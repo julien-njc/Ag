@@ -24,23 +24,27 @@ us_map_plot <- base + geom_polygon(fill="gray", color = "white", size = 0.3) +
                xlim(-125, -65) +
                ylim(25, 50) 
 
+
+mwidth <- 8
+mheight <- 4
+
 ggsave(plot = us_map_plot,
-       filename = paste0("us_map_plot_8_by_4.png"), 
-       width=8, height=4, units = "in", 
+       filename = paste0("us_map_plot_", mwidth, "_by_", mheight, ".png"), 
+       width=mwidth, height=mheight, units = "in", 
        dpi=600, device = "png",
        path="/Users/hn/Desktop/")
 
 
 ggsave(plot = us_map_plot,
-       filename = paste0("us_map_plot_8_by_4.pdf"), 
-       width=8, height=4, units = "in", 
+       filename = paste0("us_map_plot_", mwidth, "_by_", mheight, ".pdf"), 
+       width=mwidth, height=mheight, units = "in", 
        dpi=600, device = "pdf",
        path="/Users/hn/Desktop/")
 
 
 ggsave(plot = us_map_plot,
-       filename = paste0("us_map_plot_8_by_4.jpeg"), 
-       width=8, height=4, units = "in", 
+       filename = paste0("us_map_plot_", mwidth, "_by_", mheight, ".jpeg"), 
+       width=mwidth, height=mheight, units = "in", 
        dpi=600, device = "jpeg",
        path="/Users/hn/Desktop/")
 
