@@ -212,14 +212,15 @@ for (year in c(2016, 2017, 2018)){
                                    by=c("CropTyp"), all=TRUE)
 
 
-        intensity_perCounty[is.na(intensity_perCounty)] <- 0
-        intensity_perCountyCrop[is.na(intensity_perCountyCrop)] <- 0
-        intensity_perCrop[is.na(intensity_perCrop)] <- 0
-
         #
         # If a crop is not detected by algorithm as double-cropped
         # there will be NAs in the table. replace them with zero.
         #
+        intensity_perCounty[is.na(intensity_perCounty)] <- 0
+        intensity_perCountyCrop[is.na(intensity_perCountyCrop)] <- 0
+        intensity_perCrop[is.na(intensity_perCrop)] <- 0
+
+
         intensity_perCounty$numerator <- intensity_perCounty$acrSum_A1 + (intensity_perCounty$acrSum_A2*2)
         intensity_perCounty$denominat <- intensity_perCounty$acrSum_A1 + (intensity_perCounty$acrSum_A2)
 
