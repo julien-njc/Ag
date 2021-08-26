@@ -19,6 +19,14 @@ GEE_1000_error <- readOGR(paste0(SF_dir, "AZ_2020.shp"),
                           layer = "AZ_2020", 
                           GDAL1_integer64_policy = TRUE)
 
+
+grid_id_31 <- GEE_1000_error@data[31,]$grid_id
+poly_31 <- GEE_1000_error[GEE_1000_error@data$grid_id == grid_id_31, ]
+ggplot() +
+geom_polygon(data = poly_31, aes(x=long, y=lat, group=group), fill = "grey47", color = "red")
+
+
+
 writeOGR(obj = GEE_1000_error, 
          dsn = paste0(SF_dir, "/AZ_2020_R/"), 
          layer="AZ_2020_R", 
@@ -76,6 +84,11 @@ crs <- CRS("+proj=lcc
 GEE_1000_error_CRS <- spTransform(GEE_1000_error, 
                                   CRS("+proj=longlat +datum=WGS84"))
 
+writeOGR(obj = GEE_1000_error_CRS, 
+         dsn = paste0(SF_dir, "/AZ_2020_R_CRS/"), 
+         layer="AZ_2020_R_CRS", 
+         driver="ESRI Shapefile")
+
 
 Error_map_CRS <- ggplot() +
                  geom_polygon(data = states_cluster, aes(x=long, y=lat, group=group), fill = "grey", color = "black") +
@@ -98,8 +111,8 @@ ggsave(filename = paste0("Error_map_CRS.pdf"),
 GEE_1000_error_CRS_simple <- rmapshaper::ms_simplify(GEE_1000_error_CRS)
 
 writeOGR(obj = GEE_1000_error_CRS_simple, 
-         dsn = paste0(SF_dir, "/AZ_2020_R_GEE_1000_error_CRS_simple/"), 
-         layer="AZ_2020_R", 
+         dsn = paste0(SF_dir, "/AZ_2020_R_CRS_simple/"), 
+         layer="AZ_2020_R_CRS_simple", 
          driver="ESRI Shapefile")
 
 
@@ -112,5 +125,55 @@ ggsave(filename = paste0("Error_map_CRS_simple.pdf"),
        width = plot_w, height = plot_h, units = "in", limitsize = FALSE,
        dpi = 400, device = "pdf",
        path = SF_dir)
+
+
+
+
+############################
+#
+#  Find and remove the bad polygon
+#
+
+#
+#  When uploading the CRS version of the SF, GEE said: Error: 
+#               Primary geometry of feature '31' has 1340524 vertices, above the limit of 1000000 vertices.
+#
+# So, I am removing the 31st polygon. 
+#
+
+
+grid_id_31 <- GEE_1000_error_CRS@data[31,]$grid_id
+poly_31 <- GEE_1000_error_CRS[GEE_1000_error_CRS@data$grid_id == grid_id_31, ]
+ggplot() +
+geom_polygon(data = states_cluster, aes(x=long, y=lat, group=group), fill = "grey", color = "black") +
+geom_polygon(data = poly_31, aes(x=long, y=lat, group=group), fill = "grey47", color = "red")
+
+
+
+for (row_number in c(1:dim(GEE_1000_error_CRS@data)[1])){
+  grid_id <- GEE_1000_error_CRS@data[row_number,]$grid_id
+  poly <- GEE_1000_error_CRS[GEE_1000_error_CRS@data$grid_id == grid_id, ]
+  a_polygon_plot <- ggplot() +
+                    geom_polygon(data = states_cluster, aes(x=long, y=lat, group=group), fill = "grey", color = "black") +
+                    geom_polygon(data = poly, aes(x=long, y=lat, group=group), fill = "grey47", color = "red")
+
+  ggsave(filename = paste0("polygon_", grid_id, ".pdf"),
+         plot = a_polygon_plot, 
+         width = plot_w, height = plot_h, units = "in", limitsize = FALSE,
+         dpi = 400, device = "pdf",
+         path = SF_dir)
+
+}
+
+
+for (row_number in c(1:dim(GEE_1000_error_CRS@data)[1])){
+  grid_id <- GEE_1000_error_CRS@data[a_row_number, ]$grid_id
+  remove_31_poly <- GEE_1000_error_CRS[GEE_1000_error_CRS@data$grid_id != grid_id, ]
+  writeOGR(obj = remove_31_poly, 
+           dsn = paste0(SF_dir, "/remove_grid_id_", grid_id, "_polygon"), 
+           layer= paste0("/remove_grid_id_", grid_id, "_polygon"), 
+           driver="ESRI Shapefile")
+
+}
 
 

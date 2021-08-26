@@ -390,7 +390,7 @@ generate_vertdd <- function(data_tb, lower_temp=6.1, upper_temp=25.9){
                               # the commented out params below are old from first update since CodMoth:
                               # mean = 436.61, sd = 52.58, # commented out on Oct 12, 2020
                               # mean = 367.83, sd = 51.69, # Changed on Oct 12, 2020. These are AgWeather Net
-                              mean = 342.32, sd =45.71, # Changed on Nov 17, 2020. These are Daymet data
+                              mean = 342.32, sd = 45.71, # Changed on Nov 17, 2020. These are Daymet data
                               lower.tail = TRUE)
   # Gala
   data_tb$gala = pnorm(data_tb$vert_Cum_dd_F,
