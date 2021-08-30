@@ -279,7 +279,9 @@ of the disk in the center
 of the doughnut which is not part of the doughnut/polygon/region of interest.
 So, if you want to look at an area around 
 the centroid, then
-that would not belong to the polygon (See Fig.~\ref{fig:badBuffer}; it is not a doughnut, 
+that area (or parts of it, depending on how large the area is) 
+would not belong to the polygon 
+(See Fig.~\ref{fig:badBuffer}; it is not a doughnut, 
 but it delivers the message!)
 \begin{figure}[!h]
   \centering
@@ -563,6 +565,14 @@ that is given below by Alg.~\ref{alg:FilterCloudyPixelsLandsat457}:
 \hspace{.01in} 10. \}
 \end{algorithm}
 \end{tcolorbox}
+
+I have copied the cloud masking functions
+from GEE development/data-product pages into a script that can be found 
+\href{https://code.earthengine.google.com/?scriptPath=users\%2Fhnoorazar\%2FGEE_Mini_Tutorial\%3ACloudMaskings}{here}~\cite{CloudandMaskingFunctionsonMyGEE}.
+More on masking clouds of Sentinel-2 and shadows
+are provided \href{https://developers.google.com/earth-engine/tutorials/community/sentinel-2-s2cloudless}{here} by GEE developers~\cite{CloudandShadowSentinel}.
+
+
 %%%%%%%----------------------------------------
 %%%%%%%
 %%%%%%%     Timelines
@@ -688,7 +698,10 @@ Landsat-8~\cite{Landsat4NDVI}, and Sentinel:
 \end{gather}
 
 Landsat-7 has 8-day NDVI composite already provided 
-by GEE~\cite{Landsat7NDVIComposite}.
+by GEE~\cite{Landsat7NDVIComposite}. This product
+is based on TOA data which is not perfect! However,
+it seems running some smoothing methods on it can
+make it useful.
 
 %%%%%%%----------------------------------------
 %%%%%%%
