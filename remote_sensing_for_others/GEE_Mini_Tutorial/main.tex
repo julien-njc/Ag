@@ -161,8 +161,44 @@ this particular case for the following reasons:
           solution.
 \end{enumerate}
 
+%%%%%%%--------------------------------------------------------------------------
+%%%%%%%
+%%%%%%%  Landsat Products and Differences
+%%%%%%%
+\section{Landsat Products and Differences}
 
-%%%%%%%----------------------------------------
+There are different products that fall under 
+different labels; tier 1 vs tier 2, collection 1 vs collection 2, level 1 and level 2.
+Some of these have the same description on 
+Google developer pages. For example, 
+\href{https://developers.google.com/earth-engine/datasets/catalog/LANDSAT_LC08_C01_T1_SR#description}{USGS Landsat 8 Surface Reflectance Tier 1}
+\footnote{This page says ``Caution: This dataset has been superseded by LANDSAT/LC08/C02/T1\_L2.'' So, it seems USGS Landsat 8 Level 2, Collection 2, Tier 1 should be superior
+to Tier 1 SR, but in my plots it was not!}
+and \href{https://developers.google.com/earth-engine/datasets/catalog/LANDSAT_LC08_C01_T2_SR#description}{USGS Landsat 8 Surface Reflectance Tier 2}
+have the same description and identical bands. In this particular example
+we want to use Tier 1. But we need a deeper understanding of differences(?)
+
+Base on the information below and references therein, Collection 2 is an improvement
+over Collection 1 (is there any time period for which Collection 2 does not exist but 1 does?).
+Moreover, Collection 1 has only level-1 data, however, Collection 2 has level-1 data
+as well as level-2.
+
+
+\begin{description}
+\item [Collection 1] Landsat Collection 1 was established in 2016 to improve archive management. It is being \textbf{\emph{superseded}} by Collection 2 as processing continues. \href{https://www.usgs.gov/core-science-systems/nli/landsat/landsat-collection-1?qt-science_support_page_related_con=1#qt-science_support_page_related_con}{Learn more about Collection 1 from the USGS.}
+
+\item [Collection 2] 
+Landsat Collection 2 marks the second major reprocessing effort on 
+the Landsat archive by the USGS that results in several data product 
+improvements that harness recent advancements in data processing, 
+algorithm development, and data access and distribution capabilities. 
+\href{https://www.usgs.gov/core-science-systems/nli/landsat/landsat-collection-2?qt-science_support_page_related_con=1#}{Learn more about Collection 2 from the USGS.}
+\end{description}
+
+
+
+
+%%%%%%%--------------------------------------------------------------------------
 %%%%%%%
 %%%%%%%  Access a Feature/Entry of a FeatureCollection
 %%%%%%%
