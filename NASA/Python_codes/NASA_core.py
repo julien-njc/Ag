@@ -23,8 +23,59 @@ import sys
 ###########################################################
 
 
+def regularize_a_field(a_df, interval_size=10):
+    """Returns a dataframe where data points are 10-day apart.
+
+    Arguments
+    ---------
+    a_df : dataframe 
+           of a given field for only one satellite
+
+    Returns
+    -------
+    regularized_df : dataframe
+    """
+    if not("human_system_start_time" in a_df.columns):
+        a_df = add_human_start_time_by_system_start_time(a_df)
+
+    assert (len(a_df.ID.unique()) == 1)
+    assert (len(a_df.dataset.unique()) == 1)
+    #
+    # see how many days there are between the first and last image
+    #
+    a_df_coverage_days = (max(a_df.human_system_start_time) - min(a_df.human_system_start_time)).days
+    assert (a_df_coverage_days >= interval_size)
+
+    # see how many data points we need in terms of 10-day intervals for a_df_coverage_days
+    number_of_regular_steps = a_df_coverage_days // 10
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+def set_negatives_to_zero(df, indeks="NDVI"):
+    df.loc[df[indeks] < 0 , indeks] = 0
+    return (df)
+
+
+def clip_outliers(df, idx="NDVI"):
+    # dt_copy = df.copy()
+    df.loc[df[idx] > 1, idx] = 1
+    df.loc[df[idx] <- 1, idx] = -1
+    return(df)
+
+
 def add_human_start_time_by_system_start_time(HDF):
-    """Returns human readable time (system_start_time)
+    """Returns human readable time (conversion of system_start_time)
 
     Arguments
     ---------
