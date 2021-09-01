@@ -763,7 +763,7 @@ def add_human_start_time_by_YearDoY(a_Reg_DF):
 
 def regularize_movingWindow_windowSteps_2Yrs(one_field_df, SF_yr, veg_idxs, window_size=10):
     #
-    #  This function almost returns a data frame with data
+    #  This function almost returns a dataframe with data
     #  that are window_size away from each other. i.e. regular space in time.
     #  **** For **** 5 months + 12 months.
     #
@@ -824,7 +824,6 @@ def regularize_movingWindow_windowSteps_2Yrs(one_field_df, SF_yr, veg_idxs, wind
     #####################################################
     #
     #  First year (last 5 months of previous year)
-    #
     #
     #####################################################
     for row_or_count in np.arange(len(first_year_steps)-1):
@@ -912,14 +911,6 @@ def fill_theGap_linearLine(regular_TS, V_idx, SF_year):
     TS_array = a_regularized_TS[V_idx].copy().values
 
     """
-    TS_array[0] = -1.5
-    TS_array[51] = -1.5
-    TS_array[52] = -1.5
-    TS_array[53] = -1.5
-    TS_array.shape
-    """
-
-    """
     -1.5 is an indicator of missing values by Sentinel, i.e. a gap.
     The -1.5 was used as indicator in the function regularize_movingWindow_windowSteps_2Yrs()
     """
@@ -966,6 +957,9 @@ def fill_theGap_linearLine(regular_TS, V_idx, SF_year):
             # Avoid extra computation!
             #
             TS_array[left_pointer + 1] = 0.5 * (TS_array[left_pointer] + TS_array[right_pointer])
+
+            # the following line was not here on Aug. 31, 2021!!!! WTF!
+            missing_indicies = np.where(TS_array == -1.5)[0]
         else:
             # form y= ax + b
             slope = (right_value - left_value) / (x_axis[right_pointer] - x_axis[left_pointer]) # a
