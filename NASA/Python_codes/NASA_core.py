@@ -19,12 +19,118 @@ import os, os.path
 import math
 import sys
 
+###
+### These will be more generalized functions of remote_sensing_core.py
+### Hence, less hard coding, which implies column/variavle wise we
+### will be minimalistic. e.g. column: lastSurveydate should not be included
+### here.
+###
 
 ###########################################################
+def fill_theGap_linearLine(a_regularized_TS, V_idx="NDVI"):
+    """Returns a dataframe that has replaced the missing parts of regular_TS.
+
+    Arguments
+    ---------
+    regular_TS : dataframe
+        A regularized (data points are squidistant from each other) dataframe
+        with missing data points; -1.5 is indication of missing values.
+        This dataframe is the output of the function regularize_a_field(.)
+        We will assume the regular_TS is for a given unique field from a given unique satellite.
+
+    V_idx : String
+        A string indicating which column/VI should be filled in.
+
+    Returns
+    -------
+    regular_TS : dataframe
+        the same dataframe with missing data points filled in by linear interpolation
+    """
+    # a_regularized_TS = regular_TS.copy()
+
+    TS_array = a_regularized_TS[V_idx].copy().values
+
+    aaa = a_regularized_TS["human_system_start_time"].values[1]
+    bbb = a_regularized_TS["human_system_start_time"].values[0]
+    time_step_size = (aaa - bbb).astype('timedelta64[D]')/np.timedelta64(1, 'D')
+
+    """
+    -1.5 is an indicator of missing values, i.e. a gap.
+    The -1.5 was used as indicator in the function regularize_movingWindow_windowSteps_2Yrs()
+    """
+    missing_indicies = np.where(TS_array == -1.5)[0]
+    Notmissing_indicies = np.where(TS_array != -1.5)[0]
+
+    #
+    #    Check if the first or last k values are missing
+    #    if so, replace them with proper number and shorten the task
+    #
+    left_pointer = Notmissing_indicies[0]
+    right_pointer = Notmissing_indicies[-1]
+
+    if left_pointer > 0:
+        TS_array[:left_pointer] = TS_array[left_pointer]
+
+    if right_pointer < (len(TS_array) - 1):
+        TS_array[right_pointer:] = TS_array[right_pointer]
+    #    
+    # update indexes.
+    #
+    missing_indicies = np.where(TS_array == -1.5)[0]
+    Notmissing_indicies = np.where(TS_array != -1.5)[0]
+
+    # left_pointer = Notmissing_indicies[0]
+    stop = right_pointer
+    right_pointer = left_pointer + 1
+
+    missing_indicies = np.where(TS_array == -1.5)[0]
+
+    while len(missing_indicies) > 0:
+        left_pointer = missing_indicies[0] - 1
+        left_value = TS_array[left_pointer]
+        right_pointer = missing_indicies[0]
+
+        while TS_array[right_pointer] == -1.5:
+            right_pointer += 1
+        right_value = TS_array[right_pointer]
+
+        if (right_pointer - left_pointer) == 2:
+            # if there is a single gap, then we have just average of the
+            # values
+            # Avoid extra computation!
+            #
+            TS_array[left_pointer + 1] = 0.5 * (TS_array[left_pointer] + TS_array[right_pointer])
+            missing_indicies = np.where(TS_array == -1.5)[0]
+        else:
+            # form y = ax + b
+            # to see what the "x_axis" was look at the same function in remote_sensing_core.py
+
+            # denom = (x_axis[right_pointer]-x_axis[left_pointer]).astype('timedelta64[D]')/ \
+            # np.timedelta64(int(time_step_size), 'D')
+            
+            denom = right_pointer - left_pointer
+            slope = (right_value - left_value) / denom
+            
+            # b = right_value - (slope * x_axis[right_pointer])
+            # 150 is a random number below. 
+            # The thing that matters is the number of steps, not actual values on x-axis.
+            # I did it this way to avoid dealing with timestamp values and figuring out its stuff
+            # Stuff means both finding out the right script and relation of timestamp to day of year stuff.
+            # We can just use right_pointer itself instead of 150!
+            b = right_value - (slope * right_pointer)
+            TS_array[left_pointer+1 : right_pointer] = slope * np.arange(right_pointer-denom+1, right_pointer)+b
+            missing_indicies = np.where(TS_array == -1.5)[0]
+            
+        
+    a_regularized_TS[V_idx] = TS_array
+    return (a_regularized_TS)
 
 
-def regularize_a_field(a_df, interval_size=10):
-    """Returns a dataframe where data points are 10-day apart.
+
+def regularize_a_field(a_df, V_idks="NDVI", interval_size=10):
+    """Returns a dataframe where data points are interval_size-day apart.
+       This function regularizes the data between the minimum and maximum dates
+       present in the data. 
 
     Arguments
     ---------
@@ -46,18 +152,67 @@ def regularize_a_field(a_df, interval_size=10):
     a_df_coverage_days = (max(a_df.human_system_start_time) - min(a_df.human_system_start_time)).days
     assert (a_df_coverage_days >= interval_size)
 
-    # see how many data points we need in terms of 10-day intervals for a_df_coverage_days
-    number_of_regular_steps = a_df_coverage_days // 10
+    # see how many data points we need in terms of interval_size-day intervals for a_df_coverage_days
+    no_steps = a_df_coverage_days // interval_size
 
-    
+    # initialize output dataframe
+    regular_cols = ['ID', 'dataset', 'human_system_start_time', V_idks]
+    regular_df = pd.DataFrame(data = None, 
+                              index = np.arange(no_steps), 
+                              columns = regular_cols)
+
+    regular_df['ID'] = a_df.ID.unique()[0]
+    regular_df['dataset'] = a_df.dataset.unique()[0]
 
 
+    # the following is an array of time stamps where each entry is the beginning
+    # of the interval_size-day period
+    regular_time_stamps = pd.date_range(min(a_df.human_system_start_time), 
+                                        max(a_df.human_system_start_time), 
+                                        freq=str(interval_size)+'D')
+
+    if len(regular_time_stamps) == no_steps+1:
+        regular_df.human_system_start_time = regular_time_stamps[:-1]
+    elif len(regular_time_stamps) == no_steps:
+        regular_df.human_system_start_time = regular_time_stamps
+    else:
+        raise ValueError(f"There is a mismatch between no. days needed and '{interval_size}-day' interval array!")
 
 
+    # Pick the maximum of every interval_size-days
+    # for row_or_count in np.arange(len(no_steps)-1):
+    #     curr_time_window = a_df[a_df.human_system_start_time >= first_year_steps[row_or_count]]
+    #     curr_time_window = curr_time_window[curr_time_window.doy < first_year_steps[row_or_count+1]]
 
+    #     if len(curr_time_window)==0: 
+    #         regular_df.loc[row_or_count, V_idks] = -1.5
+    #     else:
+    #         regular_df.loc[row_or_count, V_idks] = max(curr_time_window[V_idks])
 
+    #     regular_df.loc[row_or_count, 'image_year'] = curr_year
+    #     regular_df.loc[row_or_count, 'doy'] = first_year_steps[row_or_count]
 
+    for start_date in regular_df.human_system_start_time:
+        """
+          The following will crate an array (of length 2)
+          it goes from a day to 10 days later; end points of the interval_size-day interval.
 
+                # Here we add 1 day to the right end point (end_date)
+          because the way pandas/python slices the dataframe; 
+          does not include the last row of sub-dataframe
+        """
+        dateRange = pd.date_range(start_date, 
+                                  start_date + pd.Timedelta(days=interval_size-1), 
+                                  freq = str(1)+'D')
+        assert (len(dateRange) == interval_size)
+
+        curr_time_window = a_df[a_df.human_system_start_time.isin(dateRange)]
+        if len(curr_time_window)==0:
+            regular_df.loc[regular_df.human_system_start_time == start_date, V_idks] = -1.5
+        else:
+            regular_df.loc[regular_df.human_system_start_time == start_date, V_idks] = max(curr_time_window[V_idks])
+
+    return (regular_df)
 
 
 
