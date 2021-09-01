@@ -42,8 +42,10 @@ states <- map_data("state")
 states_cluster <- subset(states, region %in% c("arizona"))
 
 Error_map <- ggplot() +
-             geom_polygon(data = states_cluster, aes(x=long, y=lat, group=group), fill = "grey", color = "black") +
-             geom_polygon(data = GEE_1000_error, aes(x=long, y=lat, group=group), fill = "grey47", color = "red") + 
+             geom_polygon(data = states_cluster, 
+                          aes(x=long, y=lat, group=group), fill = "grey", color = "black") +
+             geom_polygon(data = GEE_1000_error, 
+                          aes(x=long, y=lat, group=group), fill = "grey47", color = "red") + 
              coord_sf(xlim = c(-1500000, -1000000), ylim = c(1100000, 1500000)) # <----- see if this works
 
 plot_w <- 5
@@ -91,8 +93,10 @@ writeOGR(obj = GEE_1000_error_CRS,
 
 
 Error_map_CRS <- ggplot() +
-                 geom_polygon(data = states_cluster, aes(x=long, y=lat, group=group), fill = "grey", color = "black") +
-                 geom_polygon(data = GEE_1000_error_CRS, aes(x=long, y=lat, group=group), fill = "grey47", color = "red")
+                 geom_polygon(data = states_cluster, 
+                              aes(x=long, y=lat, group=group), fill = "grey", color = "black") +
+                 geom_polygon(data = GEE_1000_error_CRS, 
+                              aes(x=long, y=lat, group=group), fill = "grey47", color = "red")
 
 plot_w <- 5
 plot_h <- 5
@@ -117,8 +121,10 @@ writeOGR(obj = GEE_1000_error_CRS_simple,
 
 
 Error_map_CRS_simple <- ggplot() +
-                        geom_polygon(data = states_cluster, aes(x=long, y=lat, group=group), fill = "grey", color = "black") +
-                        geom_polygon(data = GEE_1000_error_CRS_simple, aes(x=long, y=lat, group=group), fill = "grey47", color = "red")
+                        geom_polygon(data = states_cluster, 
+                                     aes(x=long, y=lat, group=group), fill = "grey", color = "black") +
+                        geom_polygon(data = GEE_1000_error_CRS_simple, 
+                                     aes(x=long, y=lat, group=group), fill = "grey47", color = "red")
 
 ggsave(filename = paste0("Error_map_CRS_simple.pdf"),
        plot = Error_map_CRS_simple, 
@@ -154,7 +160,8 @@ for (row_number in c(1:dim(GEE_1000_error_CRS@data)[1])){
   grid_id <- GEE_1000_error_CRS@data[row_number,]$grid_id
   poly <- GEE_1000_error_CRS[GEE_1000_error_CRS@data$grid_id == grid_id, ]
   a_polygon_plot <- ggplot() +
-                    geom_polygon(data = states_cluster, aes(x=long, y=lat, group=group), fill = "grey", color = "black") +
+                    geom_polygon(data = states_cluster, 
+                                 aes(x=long, y=lat, group=group), fill = "grey", color = "black") +
                     geom_polygon(data = poly, aes(x=long, y=lat, group=group), fill = "grey47", color = "red")
 
   ggsave(filename = paste0("polygon_", grid_id, ".pdf"),
