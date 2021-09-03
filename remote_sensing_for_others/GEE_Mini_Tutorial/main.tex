@@ -7,11 +7,13 @@
 
 \usepackage{enumitem,mathtools}
 % \usepackage[ruled,vlined]{algorithm2e}
-\usepackage[ruled,vlined,resetcount,algosection]{algorithm2e}
+\usepackage[ruled,vlined,resetcount]{algorithm2e}
+
 % \SetAlFnt{\small}
 \usepackage{algorithmic}
 
 \usepackage{float}
+\usepackage{soul}
 \usepackage{subcaption}
 \usepackage[capitalise]{cleveref}
 \usepackage{graphicx}
@@ -179,9 +181,9 @@ we want to use Tier 1. But we need a deeper understanding of differences(?)
 Based on the information below and references therein, Collection 2 is an improvement
 over Collection 1\footnote{Is there any time period for which Collection 2 
 does not exist but 1 does?}.
-It seems Collection-2 Level-2 should be the best, but
-in our plots it was not different from T1\_SR. Also keep in mind 
-Collection-2 Level-2 bands have to be scaled.
+It seems Collection-2 Level-2 Tier-1 should be the best, but
+in our plots it was not different from T1\_SR (\cref{fig:C2L2Performance}). 
+Also keep in mind \hl{Collection-2 Level-2 bands must be scaled.}
 
 \begin{figure}[H]
   \includegraphics[width=1\textwidth]{figures/00_merged_Landsats_Smoothed_and_raw}
@@ -328,7 +330,8 @@ the polygons in the shapefile.
 Let the name of shapefile be \vari{Our\_ShapeFile}.
 The function to compute centroids of the
 polygons in \vari{Our\_ShapeFile} is
-given by Alg.~\ref{alg:FindCentroidsAPoly}.
+given by Alg.~\ref{alg:FindCentroidsAPoly}\footnote{This algorithm is 
+accessible on GEE \href{https://code.earthengine.google.com/df1685205d4fbfd8def0efb12a75f8e4}{here}.}.
 Line 4 of the Alg.~\ref{alg:FindCentroidsAPoly}
 is keeping the columns of data slice in \vari{Our\_ShapeFile}; 
 \vari{Our\_ShapeFile}@data.
@@ -768,7 +771,7 @@ Go nuts if you wish; figure out why, what, how.}
 Sentinel-2A & B8:~~~~~~0.77 -- 0.88 $\mu m$ & B4:~~~~~~0.65 -- 0.68 $\mu m$ & B2:~~~~~~0.46 -- 0.52 $\mu m$\\ 
 \hline
 \rowcolor{aliceblue} 
-Sentinel-2B & B8:~~~~~~0.78 -- 0.88 $\mu m$ & B4:~~~~~~0.65 -- 0.68 $\mu m$ & B2:~~~~~~0.046 -- 0.52 $\mu m$ \\ 
+Sentinel-2B & B8:~~~~~~0.78 -- 0.88 $\mu m$ & B4:~~~~~~0.65 -- 0.68 $\mu m$ & B2:~~~~~~0.46 -- 0.52 $\mu m$ \\ 
 \hline
 Landsat-8 & B5:~~~~~~0.85 -- 0.88 $\mu m$ & B4:~~~~~~0.64 -- 0.67 $\mu m$ & B2:~~~~~~0.45 -- 0.51 $\mu m$\\ 
 \hline
