@@ -61,22 +61,12 @@ selected_SF <- SF[SF@data$ID %in% IDs, ]
 
 SF_centers <- rgeos::gCentroid(selected_SF, byid=TRUE)
 crs <- CRS("+proj=lcc 
-             +lat_1=45.83333333333334 
-             +lat_2=47.33333333333334 
-             +lat_0=45.33333333333334 
-             +lon_0=-120.5 +datum=WGS84")
+            +lat_1=45.83333333333334 
+            +lat_2=47.33333333333334 
+            +lat_0=45.33333333333334 
+            +lon_0=-120.5 +datum=WGS84")
 
-centroid_coord <- spTransform(SF_centers, 
-                              CRS("+proj=longlat +datum=WGS84"))
-crs <- CRS("+proj=lcc 
-           +lat_1=45.83333333333334 
-           +lat_2=47.33333333333334 
-           +lat_0=45.33333333333334 
-           +lon_0=-120.5 +datum=WGS84")
-
-centroid_coord <- spTransform(SF_centers, 
-                              CRS("+proj=longlat +datum=WGS84"))
-
+centroid_coord <- spTransform(SF_centers, CRS("+proj=longlat +datum=WGS84"))
 centroid_coord_dt <- data.table(centroid_coord@coords)
 setnames(centroid_coord_dt, old=c("x", "y"), new=c("centroid_long", "centroid_lat"))
 
