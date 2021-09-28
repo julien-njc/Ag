@@ -142,3 +142,19 @@ def plot_raw_and_regularized(raw_dt, ax, idx="NDVI", time_step_size=10):
     ax.xaxis.set_major_locator(mdates.YearLocator(1))
     ax.set_ylim(raw_dt[idx].min()-0.05, 1)
 
+
+
+def plot_oneColumn(raw_dt, ax, idx="NDVI", _label = "raw", _color="red"):
+
+    ax.plot(raw_dt['human_system_start_time'], raw_dt[idx], '-', 
+            label=_label, linewidth=3.5, color=_color, alpha=0.8)
+
+    ax.set_title(raw_dt.ID.unique()[0] + ", " + raw_dt.CropTyp.unique()[0])
+    ax.set_ylabel(idx) # , labelpad=20); # fontsize = label_FontSize,
+    ax.tick_params(axis='y', which='major') #, labelsize = tick_FontSize)
+    ax.tick_params(axis='x', which='major') #, labelsize = tick_FontSize) # 
+    ax.legend(loc="lower right");
+    # ax.xaxis.set_major_locator(mdates.YearLocator(1))
+    ax.set_ylim(raw_dt[idx].min()-0.05, 1)
+
+
