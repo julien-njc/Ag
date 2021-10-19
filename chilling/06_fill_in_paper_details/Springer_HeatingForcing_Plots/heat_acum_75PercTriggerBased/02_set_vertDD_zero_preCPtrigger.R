@@ -16,13 +16,12 @@ param_dir <- "/Users/hn/Documents/00_GitHub/Ag/chilling/parameters/"
 
 #__________________________________________________________________________________
 trigger_dt <- readRDS(paste0(data_dir, "heatTriggers_sept_summary_comp.rds"))
-heatAccum <- readRDS(paste0(data_dir, "bloom_01Step_4locations_for_chill.rds"))
+heatAccum <- readRDS(paste0(data_dir,  "bloom_01Step_4locations_for_chill.rds"))
 
 heatAccum$location <- paste0(heatAccum$lat, "_", heatAccum$long)
 
 heatAccum <- within(heatAccum, 
              remove(cripps_pink, gala, red_deli, vert_Cum_dd, vert_Cum_dd_F, lat, long))
-
 
 #__________________________________________________________________________________
 #

@@ -133,6 +133,11 @@ for (a_future_loc in unique(future_data$location)){
       NN_loc_year_tb = information[[2]]
       NN_sigma_tb = information[[3]]
 
+      print (a_future_loc)
+      print (dim(NN_dist_tb))
+      print (dim(NN_loc_year_tb))
+      print (dim(NN_sigma_tb))
+
       saveRDS(NN_dist_tb,     paste0(out_dir, paste("/NN_dist_tb",     a_future_loc, gsub("-", "_", a_model), time, emission, sep="_"), ".rds"))
       saveRDS(NN_loc_year_tb, paste0(out_dir, paste("/NN_loc_year_tb", a_future_loc, gsub("-", "_", a_model), time, emission, sep="_"), ".rds"))
       saveRDS(NN_sigma_tb,    paste0(out_dir, paste("/NN_sigma_tb",    a_future_loc, gsub("-", "_", a_model), time, emission, sep="_"), ".rds"))

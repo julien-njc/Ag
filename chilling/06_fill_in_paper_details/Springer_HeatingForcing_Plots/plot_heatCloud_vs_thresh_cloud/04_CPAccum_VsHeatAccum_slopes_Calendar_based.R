@@ -21,22 +21,19 @@ param_dir <- paste0(bloom_source_dir, "parameters/")
 
 plot_base_dir <- "/Users/hn/Documents/01_research_data/Ag_Papers/Chill_Paper/01_Springer_1/"
 
-daily_CP_dir <- "/Users/hn/Documents/01_research_data/chilling/01_data/"
-daily_vertDD_dir <- "/Users/hn/Documents/01_research_data/bloom_4_chill_paper_trigger/"
-#############################################################
-###
-### 
-###
-#############################################################
-
 bloom_core_source <- paste0(bloom_source_dir, "bloom_core.R")
 bloom_plot_core_source <- paste0(bloom_source_dir, "bloom_plot_core.R")
-
 chill_core_source <- paste0(chill_source_dir, "chill_core.R")
 
 source(bloom_core_source)
 source(bloom_plot_core_source)
 source(chill_core_source)
+
+#############################################################
+
+daily_CP_dir <- "/Users/hn/Documents/01_research_data/chilling/01_data/"
+daily_vertDD_dir <- "/Users/hn/Documents/01_research_data/bloom_4_chill_paper_trigger/"
+
 #############################################################
 ###
 ###               Read data off the disk
@@ -59,7 +56,7 @@ chill_doy_map <- read.csv(paste0(param_dir, "/chill_DoY_map.csv"), as.is=TRUE)
 ######## read data
 ########
 
-daily_CP <- read.csv(paste0(daily_CP_dir, "daily_CP_for_CDF.csv"), as.is=TRUE)
+daily_CP     <- read.csv(paste0(daily_CP_dir, "daily_CP_for_CDF.csv"), as.is=TRUE)
 daily_vertDD <- readRDS(paste0(daily_vertDD_dir, "triggerBased_vertDD.rds"))
 
 heat_slopes <-  readRDS(paste0(daily_vertDD_dir, "slopes_maxDD_CalendarBased_HV.rds"))

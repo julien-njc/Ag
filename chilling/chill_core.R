@@ -966,14 +966,19 @@ projec_diff_from_hist <- function(dt_dt, diff_from="Observed"){
   # diff_from in {"1979-2016", "1950-2005"}
   #
   if (diff_from=="Observed"){
-      toss_rp <- "modeled hist"
-     } else {
-     toss_rp <- "Observed"
-  }
-
-  dt_dt <- dt_dt %>% 
-           filter(time_period != toss_rp)%>% 
+      
+      dt_dt <- dt_dt %>% 
+           filter(time_period != "modeled hist")%>% 
            data.table()
+
+      dt_dt <- dt_dt %>% 
+           filter(time_period != "1950-2005")%>% 
+           data.table()
+     } else {
+     dt_dt <- dt_dt %>% 
+           filter(time_period != "Observed")%>% 
+           data.table()
+  }
 
   # we have to have unique historical to be able
   # to subtract it from future stuff
@@ -993,10 +998,9 @@ projec_diff_from_hist <- function(dt_dt, diff_from="Observed"){
   # dt_dt <- rbind(dt_dt, dt_dt_hist)
 
   # melt to get differences
-  dt_dt <- melt(dt_dt, id = c("location", "model",
-                              "time_period", "emission"))
+  dt_dt <- melt(dt_dt, id = c("location", "model", "time_period", "emission"))
 
-  dt_dt <-within(dt_dt, remove("variable"))
+  dt_dt <- within(dt_dt, remove("variable"))
 
   setnames(dt_dt, old = c("value"), new = c("CP_median_A1"))
 
@@ -1007,6 +1011,9 @@ projec_diff_from_hist <- function(dt_dt, diff_from="Observed"){
 
   # remove the historical data itself for which diffs. are zeros
   diffs <- diffs %>% filter(model != "observed")
+  diffs <- diffs %>% filter(time_period != "1950-2005")
+  diffs <- diffs %>% filter(time_period != "1979-2015")
+  
 
   # to do percentages
   #**** The following 4 lines can be replaced by the 5th one ****

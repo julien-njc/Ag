@@ -36,7 +36,7 @@ models <- c("bcc-csm1-1", "CanESM2", "CSIRO-Mk3-6-0", "HadGEM2-CC365",
             "BNU-ESM", "CNRM-CM5", "GFDL-ESM2M", "inmcm4", "IPSL-CM5B-LR", 
             "MRI-CGCM3")
 
-emissions <- c("rcp45", "rcp85") # historical
+emissions <- c("historical", "rcp45", "rcp85") # 
 
 obs_dir_base <- paste0(data_dir_base, "observed/")
 #___________________________________________________________________________________________

@@ -1,8 +1,9 @@
-
 library(data.table)
 library(rgdal)
 library(dplyr)
 library(sp)
+
+
 ############################################
 ############################################
 ############################################
@@ -109,7 +110,7 @@ filter_out_non_irrigated_datatable <- function(dt){
 
 ########################################################################
 
-filter_out_non_irrigated_shapefile <- function (dt){
+filter_out_non_irrigated_shapefile <- function(dt){
   dt@data$Irrigtn <- tolower(dt@data$Irrigtn)
   dt@data$Irrigtn[is.na(dt@data$Irrigtn)] <- "na"
 
@@ -132,11 +133,11 @@ pick_eastern_counties <- function(sff){
   Klickitat <- sff[grepl('Klickitat', sff$county), ]
   Douglas <- sff[grepl('Douglas', sff$county), ]
 
-  Grant <- sff[grepl('Grant', sff$county), ]
-  Benton <- sff[grepl('Benton', sff$county), ]
-
   Ferry <- sff[grepl('Ferry', sff$county), ]
   Lincoln <- sff[grepl('Lincoln', sff$county), ]
+
+  Grant <- sff[grepl('Grant', sff$county), ]
+  Benton <- sff[grepl('Benton', sff$county), ]
 
   Adams <- sff[grepl('Adams', sff$county), ]
   Franklin <- sff[grepl('Franklin', sff$county), ]

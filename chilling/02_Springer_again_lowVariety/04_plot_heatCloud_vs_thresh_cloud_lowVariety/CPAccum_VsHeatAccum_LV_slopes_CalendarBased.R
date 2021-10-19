@@ -7,6 +7,7 @@ library(ggplot2)
 
 options(digits=9)
 options(digit=9)
+start_time <- Sys.time()
 ############################################################
 ###
 ###             local computer source
@@ -15,9 +16,13 @@ options(digit=9)
 bloom_source_dir <- "/Users/hn/Documents/00_GitHub/Ag/Bloom/"
 chill_source_dir <- "/Users/hn/Documents/00_GitHub/Ag/chilling/"
 
+in_dir <- "/Users/hn/Documents/01_research_data/bloom/"
+param_dir <- paste0(bloom_source_dir, "parameters/")
+
+plot_base_dir <- "/Users/hn/Documents/01_research_data/Ag_Papers_data/Chill_Paper/01_Springer_1/"
+
 bloom_core_source <- paste0(bloom_source_dir, "bloom_core.R")
 bloom_plot_core_source <- paste0(bloom_source_dir, "bloom_plot_core.R")
-
 chill_core_source <- paste0(chill_source_dir, "chill_core.R")
 
 source(bloom_core_source)
@@ -25,10 +30,6 @@ source(bloom_plot_core_source)
 source(chill_core_source)
 
 #############################################################
-in_dir <- "/Users/hn/Documents/01_research_data/bloom/"
-param_dir <- paste0(bloom_source_dir, "parameters/")
-
-plot_base_dir <- "/Users/hn/Documents/01_research_data/Ag_Papers_data/Chill_Paper/01_Springer_1/"
 
 daily_CP_dir <- "/Users/hn/Documents/01_research_data/chilling/01_data/"
 daily_vertDD_dir <- "/Users/hn/Documents/01_research_data/bloom_4_chill_paper_trigger/lowVariety/"

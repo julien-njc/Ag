@@ -1,6 +1,5 @@
 #
-#  Here we compute the damn vertDD based on 
-#  chill_season calendar and pased on
+#  Here we compute the damn vertDD based on chill_season calendar and pased on
 #  whenever the damn CP trigger is on
 #
 #
@@ -12,20 +11,17 @@ options(digits=9)
 options(digit=9)
 
 #__________________________________________________________________________________
-
 data_dir <- "/Users/hn/Documents/01_research_data/bloom_4_chill_paper_trigger/"
 param_dir <- "/Users/hn/Documents/00_GitHub/Ag/chilling/parameters/"
 
 #__________________________________________________________________________________
-
 trigger_dt <- readRDS(paste0(data_dir, "lowVariety/heatTriggers_sept_summary_comp_lowVariety.rds"))
-heatAccum <- readRDS(paste0(data_dir, "bloom_01Step_4locations_for_chill.rds"))
+heatAccum <- readRDS(paste0(data_dir,  "bloom_01Step_4locations_for_chill.rds"))
 
 heatAccum$location <- paste0(heatAccum$lat, "_", heatAccum$long)
 
 heatAccum <- within(heatAccum, 
              remove(cripps_pink, gala, red_deli, vert_Cum_dd, vert_Cum_dd_F, lat, long))
-
 
 #__________________________________________________________________________________
 #

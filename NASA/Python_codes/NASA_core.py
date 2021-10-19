@@ -215,8 +215,6 @@ def regularize_a_field(a_df, V_idks="NDVI", interval_size=10):
     return (regular_df)
 
 
-
-
 def set_negatives_to_zero(df, indeks="NDVI"):
     df.loc[df[indeks] < 0 , indeks] = 0
     return (df)

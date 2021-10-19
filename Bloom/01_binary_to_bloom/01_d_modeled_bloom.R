@@ -28,7 +28,7 @@ options(digit=9)
 #
 # Define main output path
 #
-bloom_out = "/data/hydro/users/Hossein/bloom/01_binary_to_bloom/"
+bloom_out <- "/data/hydro/users/Hossein/bloom/01_binary_to_bloom/"
 main_out <- file.path(bloom_out, "/modeled/")
 
 # 2. Pre-processing prep -----------------------------------------
