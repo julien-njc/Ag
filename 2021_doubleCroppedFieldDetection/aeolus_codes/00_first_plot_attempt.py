@@ -168,7 +168,8 @@ Lwidth = 1
 
 counter = 0
 for curr_field_ID in ID_list:
-    if (counter%100 == 0):
+    if (counter%1000 == 0):
+        counter = counter + 1
         print ("_____________________________________")
         print ("counter: " + str(counter))
         print (curr_field_ID)
@@ -194,19 +195,21 @@ for curr_field_ID in ID_list:
     ax.tick_params(axis='y', which='major') #, labelsize = tick_FontSize)
     ax.tick_params(axis='x', which='major') #, labelsize = tick_FontSize) # 
     ax.legend(loc="lower right");
+    ax.hlines(y=0, color='k', 
+              xmin=curr_dt['human_system_start_time'].min(), 
+              xmax=curr_dt['human_system_start_time'].max())
 
     # sub_dir = plot_dir_base + curr_field_ID.split('_')[3] + "/"
     # print ("curr_dt.county.unique()")
     # print (curr_dt.county.unique()[0])
     # file_name =  sub_dir + curr_dt.county.unique()[0] + "_" + curr_field_ID + ".pdf"
     # os.makedirs(sub_dir, exist_ok=True)
-    cc = str(curr_dt.cntrd_ln.unique()[0]) + str(curr_dt.cntrd_lt.unique()[0])
-    print ("curr_dt.county.unique()")
-    print (curr_dt.county.unique()[0])
+    cc = str(curr_dt.cntrd_ln.unique()[0]) + "_" + str(curr_dt.cntrd_lt.unique()[0])
     file_name =  plot_dir_base + curr_dt.county.unique()[0] + "_" + cc + ".pdf"
     os.makedirs(plot_dir_base, exist_ok=True)
-    
+
     plt.savefig(fname = file_name, dpi=400, transparent=False, bbox_inches='tight'); # 
+    plt.close()
 
 
 print ("done")
