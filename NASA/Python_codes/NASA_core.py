@@ -27,6 +27,93 @@ import sys
 ###
 
 ###########################################################
+
+
+def correct_big_jumps_1DaySeries(dataTMS_jumpie, give_col, maxjump_perDay = 0.015):
+    """
+    in the function correct_big_jumps_preDefinedJumpDays(.) we have
+    to define the jump_amount and the no_days_between_points.
+    For example if we have a jump more than 0.4 in less than 20 dats, then
+    that is an outlier detected.
+    
+    Here we modify the approach to be flexible in the following sense:
+    if the amount of increase in NDVI is more than #_of_Days * 0.02 then 
+    an outlier is detected and we need interpolation.
+    
+    0.015 came from the SG based paper that used 0.4 jump in NDVI for 20 days.
+    That translates into 0.02 = 0.4 / 20 per day.
+    But we did choose 0.015 as default
+    """
+    dataTMS = dataTMS_jumpie.copy()
+    dataTMS = initial_clean(df = dataTMS, column_to_be_cleaned = give_col)
+    dataTMS.sort_values(by=['human_system_start_time'], inplace=True)
+    dataTMS.reset_index(drop=True, inplace=True)
+
+    thyme_vec = dataTMS['human_system_start_time'].values.copy()
+    Veg_indks = dataTMS[give_col].values.copy()
+
+    time_diff = (pd.to_datetime(thyme_vec[1:]) - pd.to_datetime(thyme_vec[0:len(thyme_vec)-1])[0]).days
+
+    Veg_indks_diff = Veg_indks[1:] - Veg_indks[0:len(thyme_vec)-1]
+    jump_indexes = np.where(Veg_indks_diff > maxjump_perDay)
+    jump_indexes = jump_indexes[0]
+
+
+    thyme_vec = dataTMS['system_start_time'].values.copy()
+    Veg_indks = dataTMS[give_col].values.copy()
+
+    time_diff = thyme_vec[1:] - thyme_vec[0:len(thyme_vec)-1]
+    time_diff_in_days = time_diff / 86400
+    time_diff_in_days = time_diff_in_days.astype(int)
+
+    Veg_indks_diff = Veg_indks[1:] - Veg_indks[0:len(thyme_vec)-1]
+    jump_indexes = np.where(Veg_indks_diff > maxjump_perDay)
+    jump_indexes = jump_indexes[0]
+
+    jump_indexes = jump_indexes.tolist()
+
+    # It is possible that the very first one has a big jump in it.
+    # we cannot interpolate this. so, lets just skip it.
+    if len(jump_indexes) > 0: 
+        if jump_indexes[0] == 0:
+            jump_indexes.pop(0)
+    
+    if len(jump_indexes) > 0:    
+        for jp_idx in jump_indexes:
+            if  Veg_indks_diff[jp_idx] >= (time_diff_in_days[jp_idx] * maxjump_perDay):
+                #
+                # form a line using the adjacent points of the big jump:
+                #
+                x1, y1 = thyme_vec[jp_idx-1], Veg_indks[jp_idx-1]
+                x2, y2 = thyme_vec[jp_idx+1], Veg_indks[jp_idx+1]
+                # print (x1)
+                # print (x2)
+                m = np.float(y2 - y1) / np.float(x2 - x1) # slope
+                b = y2 - (m*x2)           # intercept
+
+                # replace the big jump with linear interpolation
+                Veg_indks[jp_idx] = m * thyme_vec[jp_idx] + b
+
+    dataTMS[give_col] = Veg_indks
+    return(dataTMS)
+
+
+def initial_clean(df, column_to_be_cleaned):
+    dt_copy = df.copy()
+    # remove the useles system:index column
+    if ("system:index" in list(dt_copy.columns)):
+        dt_copy = dt_copy.drop(columns=['system:index'])
+    
+    # Drop rows whith NA in column_to_be_cleaned column.
+    dt_copy = dt_copy[dt_copy[column_to_be_cleaned].notna()]
+
+    if (column_to_be_cleaned in ["NDVI", "EVI"]):
+        dt_copy.loc[dt_copy[column_to_be_cleaned] > 1, column_to_be_cleaned] = 1
+        dt_copy.loc[dt_copy[column_to_be_cleaned] < -1, column_to_be_cleaned] = -1
+
+    return (dt_copy)
+
+
 def fill_theGap_linearLine(a_regularized_TS, V_idx="NDVI"):
     """Returns a dataframe that has replaced the missing parts of regular_TS.
 
@@ -249,31 +336,3 @@ def add_human_start_time_by_system_start_time(HDF):
     return(HDF)
 
 
-
-def _optimal_allocations(fund, log_ratio_profile, alphas):
-    """Returns optimal allocations
-
-    Arguments
-    ---------
-    fund : float
-        Total amount of money we want to invest.
-
-    log_ratio_profile : Array
-        2D array of log rations of the stocks in the profile.
-    alphas :  Array of floats
-        Coefficients in the linear combination of log_ratios (please note this is not normalized!)
-        of the stocks in the profile.
-
-    Returns
-    -------
-    Allocations : Array
-        1D array of optimial allocations
-    """
-    fraction_vector = 1 / linalg.norm(log_ratio_profile - np.mean(log_ratio_profile, axis=0), axis=0)
-    
-    # element-wise multiplication of alphas and log-ratios
-    fraction_vector = np.multiply(fraction_vector[:, np.newaxis], alphas)
-    C = fund / np.sum(fraction_vector)
-
-    allocations = C * fraction_vector
-    return allocations

@@ -1008,7 +1008,7 @@ diff_CP_map_one_emission <- function(data, color_col) {
                                  high = "blue", low = "red", 
                                  guide = "colourbar", space = "Lab",
                                  limit = c(low_lim, up_lim),
-                                 breaks = c(-200, -75, -40, -25, 0, 25, 40, 75, 200)) 
+                                 breaks = c(-200, -75, -40, -25, 0, 25, 40, 75, 200))
 }
 
 diff_CP_map <- function(data, color_col) {

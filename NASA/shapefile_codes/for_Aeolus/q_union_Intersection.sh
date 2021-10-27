@@ -22,7 +22,7 @@ module purge
 # Load R
 module load udunits/2.2.20
 module load libxml2/2.9.4
-module load gdal/2.3.2_gcc proj/4.9.2
+module load gdal/2.3.2/gcc proj/4.9.2
 module load gdal/2.3.2/gcc/7.3.0 # this is new. I do not know what proj/4.9.2 does
 module load gcc/7.3.0 r/3.5.3/gcc/7.3.0
                       

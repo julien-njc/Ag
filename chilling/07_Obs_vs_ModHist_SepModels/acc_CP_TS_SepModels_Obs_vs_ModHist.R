@@ -58,12 +58,12 @@ summary_comp <- summary_comp %>%
 summary_comp$city <- factor(summary_comp$city, levels = ict, order=TRUE)
 
 observed <- summary_comp %>%
-       filter(time_period == "1979-2015")%>% 
-       data.table()
+            filter(time_period == "1979-2015")%>% 
+            data.table()
 
 MH <- summary_comp %>% 
       filter(time_period == "1950-2005")%>% 
-       data.table()
+      data.table()
 
 F85 <- summary_comp %>% 
        filter(emission == "RCP 8.5")%>% 
