@@ -41,7 +41,7 @@ if (dir.exists(output_dir) == F) {dir.create(path = output_dir, recursive = T)}
 IDs <- c("104670_WSDA_SF_2017", "105429_WSDA_SF_2017", # single
          "106054_WSDA_SF_2017", "106534_WSDA_SF_2017") # double
 
-IDs <- c("104563_WSDA_SF_2017", "102385_WSDA_SF_2017",  # single
+IDs <- c("104563_WSDA_SF_2017", "102385_WSDA_SF_2017", # single
          "102309_WSDA_SF_2017", "103372_WSDA_SF_2017") # double
 
 # good_IDs (bigger acrages)
