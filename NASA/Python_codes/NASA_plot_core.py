@@ -9,6 +9,147 @@ sys.path.append('/home/hnoorazar/NASA/')
 import NASA_core as nc
 
 
+def SG_clean_SOS_orchardinPlot(raw_dt, SG_dt, idx, ax, onset_cut=0.5, offset_cut=0.5):
+    """Returns A plot with of a given VI (NDVI or EVI) with SOS and EOS points.
+
+    Arguments
+    ---------
+    raw_dt : dataframe
+        pandas dataframe of raw observations from Google Earth Engine
+    
+    SG_dt  : dataframe
+        pandas dataframe of smoothed version of data points.
+    
+    idx : str
+        A string indicating vegetation index.
+    
+    ax : axis
+       An axis object of Matplotlib.
+    
+    onset_cut : float
+        Start Of Season threshold
+    offset_cut : float
+        End Of Season threshold
+
+    Returns
+    -------
+    A plot a given VI (NDVI or EVI) with SOS and EOS points.
+    """
+    assert (len(SG_dt['ID'].unique()) == 1)
+
+    #############################################
+    ###
+    ###      find SOS's and EOS's
+    ###
+    #############################################
+    ratio_colName = indeks + "_ratio"
+    SEOS_output_columns = ['ID', indeks, 'human_system_start_time', 
+                           ratio_colName, 'SOS', 'EOS', 'season_count']
+
+    """
+     The reason I am multiplying len(a_df) by 4 is that we can have at least two
+     seasons which means 2 SOS and 2 EOS. So, at least 4 rows are needed.
+     and the reason for 14 is that there are 14 years from 2008 to 2021.
+    """
+    all_poly_and_SEOS = pd.DataFrame(data = None, 
+                                     index = np.arange(4*14*len(a_df)), 
+                                     columns = SEOS_output_columns)
+    unique_years = SG_dt['human_system_start_time'].dt.year.unique()
+    
+    pointer_SEOS_tab = 0
+    SG_dt = SG_dt[SEOS_output_columns[0:3]]
+    
+    """
+    detect SOS and EOS in each year
+    """
+    yr_count = 0
+    for yr in unique_years:
+        curr_field_yr = SG_dt[SG_dt['human_system_start_time'].dt.year == yr].copy()
+        y_orchard = curr_field_yr[curr_field_yr['human_system_start_time'].dt.month >= 5]
+        y_orchard = y_orchard[y_orchard['human_system_start_time'].dt.month <= 10]
+        y_orchard_range = max(y_orchard[indeks]) - min(y_orchard[indeks])
+
+        if y_orchard_range > 0.3:
+            curr_field_yr = nc.addToDF_SOS_EOS_White(pd_TS = curr_field_yr,
+                                                     VegIdx = indeks, 
+                                                     onset_thresh = onset_cut, 
+                                                      offset_thresh = offset_cut)
+            curr_field_yr = nc.Null_SOS_EOS_by_DoYDiff(pd_TS=curr_field_yr, min_season_length=40)
+        else:
+            VegIdx_min = curr_field_yr[indeks].min()
+            VegIdx_max = curr_field_yr[indeks].max()
+            VegRange = VegIdx_max - VegIdx_min + sys.float_info.epsilon
+            curr_field_yr[ratio_colName] = (curr_field_yr[indeks] - VegIdx_min) / VegRange
+            curr_field_yr['SOS'] = 666
+            curr_field_yr['EOS'] = 666
+        #############################################
+        ###
+        ###             plot
+        ###
+        #############################################
+        # sb.set();
+        # plot SG smoothed
+        ax.plot(SG_dt['human_system_start_time'], SG_dt[idx], c='k', linewidth=2,
+                label= 'SG' if yr_count == 0 else "");
+
+        ax.scatter(raw_dt['human_system_start_time'], raw_dt[idx], 
+                   s=7, c='dodgerblue', label="raw" if yr_count == 0 else "");
+        ###
+        ###   plot SOS and EOS
+        ###
+        #
+        #  SOS
+        #
+        SOS = curr_field_yr[curr_field_yr['SOS'] != 0]
+        if len(SOS)>0: # dataframe might be empty
+            if SOS.iloc[0]['SOS'] != 666:
+                ax.scatter(SOS['human_system_start_time'], SOS['SOS'], marker='+', s=155, c='g')
+                # annotate SOS
+                for ii in np.arange(0, len(SOS)):
+                    style = dict(size=10, color='g', rotation='vertical')
+                    ax.text(x = SOS.iloc[ii]['human_system_start_time'].date(), 
+                            y = -0.2, 
+                            s = str(SOS.iloc[ii]['human_system_start_time'].date())[6:], #
+                            **style)
+            else:
+                 ax.plot(curr_field_yr['human_system_start_time'], 
+                         np.ones(len(curr_field_yr['human_system_start_time']))*1, 
+                         c='g', linewidth=2, label= 'SG' if yr_count == 0 else "");
+            
+
+        #
+        #  EOS
+        #
+        EOS = curr_field_yr[curr_field_yr['EOS'] != 0]
+        if len(EOS)>0: # dataframe might be empty        
+            if EOS.iloc[0]['EOS'] != 666:
+                ax.scatter(EOS['human_system_start_time'], EOS['EOS'], marker='+', s=155, c='r')
+
+                # annotate EOS
+                for ii in np.arange(0, len(EOS)):
+                    style = dict(size=10, color='r', rotation='vertical')
+                    ax.text(x = EOS.iloc[ii]['human_system_start_time'].date(), 
+                            y = -0.2, 
+                            s = str(EOS.iloc[ii]['human_system_start_time'].date())[6:], #[6:]
+                            **style)
+
+        # Plot ratios:
+        column_ratio = idx + "_" + "ratio"
+        ax.plot(curr_field_yr['human_system_start_time'], 
+                curr_field_yr[column_ratio], 
+                c='gray', label=column_ratio if yr_count == 0 else "")
+        yr_count += 1
+
+#    ax.axhline(0 , color = 'r', linewidth=.5)
+#    ax.axhline(1 , color = 'r', linewidth=.5)
+
+    ax.set_title(SG_dt['ID'].unique()[0] + ", cut: " + str(onset_cut) + ", " + indeks);
+    ax.set(ylabel=idx)
+    ax.set_xlim([datetime.date(2007, 12, 10), datetime.date(2022, 1, 10)])
+    ax.set_ylim([-0.3, 1.15])
+    ax.xaxis.set_major_locator(mdates.YearLocator(1)) # every year.
+    ax.legend(loc="lower right");
+
 def SG_clean_SOS(raw_dt, SG_dt, idx, ax, onset_cut=0.5, offset_cut=0.5):
     """Returns A plot with of a given VI (NDVI or EVI) with SOS and EOS points.
 

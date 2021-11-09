@@ -172,7 +172,7 @@ for a_poly in IDs:
         """
         # curr_field.loc[curr_field[indeks] < 0 , indeks] = 0 
         no_Outlier_TS = nc.interpolate_outliers_EVI_NDVI(outlier_input = curr_field, given_col = indeks)
-        curr_field.loc[curr_field[indeks] < 0 , indeks] = 0 
+        no_Outlier_TS.loc[no_Outlier_TS[indeks] < 0 , indeks] = 0 
 
         """
         it is possible that for a field we only have x=2 data points
