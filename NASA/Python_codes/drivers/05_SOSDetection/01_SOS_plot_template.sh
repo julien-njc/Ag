@@ -4,7 +4,7 @@
 # Configure PBS options
 # ----------------------------------------------------------------
 ## Define a job name
-#PBS -N outer_indeks_SEOS_cut_randCount_SOS_table
+#PBS -N outer_indeks_randCount_SOS_plt
 
 ## Define compute options
 #PBS -l nodes=1:ppn=10
@@ -52,7 +52,7 @@ echo "--------- continue on ---------"
 # Run python code for matrix
 # ----------------------------------------------------------------
 
-python3 ./d_SEOS_detection_tables.py indeks SEOS_cut randCount
+python3 ./01_d_SOS_plots.py randCount
 
 
 
