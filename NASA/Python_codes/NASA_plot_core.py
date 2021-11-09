@@ -5,7 +5,145 @@ import scipy
 import scipy.signal
 import matplotlib.dates as mdates
 sys.path.append('/Users/hn/Documents/00_GitHub/Ag/NASA/Python_codes/')
+sys.path.append('/home/hnoorazar/NASA/')
 import NASA_core as nc
+
+
+def SG_clean_SOS(raw_dt, SG_dt, idx, ax, onset_cut=0.5, offset_cut=0.5):
+    """Returns A plot with of a given VI (NDVI or EVI) with SOS and EOS points.
+
+    Arguments
+    ---------
+    raw_dt : dataframe
+        pandas dataframe of raw observations from Google Earth Engine
+    
+    SG_dt  : dataframe
+        pandas dataframe of smoothed version of data points.
+    
+    idx : str
+        A string indicating vegetation index.
+    
+    ax : axis
+       An axis object of Matplotlib.
+    
+    onset_cut : float
+        Start Of Season threshold
+    offset_cut : float
+        End Of Season threshold
+
+    Returns
+    -------
+    A plot a given VI (NDVI or EVI) with SOS and EOS points.
+    """
+    assert (len(SG_dt['ID'].unique()) == 1)
+
+    #############################################
+    ###
+    ###      find SOS's and EOS's
+    ###
+    #############################################
+    SEOS_output_columns = ['ID', indeks, 'human_system_start_time', 
+                           'EVI_ratio', 'SOS', 'EOS', 'season_count']
+
+    """
+     The reason I am multiplying len(a_df) by 4 is that we can have at least two
+     seasons which means 2 SOS and 2 EOS. So, at least 4 rows are needed.
+     and the reason for 14 is that there are 14 years from 2008 to 2021.
+    """
+    all_poly_and_SEOS = pd.DataFrame(data = None, 
+                                     index = np.arange(4*14*len(a_df)), 
+                                     columns = SEOS_output_columns)
+    unique_years = SG_dt['human_system_start_time'].dt.year.unique()
+    
+    pointer_SEOS_tab = 0
+    SG_dt = SG_dt[SEOS_output_columns[0:3]]
+    
+    """
+    detect SOS and EOS in each year
+    """
+    yr_count = 0
+    for yr in unique_years:
+        curr_field_yr = SG_dt[SG_dt['human_system_start_time'].dt.year == yr].copy()
+
+        curr_field_yr = nc.addToDF_SOS_EOS_White(pd_TS = curr_field_yr, 
+                                                 VegIdx = indeks, 
+                                                 onset_thresh = onset_cut, 
+                                                 offset_thresh = offset_cut)
+        curr_field_yr = nc.Null_SOS_EOS_by_DoYDiff(pd_TS=curr_field_yr, min_season_length=40)
+            
+        #############################################
+        ###
+        ###             plot
+        ###
+        #############################################
+        # sb.set();
+        # plot SG smoothed
+        # ax.plot(SG_dt['human_system_start_time'], SG_dt[idx], label= "SG", c='k', linewidth=2);
+        ax.plot(SG_dt['human_system_start_time'], SG_dt[idx], c='k', linewidth=2,
+                label= 'SG' if yr_count == 0 else "");
+
+
+        # plot raw data
+        ax.scatter(raw_dt['human_system_start_time'], 
+                   raw_dt[idx], 
+                   s=7, c='dodgerblue', label="raw" if yr_count == 0 else "");
+
+
+        ###
+        ###   plot SOS and EOS
+        ###
+        # Update the EVI/NDVI values to the smoothed version.
+        #
+        #  Start of the season
+        #
+        SOS = curr_field_yr[curr_field_yr['SOS'] != 0]
+        ax.scatter(SOS['human_system_start_time'], SOS['SOS'], marker='+', s=155, c='g')
+        # annotate SOS
+        for ii in np.arange(0, len(SOS)):
+            style = dict(size=10, color='g', rotation='vertical')
+            ax.text(x = SOS.iloc[ii]['human_system_start_time'].date(), 
+                    y = -0.2, 
+                    s = str(SOS.iloc[ii]['human_system_start_time'].date())[6:], #
+                    **style)
+
+        #
+        #  End of the season
+        #
+        EOS = curr_field_yr[curr_field_yr['EOS'] != 0]
+        ax.scatter(EOS['human_system_start_time'], EOS['EOS'], marker='+', s=155, c='r')
+
+        # annotate EOS
+        for ii in np.arange(0, len(EOS)):
+            style = dict(size=10, color='r', rotation='vertical')
+            ax.text(x = EOS.iloc[ii]['human_system_start_time'].date(), 
+                    y = -0.2, 
+                    s = str(EOS.iloc[ii]['human_system_start_time'].date())[6:], #[6:]
+                    **style)
+
+        # Plot ratios:
+        column_ratio = idx + "_" + "ratio"
+        ax.plot(curr_field_yr['human_system_start_time'], 
+                curr_field_yr[column_ratio], 
+                c='gray', label="EVI Ratio" if yr_count == 0 else "")
+        yr_count += 1
+
+    ax.axhline(0 , color = 'r', linewidth=.5)
+    ax.axhline(1 , color = 'r', linewidth=.5)
+
+    ax.set_title(SG_dt['ID'].unique()[0]);
+    ax.set(ylabel=idx)
+    ax.set_xlim([datetime.date(2007, 12, 10), datetime.date(2022, 1, 10)])
+    ax.set_ylim([-0.3, 1.15])
+    ax.xaxis.set_major_locator(mdates.YearLocator(1)) # every year.
+    ax.legend(loc="upper left");
+#    legend_without_duplicate_labels(ax)
+
+def legend_without_duplicate_labels(ax):
+    ax.legend(loc="upper left");
+    handles, labels = ax.get_legend_handles_labels()
+    unique = [(h, l) for i, (h, l) in enumerate(zip(handles, labels)) if l not in labels[:i]]
+    ax.legend(*zip(*unique))
+
 
 def one_satellite_smoothed(raw_dt, ax, color_dict, idx="NDVI", time_step_size=10, set_negatives_to_zero=True):
     """Returns a dataframe that has replaced the missing parts of regular_TS.
@@ -29,7 +167,7 @@ def one_satellite_smoothed(raw_dt, ax, color_dict, idx="NDVI", time_step_size=10
     -------
     """
     a_df = raw_dt.copy()
-    a_df.loc[a_df[idx]<0 , idx] = 0
+    a_df.loc[a_df[idx]<0, idx] = 0
 
     assert (len(a_df.ID.unique()) == 1)
     assert (len(a_df.dataset.unique()) == 1)
