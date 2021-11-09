@@ -98,7 +98,7 @@ def SG_clean_SOS_orchardinPlot(raw_dt, SG_dt, idx, ax, onset_cut=0.5, offset_cut
                 label= 'SG' if yr_count == 0 else "");
 
         ax.scatter(raw_dt['human_system_start_time'], raw_dt[idx], 
-                   s=7, c='dodgerblue', label="raw" if yr_count == 0 else "");
+                   s=7, c='dodgerblue', label="");
         ###
         ###   plot SOS and EOS
         ###
@@ -109,12 +109,12 @@ def SG_clean_SOS_orchardinPlot(raw_dt, SG_dt, idx, ax, onset_cut=0.5, offset_cut
         if len(SOS)>0: # dataframe might be empty
             if SOS.iloc[0]['SOS'] != 666:
                 ax.scatter(SOS['human_system_start_time'], SOS['SOS'], marker='+', s=155, c='g', 
-                          label="SOS" if yr_count == 0 else "")
+                          label="")
                 # annotate SOS
                 for ii in np.arange(0, len(SOS)):
                     style = dict(size=10, color='g', rotation='vertical')
                     ax.text(x = SOS.iloc[ii]['human_system_start_time'].date(), 
-                            y = -0.2, 
+                            y = -0.1, 
                             s = str(SOS.iloc[ii]['human_system_start_time'].date())[6:], #
                             **style)
             else:
@@ -127,7 +127,7 @@ def SG_clean_SOS_orchardinPlot(raw_dt, SG_dt, idx, ax, onset_cut=0.5, offset_cut
         #  EOS
         #
         EOS = curr_field_yr[curr_field_yr['EOS'] != 0]
-        if len(EOS)>0: # dataframe might be empty        
+        if len(EOS)>0: # dataframe might be empty
             if EOS.iloc[0]['EOS'] != 666:
                 ax.scatter(EOS['human_system_start_time'], EOS['EOS'], marker='+', s=155, c='r', 
                            label="EOS" if yr_count == 0 else "")
@@ -136,7 +136,7 @@ def SG_clean_SOS_orchardinPlot(raw_dt, SG_dt, idx, ax, onset_cut=0.5, offset_cut
                 for ii in np.arange(0, len(EOS)):
                     style = dict(size=10, color='r', rotation='vertical')
                     ax.text(x = EOS.iloc[ii]['human_system_start_time'].date(), 
-                            y = -0.2, 
+                            y = -0.1, 
                             s = str(EOS.iloc[ii]['human_system_start_time'].date())[6:], #[6:]
                             **style)
 
