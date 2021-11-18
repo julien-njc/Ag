@@ -95,7 +95,8 @@ regular_output_dir = "/data/hydro/users/Hossein/remote_sensing/04_noJump_Regular
 f_name = "01_Regular_filledGap_" + given_county + "_SF_" + str(SF_year) + "_" + indeks + ".csv"
 
 data_dir = regular_data_dir
-output_dir = regular_output_dir + "2Yrs_tbl_reg_fineGranular_SOS" + str(int(onset_cut*10)) + "_EOS" + str(int(offset_cut*10)) + "/"
+output_dir = regular_output_dir + "2Yrs_tbl_reg_fineGranular_SOS" + /
+             str(int(onset_cut*10)) + "_EOS" + str(int(offset_cut*10)) + "/"
 
 os.makedirs(output_dir, exist_ok=True)
 

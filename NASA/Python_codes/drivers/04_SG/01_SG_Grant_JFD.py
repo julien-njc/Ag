@@ -71,11 +71,11 @@ os.makedirs(output_dir, exist_ok=True)
 ###
 ########################################################################################
 if random_or_all == "random":
-    f_name = "03_regular_int_Grant_Irr_2008_2018_" + indeks + "_" + str(randCount) + "randomfields.csv"
-    out_name = output_dir + "04_SG_int_Grant_Irr_2008_2018_" + indeks + "_" + str(randCount) + "randomfields.csv"
+    f_name = "regular_int_Grant_Irr_2008_2018_" + indeks + "_" + str(randCount) + "randomfields_JFD.csv"
+    out_name = output_dir + "SG_int_Grant_Irr_2008_2018_" + indeks + "_" + str(randCount) + "randomfields_JFD.csv"
 else:
-    f_name = "03_regular_int_Grant_Irr_2008_2018_" + indeks + ".csv"
-    out_name = output_dir + "04_SG_int_Grant_Irr_2008_2018_" + indeks + ".csv"
+    f_name = "regular_int_Grant_Irr_2008_2018_" + indeks + "_JFD.csv"
+    out_name = output_dir + "SG_int_Grant_Irr_2008_2018_" + indeks + "_JFD.csv"
 
 print (f_name)
 
@@ -111,8 +111,7 @@ for a_poly in ID_list:
     SG[SG > 1 ] = 1 # SG might violate the boundaries. clip them:
     SG[SG < -1 ] = -1
     if counter == 0:
-        print ("fuck me")
-        print(curr_field.head(5))
+        print(curr_field.head(2))
         print(curr_field.index)
         print (an_EE_TS.loc[curr_field.index, ])
         print("len(SG) is " + str(len(SG)))

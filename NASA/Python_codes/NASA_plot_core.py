@@ -7,7 +7,7 @@ import matplotlib.dates as mdates
 import pandas as pd
 import numpy as np
 import datetime
-from datetime import date
+from datetime import date, timedelta
 sys.path.append('/Users/hn/Documents/00_GitHub/Ag/NASA/Python_codes/')
 sys.path.append('/home/hnoorazar/NASA/')
 import NASA_core as nc
@@ -98,7 +98,7 @@ def SG_clean_SOS_orchardinPlot(raw_dt, SG_dt, idx, ax, onset_cut=0.5, offset_cut
                 label= 'SG' if yr_count == 0 else "");
 
         ax.scatter(raw_dt['human_system_start_time'], raw_dt[idx], 
-                   s=7, c='dodgerblue', label="");
+                   s=7, c='dodgerblue', label="raw" if yr_count == 0 else "");
         ###
         ###   plot SOS and EOS
         ###
@@ -121,16 +121,15 @@ def SG_clean_SOS_orchardinPlot(raw_dt, SG_dt, idx, ax, onset_cut=0.5, offset_cut
                  ax.plot(curr_field_yr['human_system_start_time'], 
                          np.ones(len(curr_field_yr['human_system_start_time']))*1, 
                          c='g', linewidth=2);
-            
-
         #
         #  EOS
         #
         EOS = curr_field_yr[curr_field_yr['EOS'] != 0]
         if len(EOS)>0: # dataframe might be empty
             if EOS.iloc[0]['EOS'] != 666:
-                ax.scatter(EOS['human_system_start_time'], EOS['EOS'], marker='+', s=155, c='r', 
-                           label="EOS" if yr_count == 0 else "")
+                ax.scatter(EOS['human_system_start_time'], EOS['EOS'], 
+                           marker='+', s=155, c='r', 
+                           label="")
 
                 # annotate EOS
                 for ii in np.arange(0, len(EOS)):
@@ -151,10 +150,14 @@ def SG_clean_SOS_orchardinPlot(raw_dt, SG_dt, idx, ax, onset_cut=0.5, offset_cut
 
     ax.set_title(SG_dt['ID'].unique()[0] + ", cut: " + str(onset_cut) + ", " + idx);
     ax.set(ylabel=idx)
-    ax.set_xlim([datetime.date(2007, 12, 10), datetime.date(2022, 1, 10)])
+
+    # ax.set_xlim([datetime.date(2007, 12, 10), datetime.date(2022, 1, 10)])
+    ax.set_xlim([SG_dt.human_system_start_time.min() - timedelta(10), 
+                 SG_dt.human_system_start_time.max() + timedelta(10)])
+    
     ax.set_ylim([-0.3, 1.15])
     ax.xaxis.set_major_locator(mdates.YearLocator(1)) # every year.
-    ax.legend(loc="lower right");
+    ax.legend(loc="best");
 
 
 def SG_clean_SOS(raw_dt, SG_dt, idx, ax, onset_cut=0.5, offset_cut=0.5):
@@ -280,7 +283,10 @@ def SG_clean_SOS(raw_dt, SG_dt, idx, ax, onset_cut=0.5, offset_cut=0.5):
 
     ax.set_title(SG_dt['ID'].unique()[0]);
     ax.set(ylabel=idx)
-    ax.set_xlim([datetime.date(2007, 12, 10), datetime.date(2022, 1, 10)])
+    # ax.set_xlim([datetime.date(2007, 12, 10), datetime.date(2022, 1, 10)])
+    ax.set_xlim([SG_dt.human_system_start_time.min() - timedelta(10), 
+                 SG_dt.human_system_start_time.max() + timedelta(10)])
+
     ax.set_ylim([-0.3, 1.15])
     ax.xaxis.set_major_locator(mdates.YearLocator(1)) # every year.
     ax.legend(loc="upper left");

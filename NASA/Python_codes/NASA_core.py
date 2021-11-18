@@ -27,6 +27,34 @@ import sys
 ###
 
 ###########################################################
+def filter_out_NASS(dt_df):
+    dt_cf_NASS = dt_df.copy()
+    dt_cf_NASS['DataSrc'] = dt_cf_NASS['DataSrc'].astype(str)
+    dt_cf_NASS["DataSrc"] = dt_cf_NASS["DataSrc"].str.lower()
+
+    dt_cf_NASS = dt_cf_NASS[~dt_cf_NASS['DataSrc'].str.contains("nass")]
+    return dt_cf_NASS
+
+def filter_by_lastSurvey(dt_df_su, year):
+    dt_surv = dt_df_su.copy()
+    dt_surv = dt_surv[dt_surv['LstSrvD'].str.contains(str(year))]
+    return dt_surv
+
+def filter_out_nonIrrigated(dt_df_irr):
+    dt_irrig = dt_df_irr.copy()
+    #
+    # drop NA rows in irrigation column
+    #
+    dt_irrig.dropna(subset=['Irrigtn'], inplace=True)
+
+    dt_irrig['Irrigtn'] = dt_irrig['Irrigtn'].astype(str)
+
+    dt_irrig["Irrigtn"] = dt_irrig["Irrigtn"].str.lower()
+    dt_irrig = dt_irrig[~dt_irrig['Irrigtn'].str.contains("none")]
+    dt_irrig = dt_irrig[~dt_irrig['Irrigtn'].str.contains("unknown")]
+    
+    return dt_irrig
+
 def Null_SOS_EOS_by_DoYDiff(pd_TS, min_season_length=40):
     """
     input: pd_TS is a pandas dataframe
@@ -132,7 +160,7 @@ def Null_SOS_EOS_by_DoYDiff(pd_TS, min_season_length=40):
         raise ValueError("SOS and EOS are not of the same length.")
 
     """
-    Go through seasons and invalidate them in their length is too short
+    Go through seasons and invalidate them if their length is too short
     """
     for ii in np.arange(len(SOS_indexes)):
         SOS_pointer = SOS_indexes[ii]
@@ -207,7 +235,107 @@ def find_signChange_locs_DifferentOnOffset(SOS_candids, EOS_candids):
                 EOS_sign_change[pointer+1] = 1
 
     # sign_change = SOS_sign_change + EOS_sign_change
-    return (SOS_sign_change, EOS_sign_change) 
+    return (SOS_sign_change, EOS_sign_change)
+
+def correct_big_jumps_1DaySeries_JFD(dataTMS_jumpie, give_col, maxjump_perDay = 0.015):
+    """
+    This is a modified version of correct_big_jumps_1DaySeries()
+    Here if the big jumps happen in Dec. Jan, or Feb. we take the high value down 
+    (as opposed to lower value up)
+
+    Returns: a dataframe with no big jumps in it
+    Arguments
+    ---------
+    dataTMS_jumpie : dataframe
+        A dataframe in which
+
+    give_col : String
+        A string indicating which column/VI should be filled in.
+
+    Returns
+    -------
+    dataTMS_jumpie : dataframe
+        the same dataframe with no big jumps! (just one iteration)
+    """
+    # dataTMS_jumpie = initial_clean(df = dataTMS_jumpie, column_to_be_cleaned = give_col)
+    
+    dataTMS_jumpie['human_system_start_time'] = pd.to_datetime(dataTMS_jumpie['human_system_start_time'])
+    dataTMS_jumpie.sort_values(by=['human_system_start_time'], inplace=True)
+    dataTMS_jumpie.reset_index(drop=True, inplace=True)
+    
+    thyme_vec = dataTMS_jumpie['human_system_start_time'].values.copy()
+    Veg_indks = dataTMS_jumpie[give_col].values.copy()
+
+    time_diff = (pd.to_datetime(thyme_vec[1:]) - pd.to_datetime(thyme_vec[0:len(thyme_vec)-1])[0]).days
+
+    Veg_indks_diff = Veg_indks[1:] - Veg_indks[0:len(thyme_vec)-1]
+    jump_indexes = np.where(Veg_indks_diff > maxjump_perDay)
+    jump_indexes = jump_indexes[0]
+    jump_indexes = jump_indexes.tolist()
+
+    thyme_vec = dataTMS_jumpie['human_system_start_time'].values.copy()
+    Veg_indks = dataTMS_jumpie[give_col].values.copy()
+    time_diff = thyme_vec[1:] - thyme_vec[0:len(thyme_vec)-1]
+
+    # time_diff_in_days = time_diff / 86400
+    time_diff_in_days = time_diff.astype('timedelta64[D]')
+    time_diff_in_days = time_diff_in_days.astype(int)
+
+    # It is possible that the very first one has a big jump in it.
+    # we cannot interpolate this. so, lets just skip it.
+    if len(jump_indexes) > 0: 
+        if jump_indexes[0] == 0:
+            jump_indexes.pop(0)
+
+    if len(jump_indexes) > 0:    
+        for jp_idx in jump_indexes:
+            # for count, jp_idx in enumerate(jump_indexes):
+            # Veg_indks_diff >= (time_diff_in_days * maxjump_perDay)
+            if  Veg_indks_diff[jp_idx] >= (time_diff_in_days[jp_idx] * maxjump_perDay):
+                #
+                # form a line using the adjacent points of the big jump:
+                #
+                if pd.to_datetime(thyme_vec[jp_idx]).month in [1, 2, 12]:
+                    # take the big value down in Jan, Feb, or Dec.
+                    """
+                    It is possible that the big jump is the last data point.
+                    In this case, let it go!
+                    Perhaps we can do this in a faster way: remove the indices from jump_indexes 
+                    above. rather than checking the if statement below. Or maybe not?
+                    We have 2 cases here: Jan-Feb-Dec and other months!
+                    """
+                    if (jp_idx+2) < len(Veg_indks):
+                        x1, y1 = thyme_vec[jp_idx], Veg_indks[jp_idx]
+                        x2, y2 = thyme_vec[jp_idx+2], Veg_indks[jp_idx+2]
+
+                        m = float(y2 - y1) / (x2 - x1).astype(pd.Timedelta) # slope or float(x2-x1)
+                        b = y2 - (m * int(x2)) # intercept
+
+                        # replace the big jump with linear interpolation
+                        # only if the new value is smaller that it was in the raw
+                        new_val = m * thyme_vec[jp_idx+1].astype(int) + b
+                        if new_val < Veg_indks[jp_idx+1]:
+                            Veg_indks[jp_idx+1] = new_val
+                else:
+                    """
+                    It is possible that the big jump is the last data point.
+                    or first one. In these cases let it go!!!
+                    """
+                    if (jp_idx+1) < len(Veg_indks) and (jp_idx-1) >= 0 :
+
+                        # take the low value upper, in !(Jan, Feb, Dec)
+                        x1, y1 = thyme_vec[jp_idx-1], Veg_indks[jp_idx-1]
+                        x2, y2 = thyme_vec[jp_idx+1], Veg_indks[jp_idx+1]
+
+                        m = float(y2 - y1) / (x2 - x1).astype(pd.Timedelta) # slope or float(x2-x1)
+                        b = y2 - (m* int(x2))           # intercept
+
+                        # replace the big jump with linear interpolation
+                        Veg_indks[jp_idx] = m * thyme_vec[jp_idx].astype(int) + b
+
+    dataTMS_jumpie[give_col] = Veg_indks
+    return(dataTMS_jumpie)
+
 
 def correct_big_jumps_1DaySeries(dataTMS_jumpie, give_col, maxjump_perDay = 0.015):
     """
@@ -253,7 +381,6 @@ def correct_big_jumps_1DaySeries(dataTMS_jumpie, give_col, maxjump_perDay = 0.01
     if len(jump_indexes) > 0: 
         if jump_indexes[0] == 0:
             jump_indexes.pop(0)
-    print (dataTMS_jumpie.ID.unique()[0])
     if len(jump_indexes) > 0:    
         for jp_idx in jump_indexes:
             if  Veg_indks_diff[jp_idx] >= (time_diff_in_days[jp_idx] * maxjump_perDay):
@@ -262,9 +389,7 @@ def correct_big_jumps_1DaySeries(dataTMS_jumpie, give_col, maxjump_perDay = 0.01
                 #
                 x1, y1 = thyme_vec[jp_idx-1], Veg_indks[jp_idx-1]
                 x2, y2 = thyme_vec[jp_idx+1], Veg_indks[jp_idx+1]
-                # print (x1)
-                # print (x2)
-                if (x2 - x1).astype(pd.Timedelta) ==0:
+                if (x2 - x1).astype(pd.Timedelta) == 0:
                     print(jp_idx)
                 m = float(y2 - y1) / (x2 - x1).astype(pd.Timedelta) # slope or float(x2-x1)
                 b = y2 - (m* int(x2))           # intercept

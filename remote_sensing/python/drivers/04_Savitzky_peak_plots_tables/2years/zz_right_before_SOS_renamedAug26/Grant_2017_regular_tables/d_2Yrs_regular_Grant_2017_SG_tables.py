@@ -108,8 +108,8 @@ regular_output_dir = "/data/hydro/users/Hossein/remote_sensing/04_RegularFilledG
 
 raw_data_dir   = "/data/hydro/users/Hossein/remote_sensing/02_Eastern_WA_EE/"
 raw_output_dir = "/data/hydro/users/Hossein/remote_sensing/02_Eastern_WA_plots_tbls" + \
-             "/2Yrs_raw_tables/Grant_2017_raw_1Yr_savitzky_"  + indeks + "/" + \
-             "/delta" + str(delt) + "_Sav_win" + str(Sav_win_size) + "_Order"  + str(sav_order) + "/"
+                 "/2Yrs_raw_tables/Grant_2017_raw_1Yr_savitzky_"  + indeks + "/" + \
+                 "/delta" + str(delt) + "_Sav_win" + str(Sav_win_size) + "_Order"  + str(sav_order) + "/"
 
 param_dir = "/home/hnoorazar/remote_sensing_codes/parameters/"
 

@@ -1,9 +1,9 @@
 ####
-#### Nov 2, 2021
+#### Nov 16, 2021
 ####
 
 """
-  Regularize the EVI and NDVI of fields in Grant, 2017.
+  Regularize the EVI and NDVI of fields in individual years for training set creation.
 """
 
 import csv
@@ -37,12 +37,11 @@ import NASA_plot_core as ncp
 ###
 ####################################################################################
 indeks = sys.argv[1]
+county = sys.argv[2]
 print ("Terminal Arguments are: ")
 print (indeks)
+print (county)
 print ("__________________________________________")
-
-randCount = 100
-random_or_all = "random"
 
 if indeks == "NDVI":
     NoVI = "EVI"
@@ -67,16 +66,13 @@ print ("output_dir is: " + output_dir)
 ###                   process data
 ###
 ########################################################################################
-if random_or_all == "random":
-    f_name = "noOutlier_int_Grant_Irr_2008_2018_" + indeks + "_" + str(randCount) + "randomfields.csv"
-    out_name = output_dir + "NoJump_int_Grant_Irr_2008_2018_" + indeks + "_" + str(randCount) + "randomfields.csv"
-else:
-    f_name = "noOutlier_int_Grant_Irr_2008_2018_" + indeks + ".csv"
-    out_name = output_dir + "NoJump_int_Grant_Irr_2008_2018_" + indeks + ".csv"
 
+f_name = "noOutlier_" + county + "_" +  indeks + ".csv"
+out_name = output_dir + "NoJump_" + county + "_" + indeks + "_JFD.csv"
 
 an_EE_TS = pd.read_csv(data_dir + f_name, low_memory=False)
 an_EE_TS['human_system_start_time'] = pd.to_datetime(an_EE_TS['human_system_start_time'])
+an_EE_TS["ID"] = an_EE_TS["ID"].astype(str)
 
 ########################################################################################
 ###
@@ -108,10 +104,9 @@ for a_poly in IDs:
     curr_field.reset_index(drop=True, inplace=True)
     
     ################################################################
-
-    no_Outlier_TS = nc.correct_big_jumps_1DaySeries(dataTMS_jumpie = curr_field, 
-                                                    give_col = indeks, 
-                                                    maxjump_perDay = 0.018)
+    no_Outlier_TS = nc.correct_big_jumps_1DaySeries_JFD(dataTMS_jumpie = curr_field, 
+                                                        give_col = indeks, 
+                                                        maxjump_perDay = 0.018)
 
     output_df[row_pointer: row_pointer + curr_field.shape[0]] = no_Outlier_TS.values
     counter += 1

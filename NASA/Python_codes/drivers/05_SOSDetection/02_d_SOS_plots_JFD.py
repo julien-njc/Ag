@@ -63,6 +63,11 @@ print (type(randCount))
 ###                   Aeolus Directories
 ###
 ####################################################################################
+####################################################################################
+###
+###                   Aeolus Directories
+###
+####################################################################################
 raw_dir = "/data/hydro/users/Hossein/NASA/01_raw_GEE/"
 data_dir = "/data/hydro/users/Hossein/NASA/05_SG_TS/"
 SOS_plot_dir = "/data/hydro/users/Hossein/NASA/06_SOS_plots/"
@@ -77,8 +82,8 @@ print ("_________________________________________________________")
 ###
 ####################################################################################
 if randCount == "all":
-    f_name_NDVI = "04_SG_int_Grant_Irr_2008_2018_NDVI.csv"
-    f_name_EVI = "04_SG_int_Grant_Irr_2008_2018_EVI.csv"
+    f_name_NDVI = "04_SG_int_Grant_Irr_2008_2018_NDVI_JFD.csv"
+    f_name_EVI = "04_SG_int_Grant_Irr_2008_2018_EVI_JFD.csv"
     SG_df_NDVI = pd.read_csv(data_dir + f_name_NDVI, low_memory=False)
     SG_df_EVI = pd.read_csv(data_dir + f_name_EVI, low_memory=False)
 
@@ -86,13 +91,13 @@ if randCount == "all":
     SG_df_NDVI['human_system_start_time'] = pd.to_datetime(SG_df_NDVI['human_system_start_time'])
     SG_df_EVI['human_system_start_time'] = pd.to_datetime(SG_df_EVI['human_system_start_time'])
 
-    plot_path = SOS_plot_dir + "allfields/"
+    plot_path = SOS_plot_dir + "allfields_JFD/"
     os.makedirs(plot_path, exist_ok=True)
     print ("plot_path is: " +  plot_path)
     print ("_________________________________________________________")
 else:
-    f_name_NDVI = "04_SG_int_Grant_Irr_2008_2018_" + "NDVI" + "_" + str(randCount) + "randomfields.csv"
-    f_name_EVI = "04_SG_int_Grant_Irr_2008_2018_" + "EVI" + "_" + str(randCount) + "randomfields.csv"
+    f_name_NDVI = "04_SG_int_Grant_Irr_2008_2018_" + "NDVI" + "_" + str(randCount) + "randomfields_JFD.csv"
+    f_name_EVI = "04_SG_int_Grant_Irr_2008_2018_" + "EVI" + "_" + str(randCount) + "randomfields_JFD.csv"
     SG_df_NDVI = pd.read_csv(data_dir + f_name_NDVI, low_memory=False)
     SG_df_EVI = pd.read_csv(data_dir + f_name_EVI, low_memory=False)
     
@@ -100,7 +105,7 @@ else:
     SG_df_NDVI['human_system_start_time'] = pd.to_datetime(SG_df_NDVI['human_system_start_time'])
     SG_df_EVI['human_system_start_time'] = pd.to_datetime(SG_df_EVI['human_system_start_time'])
 
-    plot_path = SOS_plot_dir + str(randCount) + "randomfields/"
+    plot_path = SOS_plot_dir + str(randCount) + "randomfields_JFD/"
     os.makedirs(plot_path, exist_ok=True)
     print ("plot_path is: " +  plot_path)
     print ("_________________________________________________________")

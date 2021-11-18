@@ -1,28 +1,27 @@
 ####
-#### Nov 8, 2021
+#### Nov 18, 2021
 ####
 
-
-# import matplotlib.backends.backend_pdf
 import csv
 import numpy as np
 import pandas as pd
-# from IPython.display import Image
+
 import datetime
 from datetime import date
 import time
+
 import scipy
 import scipy.signal
 import os, os.path
-import matplotlib
 
 from patsy import cr
 
 # from pprint import pprint
+import matplotlib
 import matplotlib.pyplot as plt
 import seaborn as sb
-
 from pandas.plotting import register_matplotlib_converters
+
 register_matplotlib_converters()
 
 import sys
@@ -50,19 +49,14 @@ eleven_colors = ["gray", "lightcoral", "red", "peru",
                  "blue", "violet", "deepskyblue"]
 
 # indeks = sys.argv[1]
-randCount = sys.argv[1]
-if randCount != "all":
-    randCount = int(randCount)
-
-print ("randCount is:")
-print (randCount)
-print (type(randCount))
-
+county = sys.argv[1]
+print (county)
 ####################################################################################
 ###
 ###                   Aeolus Directories
 ###
 ####################################################################################
+param_dir = "/data/hydro/users/Hossein/NASA/000_shapefile_data_part/"
 raw_dir = "/data/hydro/users/Hossein/NASA/01_raw_GEE/"
 data_dir = "/data/hydro/users/Hossein/NASA/05_SG_TS/"
 SOS_plot_dir = "/data/hydro/users/Hossein/NASA/06_SOS_plots/"
@@ -76,63 +70,72 @@ print ("_________________________________________________________")
 ###                   Read data
 ###
 ####################################################################################
-if randCount == "all":
-    f_name_NDVI = "04_SG_int_Grant_Irr_2008_2018_NDVI.csv"
-    f_name_EVI = "04_SG_int_Grant_Irr_2008_2018_EVI.csv"
-    SG_df_NDVI = pd.read_csv(data_dir + f_name_NDVI, low_memory=False)
-    SG_df_EVI = pd.read_csv(data_dir + f_name_EVI, low_memory=False)
 
-    # convert the strings to datetime format
-    SG_df_NDVI['human_system_start_time'] = pd.to_datetime(SG_df_NDVI['human_system_start_time'])
-    SG_df_EVI['human_system_start_time'] = pd.to_datetime(SG_df_EVI['human_system_start_time'])
+if county == "Monterey2014":
+    raw_names = ["L7_T1C2L2_Scaled_Monterey2014_2013-01-01_2015-12-31.csv",
+                 "L8_T1C2L2_Scaled_Monterey2014_2013-01-01_2015-12-31.csv"]
+    SF_data_name = "Monterey.csv"
 
-    plot_path = SOS_plot_dir + "allfields/"
-    os.makedirs(plot_path, exist_ok=True)
-    print ("plot_path is: " +  plot_path)
-    print ("_________________________________________________________")
-else:
-    f_name_NDVI = "04_SG_int_Grant_Irr_2008_2018_" + "NDVI" + "_" + str(randCount) + "randomfields.csv"
-    f_name_EVI = "04_SG_int_Grant_Irr_2008_2018_" + "EVI" + "_" + str(randCount) + "randomfields.csv"
-    SG_df_NDVI = pd.read_csv(data_dir + f_name_NDVI, low_memory=False)
-    SG_df_EVI = pd.read_csv(data_dir + f_name_EVI, low_memory=False)
-    
-    # convert the strings to datetime format
-    SG_df_NDVI['human_system_start_time'] = pd.to_datetime(SG_df_NDVI['human_system_start_time'])
-    SG_df_EVI['human_system_start_time'] = pd.to_datetime(SG_df_EVI['human_system_start_time'])
+elif county == "AdamBenton2016":
+    raw_names = ["L7_T1C2L2_Scaled_AdamBenton2016_2015-01-01_2017-10-14.csv",
+                 "L8_T1C2L2_Scaled_AdamBenton2016_2015-01-01_2017-10-14.csv"]
+    SF_data_name = "AdamBenton2016.csv"
 
-    plot_path = SOS_plot_dir + str(randCount) + "randomfields/"
-    os.makedirs(plot_path, exist_ok=True)
-    print ("plot_path is: " +  plot_path)
-    print ("_________________________________________________________")
+elif county == "FranklinYakima2018":
+    raw_names = ["L7_T1C2L2_Scaled_FranklinYakima2018_2017-01-01_2019-10-14.csv",
+                 "L8_T1C2L2_Scaled_FranklinYakima2018_2017-01-01_2019-10-14.csv"]
+    SF_data_name = "FranklinYakima2018.csv"
 
-f_names = ["L5_T1C2L2_Scaled_int_Grant_Irr_2008_2018_2cols_102008-01-01_2012-05-05.csv", 
-           "L7_T1C2L2_Scaled_int_Grant_Irr_2008_2018_2cols_10_2008-01-01_2021-09-23.csv",
-           "L8_T1C2L2_Scaled_int_Grant_Irr_2008_2018_2cols_10_2008-01-01_2021-10-14.csv"]
-
-L5 = pd.read_csv(raw_dir + f_names[0], low_memory=False)
-L7 = pd.read_csv(raw_dir + f_names[1], low_memory=False)
-L8 = pd.read_csv(raw_dir + f_names[2], low_memory=False)
-
-# L5_EVI = L5.copy()
-# L7_EVI = L7.copy()
-# L8_EVI = L8.copy()
-
-# L5_NDVI = L5.copy()
-# L7_NDVI = L7.copy()
-# L8_NDVI = L8.copy()
-
-IDs = np.sort(SG_df_NDVI["ID"].unique())
-### List of unique fields
-print ("_____________________________________")
-print("len(IDs)")
-print (len(IDs))
-print ("_____________________________________")
+elif county == "Grant2017":
+    raw_names = ["L7_T1C2L2_Scaled_Grant2017_2016-01-01_2018-10-14.csv",
+                 "L8_T1C2L2_Scaled_Grant2017_2016-01-01_2018-10-14.csv"]
+    SF_data_name = "Grant2017.csv"
 
 
-raw_df = pd.concat([L5, L7, L8])
-del (L5, L7, L8)
 
-raw_df = raw_df[raw_df.ID.isin(IDs)]
+SG_df_NDVI = pd.read_csv(data_dir + "SG_" + county + "_NDVI.csv")
+SG_df_EVI  = pd.read_csv(data_dir + "SG_" + county + "_EVI.csv")
+
+# convert the strings to datetime format
+SG_df_NDVI['human_system_start_time'] = pd.to_datetime(SG_df_NDVI['human_system_start_time'])
+SG_df_EVI['human_system_start_time'] = pd.to_datetime(SG_df_EVI['human_system_start_time'])
+
+# Monterays ID will be read as integer, convert to string
+SG_df_EVI["ID"] = SG_df_EVI["ID"].astype(str)
+SG_df_NDVI["ID"] = SG_df_NDVI["ID"].astype(str)
+
+"""
+    Read and Clean the damn raw data
+"""
+L7 = pd.read_csv(raw_dir + raw_names[0], low_memory=False)
+L8 = pd.read_csv(raw_dir + raw_names[1], low_memory=False)
+raw_df = pd.concat([L7, L8])
+raw_df["ID"] = raw_df["ID"].astype(str)
+del (L7, L8)
+
+
+"""
+  Plots should be exact. Therefore, we need to filter by
+  last survey year, toss out NASS, and we are sticking to irrigated
+  fields for now.
+"""
+SF_data = pd.read_csv(param_dir + SF_data_name)
+SF_data["ID"] = SF_data["ID"].astype(str)
+
+if county != "Monterey2014":
+    # filter by last survey date. Last 4 digits of county name!
+    SF_data = nc.filter_by_lastSurvey(SF_data, year = county[-4:]) 
+    SF_data = nc.filter_out_NASS(SF_data)         # Toss NASS
+    SF_data = nc.filter_out_nonIrrigated(SF_data) # keep only irrigated lands
+
+    raw_df    = raw_df[raw_df.ID.isin([SF_data.ID])]
+    SG_df_EVI = SG_df_EVI[SG_df_EVI.ID.isin([SF_data.ID])]
+    SG_df_NDVI= SG_df_NDVI[SG_df_NDVI.ID.isin([SF_data.ID])]
+
+"""
+   We need to put the damn ID, crop_type, Survey_date in the plot's title
+"""
+SG_df_EVI = pd.merge(SG_df_EVI, SF_data, on=['ID'], how='left')
 
 raw_df_EVI = raw_df.copy()
 raw_df_NDVI = raw_df.copy()
@@ -145,7 +148,7 @@ raw_df_EVI = raw_df_EVI[raw_df_EVI["EVI"].notna()]
 raw_df_NDVI = raw_df_NDVI[raw_df_NDVI["NDVI"].notna()]
 
 raw_df_EVI = nc.add_human_start_time_by_system_start_time(raw_df_EVI)
-raw_df_NDVI = nc.add_human_start_time_by_system_start_time(raw_df_NDVI)
+raw_df_NDVI= nc.add_human_start_time_by_system_start_time(raw_df_NDVI)
 
 ########################################
 
@@ -157,8 +160,15 @@ raw_df_EVI = nc.initial_clean(df = raw_df_EVI, column_to_be_cleaned = "EVI")
 
 counter = 0
 
-for ID in IDs:
-    if (counter%100 == 0):
+### List of unique fields
+IDs = np.sort(SG_df_EVI["ID"].unique())
+print ("_____________________________________")
+print('len(IDs) is {}!'.format(len(IDs)))
+print ("_____________________________________")
+
+
+for ID in IDs[0:2]:
+    if (counter%1000 == 0):
         print ("_____________________________________")
         print ("counter: " + str(counter))
         print (ID)
@@ -190,7 +200,6 @@ for ID in IDs:
     # ax3.grid(True); ax4.grid(True); ax5.grid(True); ax6.grid(True);
 
     # Plot NDVIs
-
     ncp.SG_clean_SOS_orchardinPlot(raw_dt = curr_raw_NDVI,
                                    SG_dt = curr_SG_NDVI,
                                    idx = "NDVI",
@@ -198,22 +207,7 @@ for ID in IDs:
                                    onset_cut = 0.3, 
                                    offset_cut = 0.3);
 
-    # ncp.SG_clean_SOS_orchardinPlot(raw_dt = curr_raw_NDVI,
-    #                                SG_dt = curr_SG_NDVI,
-    #                                idx = "NDVI",
-    #                                ax = ax2,
-    #                                onset_cut = 0.4, 
-    #                                offset_cut = 0.4);
-
-    # ncp.SG_clean_SOS_orchardinPlot(raw_dt = curr_raw_NDVI,
-    #                                SG_dt = curr_SG_NDVI,
-    #                                idx = "NDVI",
-    #                                ax = ax3,
-    #                                onset_cut = 0.5, 
-    #                                offset_cut = 0.5);
-
     # Plot EVIs
-
     ncp.SG_clean_SOS_orchardinPlot(raw_dt = curr_raw_EVI,
                                    SG_dt = curr_SG_EVI,
                                    idx = "EVI",
@@ -221,31 +215,36 @@ for ID in IDs:
                                    onset_cut = 0.3, 
                                    offset_cut = 0.3);
 
-    # ncp.SG_clean_SOS_orchardinPlot(raw_dt = curr_raw_EVI,
-    #                                SG_dt = curr_SG_EVI,
-    #                                idx = "EVI",
-    #                                ax = ax5,
-    #                                onset_cut = 0.4, 
-    #                                offset_cut = 0.4);
+    """
+       Title is already set in the function above. 
+       We can replace/overwrite it here:
+    """
+    if county == "Monterey2014":
+        plant = curr_SG_EVI['Crop2014'].unique()[0].lower().replace(" ", "_")
+        data_source = "Land IQ"
+        survey_date = curr_SG_EVI['LstModDat'].unique()[0]
+        plot_title = county + ", " + plant + " (" + ID + ", " + data_source + ", " + survey_date +")"
+    else:
+        plant = curr_SG_EVI['CropTyp'].unique()[0].lower().replace(" ", "_")
+        data_source = curr_SG_EVI['DataSrc'].unique()[0]
+        irrig_type = curr_SG_EVI['Irrigtn'].unique()[0]
+        survey_date = curr_SG_EVI['LstSrvD'].unique()[0]
+        plot_title = county + ", " + plant + " (" + ID + ", " + data_source + ", " + irrig_type + ", " + survey_date +")"
 
-    # ncp.SG_clean_SOS_orchardinPlot(raw_dt = curr_raw_EVI,
-    #                                SG_dt = curr_SG_EVI,
-    #                                idx = "EVI",
-    #                                ax = ax6,
-    #                                onset_cut = 0.5, 
-    #                                offset_cut = 0.5);
+    ax1.set_title(plot_title);
+    ax2.set_title("");
 
-    fig_name = plot_path + ID + '.pdf'
-
+    plot_path = SOS_plot_dir + "/train_plots/" + plant + "/"
     os.makedirs(plot_path, exist_ok=True)
+    print ("plot_path is " + plot_path)
 
+    fig_name = plot_path + county + "_" + ID +'.pdf'
     plt.savefig(fname = fig_name, dpi=100, bbox_inches='tight')
     plt.close('all')
     counter += 1
 
 
 print ("done")
-end_time = time.time()
-print(end_time - start_time)
+print(time.time() - start_time)
 
 

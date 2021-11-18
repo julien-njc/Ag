@@ -403,7 +403,7 @@ def find_signChange_locs_DifferentOnOffset(SOS_candids, EOS_candids):
                 EOS_sign_change[pointer+1] = 1
 
     # sign_change = SOS_sign_change + EOS_sign_change
-    return (SOS_sign_change, EOS_sign_change) # sign_change
+    return (SOS_sign_change, EOS_sign_change)
 
 ########################################################################
 

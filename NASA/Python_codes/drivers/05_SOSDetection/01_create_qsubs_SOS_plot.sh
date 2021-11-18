@@ -1,5 +1,5 @@
 #!/bin/bash
-cd /home/hnoorazar/NASA/05_SOS_detection/
+cd /home/hnoorazar/NASA/05_SOS_detection_plots/
 
 outer=1
 

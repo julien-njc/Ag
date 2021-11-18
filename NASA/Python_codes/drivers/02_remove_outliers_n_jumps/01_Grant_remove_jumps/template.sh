@@ -15,8 +15,8 @@
 ## Define path for output & error logs
 #PBS -k o
 
-#PBS -e /home/hnoorazar/NASA/02_remove_outliers_n_jumps/01_Grant_remove_jumps/error/outer_E
-#PBS -o /home/hnoorazar/NASA/02_remove_outliers_n_jumps/01_Grant_remove_jumps/error/outer_O
+#PBS -e /home/hnoorazar/NASA/02_remove_outliers_n_jumps/01_Grant_remove_jumps/error/outer_e
+#PBS -o /home/hnoorazar/NASA/02_remove_outliers_n_jumps/01_Grant_remove_jumps/error/outer_o
 
 ## Define path for reporting
 ##PBS -M h.noorazar@yahoo.com
@@ -53,9 +53,3 @@ echo "--------- continue on ---------"
 # ----------------------------------------------------------------
 
 python3 ./01_remove_jumps.py indeks
-
-
-
-
-
-

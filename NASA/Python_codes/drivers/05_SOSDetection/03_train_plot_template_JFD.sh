@@ -4,19 +4,19 @@
 # Configure PBS options
 # ----------------------------------------------------------------
 ## Define a job name
-#PBS -N outer_indeks_reg_random_or_all
+#PBS -N outer_train_county_plt
 
 ## Define compute options
-#PBS -l nodes=1:ppn=1
-#PBS -l mem=30gb
+#PBS -l nodes=1:ppn=10
+#PBS -l mem=5gb
 #PBS -l walltime=99:00:00
 #PBS -q hydro
 
 ## Define path for output & error logs
 #PBS -k o
-
-#PBS -e /home/hnoorazar/NASA/03_regularize_fillGap/error/outer_random_or_all_e
-#PBS -o /home/hnoorazar/NASA/03_regularize_fillGap/error/outer_random_or_all_o
+        
+#PBS -e /home/hnoorazar/NASA/05_SOS_detection_plots/error/outer_train_county_e
+#PBS -o /home/hnoorazar/NASA/05_SOS_detection_plots/error/outer_train_county_o
 
 ## Define path for reporting
 ##PBS -M h.noorazar@yahoo.com
@@ -29,8 +29,8 @@ module purge
 module load gcc/7.3.0
 module load python/3.7.1/gcc/7.3.0
 
-cd /home/hnoorazar/NASA/03_regularize_fillGap
    
+cd /home/hnoorazar/NASA/05_SOS_detection_plots
 
 # ----------------------------------------------------------------
 # Gathering useful information
@@ -52,7 +52,7 @@ echo "--------- continue on ---------"
 # Run python code for matrix
 # ----------------------------------------------------------------
 
-python3 ./00_regularize_fillGap_oneStep.py indeks random_or_all
+python3 ./03_d_train_plots_JFD.py county
 
 
 

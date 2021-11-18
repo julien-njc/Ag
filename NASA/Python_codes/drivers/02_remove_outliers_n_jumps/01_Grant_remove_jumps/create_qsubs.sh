@@ -5,8 +5,8 @@ outer=1
 
 for indeks in EVI NDVI
 do
-  cp template.sh ./qsubs/q_$outer.sh
-  sed -i s/outer/"$outer"/g    ./qsubs/q_$outer.sh
-  sed -i s/indeks/"$indeks"/g  ./qsubs/q_$outer.sh
+  cp template.sh ./qsubs/q_Grant$outer.sh
+  sed -i s/outer/"$outer"/g    ./qsubs/q_Grant$outer.sh
+  sed -i s/indeks/"$indeks"/g  ./qsubs/q_Grant$outer.sh
   let "outer+=1" 
 done

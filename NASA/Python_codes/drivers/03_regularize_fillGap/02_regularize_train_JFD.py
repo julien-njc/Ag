@@ -57,14 +57,12 @@ import NASA_plot_core as ncp
 ####################################################################################
 
 indeks = sys.argv[1]
-random_or_all = sys.argv[2]
+county = sys.argv[2]
 regular_window_size = 10
-randCount = 100
 
 # do the following since walla walla has two parts and we have to use walla_walla in terminal
 print ("Terminal Arguments are: ")
 print (indeks)
-print (random_or_all)
 print ("__________________________________________")
 if indeks == "NDVI":
     NoVI = "EVI"
@@ -89,17 +87,14 @@ os.makedirs(output_dir, exist_ok=True)
 ###                   process data
 ###
 ########################################################################################
-if random_or_all == "random":
-    f_name = "01_jump_removed_int_Grant_Irr_2008_2018_" + indeks + "_" + str(randCount) + "randomfields.csv"
-    out_name = output_dir + "03_regular_int_Grant_Irr_2008_2018_" + indeks + "_" + str(randCount) + "randomfields.csv"
-else:
-    f_name = "01_jump_removed_int_Grant_Irr_2008_2018_" + indeks + ".csv"
-    out_name = output_dir + "03_regular_int_Grant_Irr_2008_2018_" + indeks + ".csv"
 
+f_name = "NoJump_" + county + "_" + indeks + "_JFD.csv"
+out_name = output_dir + "regular_" + county + "_" + indeks + "_JFD.csv"
 
 an_EE_TS = pd.read_csv(data_dir + f_name, low_memory=False)
 an_EE_TS.drop(["system_start_time"], axis=1, inplace=True)
 an_EE_TS['human_system_start_time'] = pd.to_datetime(an_EE_TS['human_system_start_time'])
+an_EE_TS["ID"] = an_EE_TS["ID"].astype(str)
 print (an_EE_TS.head(2))
 
 ###
@@ -119,8 +114,8 @@ print (reg_cols)
 
 # We have 51 below, because in total there are 515 days in 17 months
 # we have
-st_yr = 2008
-end_yr = 2021
+st_yr = an_EE_TS.human_system_start_time.dt.year.min()
+end_yr = an_EE_TS.human_system_start_time.dt.year.max()
 no_days = (end_yr - st_yr + 1) * 366 # 14 years, each year 366 days!
 no_steps = no_days // regular_window_size
 
@@ -128,6 +123,11 @@ nrows = no_steps * len(ID_list)
 output_df = pd.DataFrame(data = None,
                          index = np.arange(nrows), 
                          columns = reg_cols)
+
+
+print('st_yr is {}!'.format(st_yr))
+print('end_yr is {}!'.format(end_yr))
+print('nrows is {}!'.format(nrows))
 ########################################################################################
 
 counter = 0
@@ -145,8 +145,8 @@ for a_poly in ID_list:
     regularized_TS = nc.regularize_a_field(a_df = curr_field, \
                                            V_idks = indeks, \
                                            interval_size = regular_window_size,\
-                                           start_year=st_yr, \
-                                           end_year=end_yr)
+                                           start_year = st_yr, \
+                                           end_year = end_yr)
     
     regularized_TS = nc.fill_theGap_linearLine(a_regularized_TS = regularized_TS, V_idx = indeks)
     if (counter == 0):
@@ -161,7 +161,17 @@ for a_poly in ID_list:
     so, the actual thing might be smaller!
     """
     right_pointer = row_pointer + min(no_steps, regularized_TS.shape[0])
-    output_df[row_pointer: right_pointer] = regularized_TS.values
+
+    # why this should not work?:
+    output_df[row_pointer : (row_pointer+regularized_TS.shape[0])] = regularized_TS.values
+
+    # try:
+    #     ### I do not know why the hell the following did not work for training set!
+    #     ### So, I converted this to try-except statement! hopefully, this will
+    #     ### work, at least as temporary remedy!
+    #     output_df[row_pointer: right_pointer] = regularized_TS.values
+    # except:
+    #     output_df[row_pointer: right_pointer+1] = regularized_TS.values
     counter += 1
 
 
@@ -174,8 +184,7 @@ output_df.drop_duplicates(inplace=True)
 output_df.dropna(inplace=True)
 
 output_df.to_csv(out_name, index = False)
-end_time = time.time()
-print(end_time - start_time)
+print(time.time() - start_time)
 
 
 

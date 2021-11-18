@@ -4,19 +4,19 @@
 # Configure PBS options
 # ----------------------------------------------------------------
 ## Define a job name
-#PBS -N outer_indeks_randCount_SOS_plt
+#PBS -N outer_indeks_SG_county_JFD
 
 ## Define compute options
-#PBS -l nodes=1:ppn=10
-#PBS -l mem=5gb
+#PBS -l nodes=1:ppn=1
+#PBS -l mem=30gb
 #PBS -l walltime=06:00:00
 #PBS -q batch
 
 ## Define path for output & error logs
 #PBS -k o
-        
-#PBS -e /home/hnoorazar/NASA/05_SOS_detection_plots/error/outer_e
-#PBS -o /home/hnoorazar/NASA/05_SOS_detection_plots/error/outer_o
+
+#PBS -e /home/hnoorazar/NASA/04_SG/error/outer_county_JFD_e
+#PBS -o /home/hnoorazar/NASA/04_SG/error/outer_county_JFD_o
 
 ## Define path for reporting
 ##PBS -M h.noorazar@yahoo.com
@@ -29,8 +29,8 @@ module purge
 module load gcc/7.3.0
 module load python/3.7.1/gcc/7.3.0
 
-
-cd /home/hnoorazar/NASA/05_SOS_detection_plots
+cd /home/hnoorazar/NASA/04_SG
+   
 
 # ----------------------------------------------------------------
 # Gathering useful information
@@ -52,7 +52,7 @@ echo "--------- continue on ---------"
 # Run python code for matrix
 # ----------------------------------------------------------------
 
-python3 ./01_d_SOS_plots.py randCount
+python3 ./02_SG_train_JFD.py indeks county
 
 
 

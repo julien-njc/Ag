@@ -69,10 +69,10 @@ print ("output_dir is: " + output_dir)
 ########################################################################################
 if random_or_all == "random":
     f_name = "noOutlier_int_Grant_Irr_2008_2018_" + indeks + "_" + str(randCount) + "randomfields.csv"
-    out_name = output_dir + "NoJump_int_Grant_Irr_2008_2018_" + indeks + "_" + str(randCount) + "randomfields.csv"
+    out_name = output_dir + "NoJump_int_Grant_Irr_2008_2018_" + indeks + "_" + str(randCount) + "randomfields_JFD.csv"
 else:
     f_name = "noOutlier_int_Grant_Irr_2008_2018_" + indeks + ".csv"
-    out_name = output_dir + "NoJump_int_Grant_Irr_2008_2018_" + indeks + ".csv"
+    out_name = output_dir + "NoJump_int_Grant_Irr_2008_2018_" + indeks + "_JFD.csv"
 
 
 an_EE_TS = pd.read_csv(data_dir + f_name, low_memory=False)
@@ -109,9 +109,9 @@ for a_poly in IDs:
     
     ################################################################
 
-    no_Outlier_TS = nc.correct_big_jumps_1DaySeries(dataTMS_jumpie = curr_field, 
-                                                    give_col = indeks, 
-                                                    maxjump_perDay = 0.018)
+    no_Outlier_TS = nc.correct_big_jumps_1DaySeries_JFD(dataTMS_jumpie = curr_field, 
+                                                        give_col = indeks, 
+                                                        maxjump_perDay = 0.018)
 
     output_df[row_pointer: row_pointer + curr_field.shape[0]] = no_Outlier_TS.values
     counter += 1

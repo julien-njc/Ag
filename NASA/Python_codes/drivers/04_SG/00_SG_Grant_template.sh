@@ -4,7 +4,7 @@
 # Configure PBS options
 # ----------------------------------------------------------------
 ## Define a job name
-#PBS -N outer_indeks_noJump_random_or_all_SG
+#PBS -N outer_indeks_SG_random_or_all_SG
 
 ## Define compute options
 #PBS -l nodes=1:ppn=1
@@ -52,7 +52,7 @@ echo "--------- continue on ---------"
 # Run python code for matrix
 # ----------------------------------------------------------------
 
-python3 ./00_SG.py indeks random_or_all
+python3 ./00_SG_Grant.py indeks random_or_all
 
 
 

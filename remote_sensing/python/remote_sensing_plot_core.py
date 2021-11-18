@@ -74,7 +74,7 @@ def plot_for_landsat_proposal(twoYears_EVI8Day, SFYr, ax, onset_cut=0.3, offset_
     ###             fine granularity table
     ###
     #############################################
-    # create the full calenadr to make better estimation of SOS and EOS.
+    # create the full calendar to make better estimation of SOS and EOS.
     fine_granular_table = rc.create_calendar_table(SF_year = SFYr)
     fine_granular_table.rename(columns={"Date": "human_system_start_time"}, inplace=True)
     fine_granular_table = pd.merge(fine_granular_table, crr_fld, on=['human_system_start_time', 'SF_year', 'doy'], how='left')
@@ -270,7 +270,7 @@ def SG_1yr_panels_noPeak_SOS_fineGranularity(twoYears_raw,
     ###             fine granularity table
     ###
     #############################################
-    # create the full calenadr to make better estimation of SOS and EOS.
+    # create the full calendar to make better estimation of SOS and EOS.
     fine_granular_table = rc.create_calendar_table(SF_year = SFYr)
     fine_granular_table = pd.merge(fine_granular_table, crr_fld, on=['Date', 'SF_year', 'doy'], how='left')
 
@@ -424,7 +424,7 @@ def SG_1yr_panels_clean_sciPy_My_Peaks_SOS_fineGranularity(twoYears_raw, twoYear
     ###             fine granularity table
     ###
     #############################################
-    # create the full calenadr to make better estimation of SOS and EOS.
+    # create the full calendar to make better estimation of SOS and EOS.
     fine_granular_table = rc.create_calendar_table(SF_year = SFYr)
     fine_granular_table = pd.merge(fine_granular_table, crr_fld, on=['Date', 'SF_year', 'doy'], how='left')
 
@@ -721,7 +721,7 @@ def SG_1yr_panels_clean_sciPy_My_Peaks_SOS_fineGranularity_1Year(dataAB, idx, SG
     ###             fine granularity table
     ###
     #############################################
-    # create the full calenadr to make better estimation of SOS and EOS.
+    # create the full calendar to make better estimation of SOS and EOS.
     fine_granular_table = rc.create_calendar_table(SF_year = SFYr)
     fine_granular_table = pd.merge(fine_granular_table, crr_fld, on=['Date', 'SF_year', 'doy'], how='left')
 
@@ -901,7 +901,7 @@ def SG_1yr_panels_clean_sciPy_My_Peaks_SOS_fineGranularity_1Year(dataAB, idx, SG
     ###   plot SOS and EOS
     ###
     # Update the EVI/NDVI values to the smoothed version.
-    crr_fld [idx] = SG_pred
+    crr_fld[idx] = SG_pred
     #
     #  EVI Ratio is added in this step
     #
