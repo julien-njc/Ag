@@ -117,7 +117,8 @@ print (reg_cols)
 st_yr = an_EE_TS.human_system_start_time.dt.year.min()
 end_yr = an_EE_TS.human_system_start_time.dt.year.max()
 no_days = (end_yr - st_yr + 1) * 366 # 14 years, each year 366 days!
-no_steps = no_days // regular_window_size
+
+no_steps = int(np.ceil(no_days / regular_window_size)) # no_days // regular_window_size
 
 nrows = no_steps * len(ID_list)
 output_df = pd.DataFrame(data = None,
@@ -131,9 +132,9 @@ print('nrows is {}!'.format(nrows))
 ########################################################################################
 
 counter = 0
-
+row_pointer = 0
 for a_poly in ID_list:
-    if (counter % 300 == 0):
+    if (counter % 1000 == 0):
         print (counter)
     curr_field = an_EE_TS[an_EE_TS[IDcolName]==a_poly].copy()
     ################################################################
@@ -154,21 +155,24 @@ for a_poly in ID_list:
         print ("regularized_TS.columns", regularized_TS.columns)
     
     ################################################################
-    row_pointer = no_steps * counter
+    # row_pointer = no_steps * counter
     
     """
-    The reason for the following line is that we assume all years are 366 days!
-    so, the actual thing might be smaller!
+       The reason for the following line is that we assume all years are 366 days!
+       so, the actual thing might be smaller!
     """
-    right_pointer = row_pointer + min(no_steps, regularized_TS.shape[0])
-
-    # why this should not work?:
+    # why this should not work?: It may leave some empty rows in output_df
+    # but we drop them at the end.
     output_df[row_pointer : (row_pointer+regularized_TS.shape[0])] = regularized_TS.values
+    row_pointer += regularized_TS.shape[0]
 
+    # right_pointer = row_pointer + min(no_steps, regularized_TS.shape[0])
+    # print('right_pointer - row_pointer + 1 is {}!'.format(right_pointer - row_pointer + 1))
+    # print('len(regularized_TS.values) is {}!'.format(len(regularized_TS.values)))
     # try:
     #     ### I do not know why the hell the following did not work for training set!
     #     ### So, I converted this to try-except statement! hopefully, this will
-    #     ### work, at least as temporary remedy!
+    #     ### work, at least as temporary remedy! Why it worked well with 2008-2021 but not 2013-2015
     #     output_df[row_pointer: right_pointer] = regularized_TS.values
     # except:
     #     output_df[row_pointer: right_pointer+1] = regularized_TS.values
@@ -184,9 +188,9 @@ output_df.drop_duplicates(inplace=True)
 output_df.dropna(inplace=True)
 
 output_df.to_csv(out_name, index = False)
-print(time.time() - start_time)
 
 
-
-
+end_time = time.time()
+print ("current time is {}".format(end_time))
+print(end_time - start_time)
 

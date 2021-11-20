@@ -90,7 +90,6 @@ def Null_SOS_EOS_by_DoYDiff(pd_TS, min_season_length=40):
     # if len(SOS_indexes) == 0 or len(EOS_indexes) == 0:
     #     return pd_TS_DoYDiff
 
-
     if len(SOS_indexes) == 0 :
         if len(EOS_indexes) == 0:
             return pd_TS_DoYDiff
@@ -169,9 +168,7 @@ def Null_SOS_EOS_by_DoYDiff(pd_TS, min_season_length=40):
         current_growing_season_Length = (pd_TS_DoYDiff.loc[EOS_pointer, 'human_system_start_time'] - \
                                          pd_TS_DoYDiff.loc[SOS_pointer, 'human_system_start_time']).days
 
-        #
-        #  Kill/invalidate the SOS and EOS if growing season length is too short
-        #
+        #  Kill/invalidate season if its length is too short.
         if current_growing_season_Length < min_season_length:
             pd_TS_DoYDiff.loc[SOS_pointer, 'SOS'] = 0
             pd_TS_DoYDiff.loc[EOS_pointer, 'EOS'] = 0
@@ -179,7 +176,7 @@ def Null_SOS_EOS_by_DoYDiff(pd_TS, min_season_length=40):
     return(pd_TS_DoYDiff)
 
 
-def addToDF_SOS_EOS_White(pd_TS, VegIdx = "EVI", onset_thresh=0.15, offset_thresh=0.15):
+def addToDF_SOS_EOS_White(pd_TS, VegIdx = "EVI", onset_thresh=0.4, offset_thresh=0.3):
     """
     In this methods the NDVI_Ratio = (NDVI - NDVI_min) / (NDVI_Max - NDVI_min)
     is computed.
@@ -807,5 +804,4 @@ def add_human_start_time_by_system_start_time(HDF):
     if type(HDF["human_system_start_time"]==str):
         HDF['human_system_start_time'] = pd.to_datetime(HDF['human_system_start_time'])
     return(HDF)
-
 

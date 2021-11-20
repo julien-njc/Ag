@@ -106,7 +106,7 @@ raw_df = pd.concat([L7, L8])
 raw_df["ID"] = raw_df["ID"].astype(str)
 del (L7, L8)
 """
-  Plots should be exact. Therefore, we need to filter by
+  Plots should be correct. Therefore, we need to filter by
   last survey year, toss out NASS, and we are sticking to irrigated
   fields for now.
 """

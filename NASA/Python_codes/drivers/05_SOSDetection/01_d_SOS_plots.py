@@ -246,6 +246,5 @@ for ID in IDs:
 
 print ("done")
 end_time = time.time()
+print ("current time is {}".format(end_time))
 print(end_time - start_time)
-
-

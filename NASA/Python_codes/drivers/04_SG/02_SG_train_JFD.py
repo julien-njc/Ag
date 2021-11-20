@@ -119,10 +119,8 @@ an_EE_TS.drop_duplicates(inplace=True)
 an_EE_TS.dropna(inplace=True)
 
 an_EE_TS.to_csv(out_name, index = False)
+
+
 end_time = time.time()
+print ("current time is {}".format(end_time))
 print(end_time - start_time)
-
-
-
-
-

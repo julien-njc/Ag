@@ -22,49 +22,53 @@ data_dir <- paste0("/Users/hn/Documents/01_research_data/remote_sensing/00_shape
 
 ##############################################################################
 
-WSDA <- readOGR(paste0(data_dir, "Eastern_", SF_year, "/Eastern_", 2017, ".shp"),
-                       layer = paste0("Eastern_", SF_year), 
+WSDA <- readOGR(paste0(data_dir, "Eastern_", 2017, "/Eastern_", 2017, ".shp"),
+                       layer = paste0("Eastern_", 2017), 
                        GDAL1_integer64_policy = TRUE)
 
 
 Grant <- WSDA[grepl('Grant', WSDA$county), ]
 
-
-write_dir <- paste0("/Users/hn/Documents/01_research_data/remote_sensing/00_shapeFiles/0002_final_shapeFiles/")
 writeOGR(obj = Grant, 
          dsn = paste0(write_dir, "/", "Grant2017"), 
          layer = "Grant2017", 
          driver = "ESRI Shapefile")
 
 
-WSDA <- readOGR(paste0(data_dir, "Eastern_", SF_year, "/Eastern_", 2016, ".shp"),
-                       layer = paste0("Eastern_", SF_year), 
+WSDA <- readOGR(paste0(data_dir, "Eastern_", 2016, "/Eastern_", 2016, ".shp"),
+                       layer = paste0("Eastern_", 2016), 
                        GDAL1_integer64_policy = TRUE)
-
 
 Adam <- WSDA[grepl('Adam', WSDA$county), ]
 Benton <- WSDA[grepl('Benton', WSDA$county), ]
 Adam <- raster::bind(Adam, Benton)
 
-write_dir <- paste0("/Users/hn/Documents/01_research_data/remote_sensing/00_shapeFiles/0002_final_shapeFiles/")
+write_dir <- paste0("/Users/hn/Documents/01_research_data/NASA/shapefiles/")
 writeOGR(obj = Adam, 
          dsn = paste0(write_dir, "/", "AdamBenton2016"), 
          layer = "AdamBenton2016", 
          driver = "ESRI Shapefile")
 
+Adam <- Adam@data
+write.csv(Adam, 
+          "/Users/hn/Documents/01_research_data/NASA/data_part_of_shapefile/AdamBenton2016.csv", row.names = F)
 
-WSDA <- readOGR(paste0(data_dir, "Eastern_", SF_year, "/Eastern_", 2016, ".shp"),
-                       layer = paste0("Eastern_", SF_year), 
+
+WSDA <- readOGR(paste0(data_dir, "Eastern_", 2018, "/Eastern_", 2018, ".shp"),
+                       layer = paste0("Eastern_", 2018), 
                        GDAL1_integer64_policy = TRUE)
-
 
 Franklin <- WSDA[grepl('Franklin', WSDA$county), ]
 Yakima <- WSDA[grepl('Yakima', WSDA$county), ]
 Franklin <- raster::bind(Franklin, Yakima)
 
-write_dir <- paste0("/Users/hn/Documents/01_research_data/remote_sensing/00_shapeFiles/0002_final_shapeFiles/")
 writeOGR(obj = Franklin, 
          dsn = paste0(write_dir, "/", "FranklinYakima2018"), 
          layer = "FranklinYakima2018", 
          driver = "ESRI Shapefile")
+
+
+Franklin <- Franklin@data
+write.csv(Franklin, 
+          "/Users/hn/Documents/01_research_data/NASA/data_part_of_shapefile/FranklinYakima2018.csv", row.names = F)
 
