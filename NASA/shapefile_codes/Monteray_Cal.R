@@ -21,9 +21,7 @@ Monterey <- readOGR(paste0(data_dir, "2014_Crop_Monterey_CDL.shp"),
                     layer = "2014_Crop_Monterey_CDL", 
                     GDAL1_integer64_policy = TRUE)
 
-
-
-Monterey <- Monterey[grepl('Monterey', Monterey$County), ]
+# Monterey <- Monterey[grepl('Monterey', Monterey$County), ]
 
 # there is only one source: "Land IQ, LLC"
 # there is only one comment:  NA
@@ -34,7 +32,7 @@ Monterey@data <- within(Monterey@data, remove(Comments, ModBy, Source, County, V
 
 add_identifier <- function(dt_df, year){
   dt_df@data <- tibble::rowid_to_column(dt_df@data, "ID")
-  dt_df@data$ID <- paste0(dt_df@data$ID)
+  dt_df@data$ID <- paste0("Monterey", year, "_", dt_df@data$ID)
   return(dt_df)
 }
 
@@ -42,7 +40,14 @@ Monterey <- add_identifier(Monterey, 2014)
 
 write_dir <- paste0("/Users/hn/Documents/01_research_data/NASA/shapefiles/")
 writeOGR(obj = Monterey, 
-         dsn = paste0(write_dir, "/", "clean_Monterey"), 
+         dsn = paste0(write_dir, "/", "clean_Monterey"),
          layer = "clean_Monterey", 
          driver = "ESRI Shapefile")
+
+
+
+Monterey <- Monterey@data
+# Mont$County <- "Monterey"
+write.csv(Monterey, 
+          "/Users/hn/Documents/01_research_data/NASA/data_part_of_shapefile/Monterey2014.csv", row.names = F)
 

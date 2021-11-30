@@ -200,5 +200,5 @@ output_df.drop_duplicates(inplace=True)
 output_df.to_csv(out_name, index = False)
 
 end_time = time.time()
-print(end_time - start_time)
+print ("it took {:.0f} minutes to run this code.".format((end_time - start_time)/60))
 

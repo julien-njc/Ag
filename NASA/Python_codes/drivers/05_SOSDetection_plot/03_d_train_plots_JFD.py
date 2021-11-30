@@ -67,27 +67,25 @@ print ("_________________________________________________________")
 ####################################################################################
 
 if county == "Monterey2014":
-    raw_names = ["L7_T1C2L2_Scaled_Monterey2014_2013-01-01_2015-12-31.csv",
-                 "L8_T1C2L2_Scaled_Monterey2014_2013-01-01_2015-12-31.csv"]
-    SF_data_name = "Monterey.csv"
+    raw_names = ["L7_T1C2L2_Scaled_Monterey2014_2013-01-01_2016-01-01.csv",
+                 "L8_T1C2L2_Scaled_Monterey2014_2013-01-01_2016-01-01.csv"]
 
 elif county == "AdamBenton2016":
     raw_names = ["L7_T1C2L2_Scaled_AdamBenton2016_2015-01-01_2017-10-14.csv",
                  "L8_T1C2L2_Scaled_AdamBenton2016_2015-01-01_2017-10-14.csv"]
-    SF_data_name = "AdamBenton2016.csv"
 
 elif county == "FranklinYakima2018":
     raw_names = ["L7_T1C2L2_Scaled_FranklinYakima2018_2017-01-01_2019-10-14.csv",
                  "L8_T1C2L2_Scaled_FranklinYakima2018_2017-01-01_2019-10-14.csv"]
-    SF_data_name = "FranklinYakima2018.csv"
 
 elif county == "Grant2017":
     raw_names = ["L7_T1C2L2_Scaled_Grant2017_2016-01-01_2018-10-14.csv",
                  "L8_T1C2L2_Scaled_Grant2017_2016-01-01_2018-10-14.csv"]
-    SF_data_name = "Grant2017.csv"
 
-SG_df_NDVI = pd.read_csv(data_dir + "SG_" + county + "_NDVI.csv")
-SG_df_EVI  = pd.read_csv(data_dir + "SG_" + county + "_EVI.csv")
+SF_data_name = county + ".csv"
+
+SG_df_NDVI = pd.read_csv(data_dir + "SG_" + county + "_NDVI_JFD.csv")
+SG_df_EVI  = pd.read_csv(data_dir + "SG_" + county + "_EVI_JFD.csv")
 
 # convert the strings to datetime format
 SG_df_NDVI['human_system_start_time'] = pd.to_datetime(SG_df_NDVI['human_system_start_time'])
@@ -106,7 +104,7 @@ raw_df = pd.concat([L7, L8])
 raw_df["ID"] = raw_df["ID"].astype(str)
 del (L7, L8)
 """
-  Plots should be correct. Therefore, we need to filter by
+  Plots should be exact. Therefore, we need to filter by
   last survey year, toss out NASS, and we are sticking to irrigated
   fields for now.
 """
@@ -256,9 +254,8 @@ for ID in IDs:
     ax1.set_title(plot_title);
     ax2.set_title("");
 
-    plot_path = SOS_plot_dir + "/train_plots/" + plant + "/"
+    plot_path = SOS_plot_dir + "/train_plots_JFD/" + plant + "/"
     os.makedirs(plot_path, exist_ok=True)
-    print ("plot_path is " + plot_path)
 
     fig_name = plot_path + county + "_" + ID +'.pdf'
     plt.savefig(fname = fig_name, dpi=100, bbox_inches='tight')
@@ -269,7 +266,6 @@ for ID in IDs:
 print ("done")
 
 end_time = time.time()
-print ("current time is {}".format(end_time))
-print(end_time - start_time)
+print ("it took {:.0f} minutes to run this code.".format((end_time - start_time)/60))
 
 

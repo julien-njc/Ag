@@ -19,27 +19,8 @@ import time
 import sys
 start_time = time.time()
 
-# search path for modules
-# look @ https://stackoverflow.com/questions/67631/how-to-import-a-module-given-the-full-path
+# search path for modules# look @ https://stackoverflow.com/questions/67631/how-to-import-a-module-given-the-full-path
 
-
-####################################################################################
-###
-###                      Local
-###
-####################################################################################
-
-###
-### Core path
-###
-
-# sys.path.append('/Users/hn/Documents/00_GitHub/Ag/remote_sensing/python/')
-
-###
-### Directories
-###
-
-# param_dir = "/Users/hn/Documents/00_GitHub/Ag/remote_sensing/parameters/"
 ####################################################################################
 ###
 ###                      Aeolus Core path
@@ -191,6 +172,5 @@ output_df.to_csv(out_name, index = False)
 
 
 end_time = time.time()
-print ("current time is {}".format(end_time))
-print(end_time - start_time)
+print ("it took {:.0f} minutes to run this code.".format((end_time - start_time)/60))
 

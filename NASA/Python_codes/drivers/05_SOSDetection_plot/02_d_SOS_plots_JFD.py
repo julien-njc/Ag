@@ -252,5 +252,4 @@ for ID in IDs:
 print ("done")
 
 end_time = time.time()
-print ("current time is {}".format(end_time))
-print(end_time - start_time)
+print ("it took {:.0f} minutes to run this code.".format((end_time - start_time)/60))

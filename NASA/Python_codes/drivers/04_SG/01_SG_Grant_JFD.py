@@ -133,5 +133,4 @@ an_EE_TS.to_csv(out_name, index = False)
 
 
 end_time = time.time()
-print ("current time is {}".format(end_time))
-print(end_time - start_time)
+print ("it took {:.0f} minutes to run this code.".format((end_time - start_time)/60))

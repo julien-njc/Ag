@@ -754,12 +754,12 @@ def regularize_a_field(a_df, V_idks="NDVI", interval_size=10, start_year=2008, e
     # The tail of the TS
     #
     A = pd.date_range(max(regular_df.human_system_start_time),
-              pd.Timestamp(end_year, 12, 31),
-              freq=str(interval_size)+'D')
+                      pd.Timestamp(end_year, 12, 31),
+                      freq=str(interval_size)+'D')
 
     missing_end_df = pd.DataFrame(data = None, 
-                                    index = np.arange(len(A[1:])), 
-                                    columns = regular_cols)
+                                  index = np.arange(len(A[1:])), 
+                                  columns = regular_cols)
     missing_end_df.human_system_start_time = A[1:]
     missing_end_df.ID = regular_df.ID.unique()[0]
     mm=max(regular_df.human_system_start_time)

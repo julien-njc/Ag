@@ -18,8 +18,10 @@ options(digit=9)
 
 ##############################################################################
 
-data_dir <- paste0("/Users/hn/Documents/01_research_data/remote_sensing/00_shapeFiles/0002_final_shapeFiles/000_Eastern_WA/")
+data_dir <- paste0("/Users/hn/Documents/01_research_data/remote_sensing/", 
+                  "00_shapeFiles/0002_final_shapeFiles/000_Eastern_WA/")
 
+write_dir <- paste0("/Users/hn/Documents/01_research_data/NASA/shapefiles/")
 ##############################################################################
 
 WSDA <- readOGR(paste0(data_dir, "Eastern_", 2017, "/Eastern_", 2017, ".shp"),
@@ -43,7 +45,6 @@ Adam <- WSDA[grepl('Adam', WSDA$county), ]
 Benton <- WSDA[grepl('Benton', WSDA$county), ]
 Adam <- raster::bind(Adam, Benton)
 
-write_dir <- paste0("/Users/hn/Documents/01_research_data/NASA/shapefiles/")
 writeOGR(obj = Adam, 
          dsn = paste0(write_dir, "/", "AdamBenton2016"), 
          layer = "AdamBenton2016", 
@@ -71,4 +72,34 @@ writeOGR(obj = Franklin,
 Franklin <- Franklin@data
 write.csv(Franklin, 
           "/Users/hn/Documents/01_research_data/NASA/data_part_of_shapefile/FranklinYakima2018.csv", row.names = F)
+
+
+
+# which year is the damn walla walla surveyed most
+for (yr in c(2015, 2016, 2017, 2018)){
+    WSDA <- readOGR(paste0(data_dir, "Eastern_", yr, "/Eastern_", yr, ".shp"),
+                    layer = paste0("Eastern_", yr), 
+                     GDAL1_integer64_policy = TRUE)
+    walla <- WSDA[grepl('Walla Walla', WSDA$county), ]
+    walla <- walla@data
+    walla <- filter_lastSrvyDate_DataTable(walla, yr)
+    print (paste0("no. fields in year ", yr, " is ", length(unique(walla$ID))))
+}
+
+
+WSDA <- readOGR(paste0(data_dir, "Eastern_", 2015, "/Eastern_", 2015, ".shp"),
+                       layer = paste0("Eastern_", 2015), 
+                       GDAL1_integer64_policy = TRUE)
+
+Walla <- WSDA[grepl('Walla Walla', WSDA$county), ]
+
+writeOGR(obj = Walla, 
+         dsn = paste0(write_dir, "/", "Walla2015"), 
+         layer = "Walla2015", 
+         driver = "ESRI Shapefile")
+
+
+Walla <- Walla@data
+write.csv(Walla, 
+          "/Users/hn/Documents/01_research_data/NASA/data_part_of_shapefile/Walla2015.csv", row.names = F)
 

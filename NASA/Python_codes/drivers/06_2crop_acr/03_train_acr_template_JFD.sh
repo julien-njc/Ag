@@ -15,8 +15,8 @@
 ## Define path for output & error logs
 #PBS -k o
         
-#PBS -e /home/hnoorazar/NASA/05_SOS_detection_tables/error/outer_train_county_e
-#PBS -o /home/hnoorazar/NASA/05_SOS_detection_tables/error/outer_train_county_o
+#PBS -e /home/hnoorazar/NASA/06_2crop_acr/error/outer_train_county_e
+#PBS -o /home/hnoorazar/NASA/06_2crop_acr/error/outer_train_county_o
 
 ## Define path for reporting
 ##PBS -M h.noorazar@yahoo.com
@@ -30,7 +30,7 @@ module load gcc/7.3.0
 module load python/3.7.1/gcc/7.3.0
 
    
-cd /home/hnoorazar/NASA/05_SOS_detection_tables
+cd /home/hnoorazar/NASA/06_2crop_acr
 
 # ----------------------------------------------------------------
 # Gathering useful information
@@ -52,5 +52,5 @@ echo "--------- continue on ---------"
 # Run python code for matrix
 # ----------------------------------------------------------------
 
-python3 ./03_d_train_tables_JFD.py county indeks SEOS_cut
+python3 ./03_train_acr_JFD.py indeks
 

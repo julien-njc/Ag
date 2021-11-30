@@ -144,7 +144,9 @@ for SEOS_cut in [33, 44, 55]:
         output_df.to_csv(output_name, index = False)
         
         eastern_confusion = output_df.groupby(['parameters']).sum()
-        eastern_confusion['parameters'] = eastern_confusion.index # parameters are converted to index. Convert it back to a column
+
+        # parameters are converted to index. Convert it back to a column
+        eastern_confusion['parameters'] = eastern_confusion.index 
 
         columnss = output_df.columns[0:5]
         eastern_confusion = eastern_confusion[columnss]

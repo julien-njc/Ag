@@ -2,7 +2,7 @@
 cd /home/hnoorazar/NASA/03_regularize_fillGap
 
 outer=1
-for county in AdamBenton2016 FranklinYakima2018 Grant2017 Monterey2014
+for county in AdamBenton2016 FranklinYakima2018 Grant2017 Monterey2014 Walla2015
 do
   for indeks in EVI NDVI
   do
