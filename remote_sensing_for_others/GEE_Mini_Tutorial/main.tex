@@ -845,6 +845,46 @@ is based on TOA data which is not perfect! However,
 it seems running some smoothing methods on it can
 make it useful.
 
+
+\section{Tiny Tips, Big Problems}
+\label{sec:Tiny-Tips-Big-Problems}
+
+Some times you may find yourself in a situation
+for which you are using the biggest sledgehammer to deal
+with the tiniest nail. In these scenarios the empire of Google
+does not have a function (for good reasons most likely) to do the job. 
+If brute force is the chosen approach these tips may help.
+
+\begin{description}
+\item [Object Types] There are two types of objects or functions.
+Some are called server-side. Some are called client-size.
+Here is an \href{https://code.earthengine.google.com/?scriptPath=users\%2Fhnoorazar\%2FGEE_Mini_Tutorial\%3AobjectTypeForLoop}{example}  
+that shows a client-side object does not work with server-side object.
+
+It is strongly advised to avoid using/writing client-side
+objects/functions. The client-side objects also make the
+server/code/interface be very slow, freeze at times.
+
+\item [Batch Export] This is an example that Google does not think
+is useful. But if you need to export a collection of images you can do it
+either using a for-loop for which you may need to look at the previous example.
+Or, you can use \func{batch.Download.ImageCollection.toDrive(.)}. 
+Both of these approaches are demonstrated \href{https://code.earthengine.google.com/cda913b68aecf6e49b3d09961c1cd458}{here}.
+
+Two remarks in this regard. First, the function for downloading the image 
+collection as a batch\footnote{\func{batch.Download.ImageCollection.toDrive(.)}} did not work for me,
+but the for-loop did\footnote{I was visualizing the images as RGB images and exporting them; \textbf{var} \code{imageRGB =} \codeCyan{an\_image}.\func{visualize}(vizParams).}.
+The images I exported turned out to be black and white.
+Secondly, any time a data is exported on GEE interface, you need
+to click on the \textbf{Run} button on Task tab. Perhaps Python
+can be used to avoid this problem, as well as server-side/client-side
+problem altogether.
+
+
+\end{description}
+
+
+
 %%%%%%%----------------------------------------
 %%%%%%%
 %%%%%%% references
