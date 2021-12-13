@@ -21,6 +21,8 @@ Monterey <- readOGR(paste0(data_dir, "2014_Crop_Monterey_CDL.shp"),
                     layer = "2014_Crop_Monterey_CDL", 
                     GDAL1_integer64_policy = TRUE)
 
+# Monterey$County[is.na(Monterey$County)] <- "na"
+# NA_county <- Monterey[grepl('na', Monterey$County), ]
 # Monterey <- Monterey[grepl('Monterey', Monterey$County), ]
 
 # there is only one source: "Land IQ, LLC"
@@ -47,6 +49,14 @@ writeOGR(obj = Monterey,
 
 
 Monterey <- Monterey@data
+# Monterey$Crop2014 <- tolower(Monterey$Crop2014)
+# Monterey$Crop2014 <- sub("/", "_", Monterey$Crop2014)
+# Monterey$Crop2014 <- sub(" ", "-", Monterey$Crop2014)
+# Monterey$Crop2014 <- sub(" ", "-", Monterey$Crop2014)
+# Monterey$Crop2014 <- sub(" ", "-", Monterey$Crop2014)
+# Monterey$Crop2014 <- sub(" ", "-", Monterey$Crop2014)
+# Monterey$Crop2014 <- sub(" ", "-", Monterey$Crop2014)
+# Monterey$Crop2014 <- sub(",", "", Monterey$Crop2014)
 # Mont$County <- "Monterey"
 write.csv(Monterey, 
           "/Users/hn/Documents/01_research_data/NASA/data_part_of_shapefile/Monterey2014.csv", row.names = F)

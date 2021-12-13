@@ -1,6 +1,15 @@
 ####
-#### Nov. 19, 2021
+#### last update Nov. 29, 2021
 ####
+"""
+  This is not efficient. I am doing the following two scenarios in a
+  sequential fashion.
+   a. three filters: irrigated fields, NASS out, survey date correct
+   b. one filter: irrigated fields
+
+   The least could be done is do it in parallel fashion!
+"""
+
 import csv
 import numpy as np
 import pandas as pd
