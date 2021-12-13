@@ -75,6 +75,10 @@
 font={\color{red}},
 }
 
+\newcommand{\EVI}{E\!V\!I}
+\newcommand{\NDVI}{N\!D\!V\!I}
+\newcommand{\NIR}{N\!I\!R}
+
 \title{Google Earth Engine}
 \author{Hossein Noorazar}
 \date{\today}
@@ -795,10 +799,10 @@ Landsat-5 C2 L2 & SR\_B4: 0.77 -- 0.90 $\mu m$ & SR\_B3: 0.63 -- 0.69 $\mu m$ & 
 \begin{gather}
 \label{eq:EVILandsat8}
 \begin{aligned}
-\text{EVI} &= G \times \frac{NIR - R}{NIR + C1 \times R - C2 \times B + L} \\
-\text{EVI}_S &= 2.5 \times \frac{B8 - B4}{B8 + 6 \times B4 - 7.5 \times B2 + 1}\\
-\text{EVI}_8 &= 2.5 \times \frac{B5 - B4}{B5 + 6 \times B4 - 7.5 \times B2 + 1} \\
-\text{EVI}_7 &= 2.5 \times \frac{B4 - B3}{B4 + 6 \times B3 - 7.5 \times B1 + 1}
+\EVI &= G \times \frac{\NIR - R}{\NIR + C1 \times R - C2 \times B + L} \\
+\EVI_S &= 2.5 \times \frac{B8 - B4}{B8 + 6 \times B4 - 7.5 \times B2 + 1}\\
+\EVI_8 &= 2.5 \times \frac{B5 - B4}{B5 + 6 \times B4 - 7.5 \times B2 + 1} \\
+\EVI_7 &= 2.5 \times \frac{B4 - B3}{B4 + 6 \times B3 - 7.5 \times B1 + 1}
 \end{aligned}
 \end{gather} 
 
@@ -857,7 +861,7 @@ If brute force is the chosen approach these tips may help.
 
 \begin{description}
 \item [Object Types] There are two types of objects or functions.
-Some are called server-side. Some are called client-size.
+Some are called server-side. Some are called client-side.
 Here is an \href{https://code.earthengine.google.com/?scriptPath=users\%2Fhnoorazar\%2FGEE_Mini_Tutorial\%3AobjectTypeForLoop}{example}  
 that shows a client-side object does not work with server-side object.
 
@@ -873,10 +877,11 @@ Both of these approaches are demonstrated \href{https://code.earthengine.google.
 
 Two remarks in this regard. First, the function for downloading the image 
 collection as a batch\footnote{\func{batch.Download.ImageCollection.toDrive(.)}} did not work for me,
-but the for-loop did\footnote{I was visualizing the images as RGB images and exporting them; \textbf{var} \code{imageRGB =} \codeCyan{an\_image}.\func{visualize}(vizParams).}.
+but the for-loop did\footnote{I was visualizing the images as RGB images and exporting them; \textbf{var} \code{imageRGB =} \codeCyan{an\_image}.\func{visualize}(vizParams). 
+I am not too sure if the batch download's problem is specific to RGB images.}.
 The images I exported turned out to be black and white.
 Secondly, any time a data is exported on GEE interface, you need
-to click on the \textbf{Run} button on Task tab. Perhaps Python
+to click on the \textbf{Run} button on \textbf{Task} tab. Perhaps Python
 can be used to avoid this problem, as well as server-side/client-side
 problem altogether.
 
