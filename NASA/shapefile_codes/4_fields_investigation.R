@@ -52,6 +52,10 @@ IDs <- c("105429_WSDA_SF_2017", "104563_WSDA_SF_2017", # single
 #
 #    Body
 #
+
+
+
+
 SF <- readOGR(paste0(SF_dir, "Eastern_2017.shp"),
                      layer = "Eastern_2017", 
                      GDAL1_integer64_policy = TRUE)

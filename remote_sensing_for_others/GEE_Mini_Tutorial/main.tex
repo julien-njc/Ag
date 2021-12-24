@@ -3,7 +3,6 @@
 \usepackage[osf,sc]{mathpazo}
 \usepackage[scaled=0.90]{helvet}
 \usepackage[table,dvipsnames]{xcolor}
-\usepackage[breaklinks]{hyperref}
 
 \usepackage{enumitem,mathtools}
 % \usepackage[ruled,vlined]{algorithm2e}
@@ -257,9 +256,37 @@ For the enhancement details please see~\cite{C2L2Describe}.
 \end{description}
 
 
+\section{Scaling the Bands}
+\label{sec:Scaling-the-Bands}
+The purpose of this section is to make a point.
+Since it is an important point, a section is devoted to it.
 
+If you look at the band tables on \href{https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S2#bands}{Sentinel-2},
+there is a column called \emph{scale}. If you look at the band
+table of \href{https://developers.google.com/earth-engine/datasets/catalog/LANDSAT_LC08_C02_T1_L2#bands}{Landsat 8 Level 2, Collection 2, Tier 1}, there are two columns called \emph{scale} and \emph{offset}. But such columns do not exist on 
+\href{https://developers.google.com/earth-engine/datasets/catalog/LANDSAT_LT05_C01_T1_TOA#bands}{Landsat 5 TM Collection 1 Tier 1 TOA Reflectance}.
 
+For some reason, Google Earth Engine has not scaled the bands
+and has made that your problem. So, you have to scale the bands
+properly during computations. If you forget to scale in case of Sentinel-2 and 
+$\NDVI = \frac{\NIR - R}{\NIR + R}$ you will be lucky since scales
+cancel out but that will not happen in case of EVI because 
+of the additional 1 in the denominator 
+(or in case of Landsat an off-set parameter is present as well);
+\begin{gather}\label{eq:EVIeq} % gather and aligned leads to having one label for eq.
+\begin{aligned}
+\EVI &\coloneqq  G \times \frac{\rho_{NIR} - \rho_R}{\rho_{NIR} + C_1 \rho_R - C_2 \rho_B + L} \\ 
+   &= 2.5 \times \frac{\rho_{NIR} - \rho_R}{\rho_{NIR} + 6 \rho_R - 7.5 \rho_B + 1} \\ 
+\end{aligned}
+\end{gather} 
 
+Moreover, if you search the web for masking clouds in Sentinel,
+you will find the function \href{https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S2}{maskS2clouds}. 
+If you look closely, in the last line the function is dividing 
+the result by 10,000. Therefore, you do not have to scale
+the bands again in computation of VIs. However,
+you have to apply the \func{maskS2clouds} functions
+to the image collection before computing the VIs.
 
 %%%%%%%--------------------------------------------------------------------------
 %%%%%%%
@@ -313,9 +340,9 @@ property to a feature you should use:\\
 If you want to copy \vari{properties} (metadata)
 of \vari{feature\_b} into \vari{feature\_a} you can do:\\
 
-\code{feature\_a} = \code{feature\_a}.\func{copyProperties}(\code{feature\_b}, [\codeRed{`ID`}, \codeRed{`Irrigation\_type'}]);\\
+\code{feature\_a} = \code{feature\_a}.\func{copyProperties}(\code{feature\_b}, [\codeRed{`ID'}, \codeRed{`Irrigation\_type'}]);\\
 
-\noindent where [\codeRed{`ID`}, \codeRed{`Irrigation\_type'}] 
+\noindent where [\codeRed{`ID'}, \codeRed{`Irrigation\_type'}] 
 is a subset of \vari{properties} of \vari{feature\_b} 
 to be copied into \vari{feature\_a}.
 I guess if that argument is dropped, then
@@ -852,12 +879,17 @@ make it useful.
 
 \section{Tiny Tips, Big Problems}
 \label{sec:Tiny-Tips-Big-Problems}
+The tips in this section are useful for beginners and
+if you want to do something that is unusual.
 
 Some times you may find yourself in a situation
 for which you are using the biggest sledgehammer to deal
 with the tiniest nail. In these scenarios the empire of Google
 does not have a function (for good reasons most likely) to do the job. 
-If brute force is the chosen approach these tips may help.
+If brute force is the chosen approach then these tips may be handy. 
+If you are the only person on the planet who wants
+to do a certain thing, maybe you need to think again,
+and let go of useless approaches.
 
 \begin{description}
 \item [Object Types] There are two types of objects or functions.
@@ -873,17 +905,38 @@ server/code/interface be very slow, freeze at times.
 is useful. But if you need to export a collection of images you can do it
 either using a for-loop for which you may need to look at the previous example.
 Or, you can use \func{batch.Download.ImageCollection.toDrive(.)}. 
-Both of these approaches are demonstrated \href{https://code.earthengine.google.com/cda913b68aecf6e49b3d09961c1cd458}{here}.
+Both of these approaches are demonstrated \href{https://code.earthengine.google.com/?scriptPath=users\%2Fhnoorazar\%2FGEE_Mini_Tutorial\%3ABatchExport}{here}.
 
 Two remarks in this regard. First, the function for downloading the image 
-collection as a batch\footnote{\func{batch.Download.ImageCollection.toDrive(.)}} did not work for me,
-but the for-loop did\footnote{I was visualizing the images as RGB images and exporting them; \textbf{var} \code{imageRGB =} \codeCyan{an\_image}.\func{visualize}(vizParams). 
-I am not too sure if the batch download's problem is specific to RGB images.}.
+collection as a batch\footnote{\func{batch.Download.ImageCollection.toDrive(.)}} 
+behaves strangely.\footnote{I was visualizing the images as RGB 
+images and exporting them; \textbf{var} 
+\code{imageRGB =} \codeCyan{an\_image}. 
+\func{visualize}(vizParams). I am not too sure if the 
+batch download's problem is specific to RGB images.}
+In~\cref{fig:strangeBatch} there are 4 parts. The top left shows
+two images in a folder; one is exported via for-loop and the other
+is exported via batch-download. In the batch-downloaded image,
+naked eye cannot see anything, it is black and white. After opening it,
+it turns all into white (lower left). But the image exported via for-loop
+can be seen with naked eye (top right). The strange event is that the 
+batch-downloaded image, can be seen if it is opened via Python or 
+GIS (lower right image)!
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=.9\textwidth]{figures/strangeBatch}
+  \caption{Strange Behavior of Batch-Download.}
+  \label{fig:strangeBatch}
+\end{figure}
+
 The images I exported turned out to be black and white.
 Secondly, any time a data is exported on GEE interface, you need
 to click on the \textbf{Run} button on \textbf{Task} tab. Perhaps Python
 can be used to avoid this problem, as well as server-side/client-side
 problem altogether.
+
+
+
 
 
 \end{description}

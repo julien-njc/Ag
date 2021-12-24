@@ -39,8 +39,10 @@ add_identifier <- function(dt_df, year){
 }
 
 Monterey <- add_identifier(Monterey, 2014)
+setnames(Monterey@data, old=c("Crop2014", "Acres"), new=c("CropTyp", "ExctAcr"))
 
 write_dir <- paste0("/Users/hn/Documents/01_research_data/NASA/shapefiles/")
+
 writeOGR(obj = Monterey, 
          dsn = paste0(write_dir, "/", "clean_Monterey"),
          layer = "clean_Monterey", 

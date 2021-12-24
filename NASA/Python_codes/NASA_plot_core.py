@@ -14,6 +14,7 @@ import NASA_core as nc
 
 
 
+
 def SG_clean_SOS_orchardinPlot(raw_dt, SG_dt, idx, ax, onset_cut=0.5, offset_cut=0.5):
     """Returns A plot with of a given VI (NDVI or EVI) with SOS and EOS points.
 

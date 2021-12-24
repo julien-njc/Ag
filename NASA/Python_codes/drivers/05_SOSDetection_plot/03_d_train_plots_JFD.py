@@ -82,6 +82,11 @@ elif county == "Grant2017":
     raw_names = ["L7_T1C2L2_Scaled_Grant2017_2016-01-01_2018-10-14.csv",
                  "L8_T1C2L2_Scaled_Grant2017_2016-01-01_2018-10-14.csv"]
 
+elif county == "Walla2015":
+    raw_names = ["L7_T1C2L2_Scaled_Walla2015_2014-01-01_2016-12-31.csv",
+                 "L8_T1C2L2_Scaled_Walla2015_2014-01-01_2016-12-31.csv"]
+
+
 SF_data_name = county + ".csv"
 
 SG_df_NDVI = pd.read_csv(data_dir + "SG_" + county + "_NDVI_JFD.csv")
