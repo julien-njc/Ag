@@ -3,9 +3,9 @@ cd /home/hnoorazar/NASA/05_snapshot_plots/
 
 outer=1
 
-for county in AdamBenton2016 FranklinYakima2018 Grant2017 Monterey2014 Walla2015
+for TOA_or_corrected in corrected TOA
 do
-  for TOA_or_corrected in TOA corrected
+  for county in AdamBenton2016 FranklinYakima2018 Grant2017 Walla2015
   do
     cp 02_train_snap_temp_exactCount.sh ./qsubs/q_exactCount$outer.sh
     sed -i s/outer/"$outer"/g    ./qsubs/q_exactCount$outer.sh
