@@ -1,4 +1,13 @@
 // L8_C2L2Scaled.js  Jan 03, 2022
+
+// How to share code: https://developers.google.com/earth-engine/guides/playground
+//                    https://developers.google.com/earth-engine/guides/playground#script-manager-scripts-tab
+// This link should provide/share the latest version of the code:
+// https://code.earthengine.google.com/?scriptPath=users%2Fhnoorazar%2FNASA_trends%3A07_snapshot_RGB_Working%2FL8_C2L2Scaled
+// whole repo: https://code.earthengine.google.com/?accept_repo=users/hnoorazar/NASA_trends
+//
+
+
 // zz_L8_C2L2Scaled_Working_Monterey_Loop, shit_3 - exportRGBuseful1
 // Load a landsat image and select three bands.
 
