@@ -5,7 +5,7 @@
 // This link should provide/share the latest version of the code:
 // https://code.earthengine.google.com/?scriptPath=users%2Fhnoorazar%2FNASA_trends%3A07_snapshot_RGB_Working%2FL8_C2L2Scaled
 // whole repo: https://code.earthengine.google.com/?accept_repo=users/hnoorazar/NASA_trends
-//
+// Assets: https://code.earthengine.google.com/?asset=users/hnoorazar/NASA_trend
 
 
 // zz_L8_C2L2Scaled_Working_Monterey_Loop, shit_3 - exportRGBuseful1
