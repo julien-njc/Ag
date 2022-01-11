@@ -45,7 +45,6 @@ states_cluster <- subset(states, region %in% c("washington"))
 
 states_cluster <- map_data("county", "washington")
 
-
 mid_range <- function(x) mean(range(x))
 county_names <- do.call(rbind, lapply(split(states_cluster, states_cluster$subregion), function(d) {
   data.frame(lat = mid_range(d$lat), long = mid_range(d$long), subregion = unique(d$subregion))

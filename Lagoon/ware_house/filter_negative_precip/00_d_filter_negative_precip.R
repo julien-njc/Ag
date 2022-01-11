@@ -8,7 +8,6 @@ library(tidyverse)
 library(data.table)
 library(dplyr)
 library(ggplot2)
-library(maps)
 
 ##### read file
 in_dir <- "/data/hydro/users/Hossein/lagoon/00_raw_data/"
