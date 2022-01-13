@@ -143,7 +143,6 @@ def SG_clean_SOS_orchardinPlot_VerticalLine(raw_dt, SG_dt, idx, ax, onset_cut=0.
                 # annotate EOS
                 for ii in np.arange(0, len(EOS)):
                     style = dict(size=10, color='r', rotation='vertical')
-                    print (EOS.iloc[ii])
                     ax.text(x = EOS.iloc[ii]['human_system_start_time'].date(), 
                             y = -0.18, 
                             s = str(EOS.iloc[ii]['human_system_start_time'].date())[5:],

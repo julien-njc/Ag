@@ -136,38 +136,18 @@ del (L7, L8)
 SF_data = pd.read_csv(param_dir + SF_data_name)
 SF_data["ID"] = SF_data["ID"].astype(str)
 
-print ("line 129")
-print (raw_df.shape)
-print (SG_df_NDVI.shape)
-print (SG_df_EVI.shape)
-
-print (SF_data.head(1))
-print (raw_df.head(1))
-print (SG_df_NDVI.head(1))
-print (SG_df_EVI.head(1))
 
 if county != "Monterey2014":
     # filter by last survey date. Last 4 digits of county name!
     SF_data = nc.filter_by_lastSurvey(SF_data, year = county[-4:]) 
     SF_data = nc.filter_out_NASS(SF_data)         # Toss NASS
     SF_data = nc.filter_out_nonIrrigated(SF_data) # keep only irrigated lands
-    print ("line 130")
-    print (SF_data.shape)
-    print (SF_data.head(2))
     
     fuck = list(SF_data.ID)
     raw_df    = raw_df[raw_df.ID.isin(fuck)]
     SG_df_EVI = SG_df_EVI[SG_df_EVI.ID.isin(fuck)]
     SG_df_NDVI= SG_df_NDVI[SG_df_NDVI.ID.isin(fuck)]
 
-    print ("line 138")
-    print (raw_df.shape)
-    print (SG_df_NDVI.shape)
-    print (SG_df_EVI.shape)
-
-    print (raw_df.head(1))
-    print (SG_df_NDVI.head(1))
-    print (SG_df_EVI.head(1))
 
 raw_df_EVI = raw_df.copy()
 raw_df_NDVI = raw_df.copy()
@@ -211,10 +191,6 @@ SG_df_NDVI = SG_df_NDVI[SG_df_NDVI.human_system_start_time <= max_year]
 
 SG_df_EVI = SG_df_EVI[SG_df_EVI.human_system_start_time >= min_year]
 SG_df_EVI = SG_df_EVI[SG_df_EVI.human_system_start_time <= max_year]
-
-print ("line 201")
-print (SG_df_NDVI.shape)
-print (SG_df_EVI.shape)
 
 
 for ID in IDs:

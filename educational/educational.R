@@ -479,6 +479,7 @@ ddply(df, .(Gene), summarise, Value = max(Value))
 ########
 A = A[, .(mean_gdd = mean(CumDDinF)), by = c("location", "year")]
 
+
 B <- B %>%
      group_by(location, year) %>%
      summarise_at(.funs = funs(mean(., na.rm=TRUE)), vars(CumDDinF)) %>% 

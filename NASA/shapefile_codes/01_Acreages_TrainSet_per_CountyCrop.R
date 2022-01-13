@@ -24,8 +24,8 @@ data_dir <- paste0("/Users/hn/Documents/01_research_data/remote_sensing/00_shape
 
 grant_year = 2017
 WSDA <- readOGR(paste0(data_dir, "Eastern_", grant_year, "/Eastern_", grant_year, ".shp"),
-                       layer = paste0("Eastern_", grant_year), 
-                       GDAL1_integer64_policy = TRUE)
+                layer = paste0("Eastern_", grant_year), 
+                GDAL1_integer64_policy = TRUE)
 
 
 Grant <- WSDA[grepl('Grant', WSDA$county), ]
