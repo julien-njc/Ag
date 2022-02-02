@@ -1,3 +1,9 @@
+##
+##   Jan 31, 2022. 
+##   This is copy of Try201_04_CPAccum_VsHeatAccum_ModHist.R
+##   with one edit: cut the y-axis at 400.
+##
+##
 rm(list=ls())
 
 library(data.table)
@@ -19,7 +25,8 @@ chill_source_dir <- "/Users/hn/Documents/00_GitHub/Ag/chilling/"
 in_dir <- "/Users/hn/Documents/01_research_data/bloom/"
 param_dir <- paste0(bloom_source_dir, "parameters/")
 
-plot_base_dir <- "/Users/hn/Documents/00_GitHub/ag_papers/chill_paper/02_Springer_2/figure_201_ModHist/"
+plot_base_dir <- "/Users/hn/Documents/00_GitHub/ag_papers/chill_paper/02_Springer_2/figure_202_ModHist/"
+plot_base_dir <- "/Users/hn/Documents/"
 
 daily_CP_dir <- "/Users/hn/Documents/01_research_data/chilling/01_data/"
 daily_vertDD_dir <- "/Users/hn/Documents/01_research_data/bloom_4_chill_paper_trigger/"
@@ -247,7 +254,14 @@ app_tp <- "Cripps Pink"
 #
 # Take care of RCP 8.5. and next do the RCP 4.5
 startDoY_letters = c("Sep1", "Sep15", "Oct1", "Oct15", "Nov1", "Nov15", "Dec1", "Dec15", "Jan1")
-startDoY = c(1, 15, 31, 46, 62, 77, 92, 107, 123)
+startDoY =         c(1,       15,       31,      46,     62,      77,     92,     107,    123)
+
+startDoY_letters = c("Nov1", "Nov15", "Dec1", "Dec15")
+startDoY =         c(62,       77,     92,      107)
+
+
+startDoY_letters = c("Dec1")
+startDoY = c(92)
 
 print (length(startDoY))
 print (length(startDoY_letters))
@@ -281,19 +295,21 @@ for (ii in c(1:length(startDoY))){
   curr_heatAccum <- subset(curr_heatAccum, select = c(needed_cols, "vert_Cum_dd"))
   ############################################################
 
-  curr_dailyCP_melt <- melt(data.table(curr_daily_CP), id = needed_cols)
-  curr_heatAccum <-  melt(data.table(curr_heatAccum) , id = needed_cols)
+  curr_dailyCP_melt <- melt(data.table(curr_daily_CP), id=needed_cols)
+  curr_heatAccum <-  melt(data.table(curr_heatAccum) , id=needed_cols)
 
   merged_dt <- rbind(curr_dailyCP_melt, curr_heatAccum)
 
   source(bloom_core_source)
   source(bloom_plot_core_source)
   source(chill_core_source)
-  merged_plt <- double_cloud_2_rows_Accum_VertDD_CP_NoSlopes_200TrySpringerSub2(d1 = merged_dt,
-                                                                                full_CP_intcpt = 73.3,
-                                                                                heat_intcpt = 25)
+  y_Max=125
+  merged_plt <- double_cloud_2_rows_Accum_VertDD_CP_NoSlopes_200TrySpringerSub2_YMax(d1 = merged_dt,
+                                                                                     full_CP_intcpt=73.3,
+                                                                                     heat_intcpt=25, 
+                                                                                     yMax=y_Max)
 
-  plot_dir <- paste0(plot_base_dir, "CPAccum_heatAccum/")
+  plot_dir <- paste0(plot_base_dir) # , "CPAccum_heatAccum/"
 
   if (dir.exists(plot_dir) == F) {
     dir.create(path = plot_dir, recursive = T)
@@ -301,7 +317,7 @@ for (ii in c(1:length(startDoY))){
   }
   
   Fname <- paste0("00_Acum_CPHeat_", gsub(" ", "_", app_tp), "_RCP85_heatBegins", curr_startDoY_letter, "_ModHist.pdf")
-  Fname <- paste0("00_Acum_CPHeat_", "RCP85_heatBegins", curr_startDoY_letter, "_ModHist.pdf")
+  Fname <- paste0("00_Acum_CPHeat_", "RCP85_heatBegins", curr_startDoY_letter, "_ModHist_Ycut", y_Max, ".pdf")
   ggsave(plot = merged_plt,
          filename = Fname,
          width = 11, height=10, units = "in", 
@@ -349,11 +365,12 @@ for (ii in c(1:length(startDoY))){
   source(bloom_core_source)
   source(bloom_plot_core_source)
   source(chill_core_source)
-  merged_plt <- double_cloud_2_rows_Accum_VertDD_CP_NoSlopes_200TrySpringerSub2(d1 = merged_dt,
-                                                                                full_CP_intcpt = 73.3,
-                                                                                heat_intcpt = 25)
+  merged_plt <- double_cloud_2_rows_Accum_VertDD_CP_NoSlopes_200TrySpringerSub2_YMax(d1 = merged_dt,
+                                                                                     full_CP_intcpt=73.3,
+                                                                                     heat_intcpt=25,
+                                                                                     yMax=y_Max)
 
-  plot_dir <- paste0(plot_base_dir, "CPAccum_heatAccum/")
+  plot_dir <- paste0(plot_base_dir) # , "CPAccum_heatAccum/"
 
   if (dir.exists(plot_dir) == F) {
     dir.create(path = plot_dir, recursive = T)
@@ -361,7 +378,7 @@ for (ii in c(1:length(startDoY))){
   }
   
   Fname <- paste0("00_Acum_CPHeat_", gsub(" ", "_", app_tp), "_RCP45_heatBegins", curr_startDoY_letter, "_ModHist.pdf")
-  Fname <- paste0("00_Acum_CPHeat_", "RCP45_heatBegins", curr_startDoY_letter, "_ModHist.pdf")
+  Fname <- paste0("00_Acum_CPHeat_", "RCP45_heatBegins", curr_startDoY_letter, "_ModHist_Ycut", y_Max, ".pdf")
   ggsave(plot = merged_plt,
          filename = Fname,
          width = 11, height=10, units = "in", 

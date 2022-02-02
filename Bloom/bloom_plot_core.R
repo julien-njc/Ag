@@ -1,6 +1,168 @@
 # panel.grid.major = element_line(size=0.2), # inside theme
 # panel.grid.minor = element_blank(),
 
+double_cloud_2_rows_Accum_VertDD_CP_NoSlopes_200TrySpringerSub2_XCut <- function(d1, full_CP_intcpt=73.3, 
+                                                                                 heat_intcpt=25, xMax=215){
+  #
+  # set the followings in a way that x-axis and y-axis have
+  # the same length so that the damn slopes makes sense visually
+  #
+  ymin <- 0
+  ymax <- 800
+
+  xmin <- 1
+  xmax <- xMax
+   
+  newdf <- data.table(chill_doy_map)
+  # pick every other row so that x-axis ticks are less busy
+  newdf <- newdf[c(rep(c(TRUE, FALSE), (nrow(newdf)/2))), ]
+
+  the_thm <- theme(plot.margin = unit(c(t=0 , r=0 , b=0, l=0), "cm"), 
+                   panel.grid.major = element_line(size=0.2),
+                   panel.spacing=unit(.5, "cm"),
+                   legend.text=element_text(size=18, face="bold"),
+                   legend.title = element_blank(),
+                   legend.position = "bottom",
+                   legend.margin=margin(t=-0.1, unit='cm'),
+                   strip.text = element_text(face="bold", size=16, color="black"),
+                   axis.text = element_text(size=13, color="black"), # face="bold",
+                   axis.text.x = element_text(angle = 90),
+                   axis.ticks = element_line(color = "black", size = .2),
+                   axis.title.x = element_text(size=18, face="bold", margin=margin(t=2, r=0, b=0, l=0)),
+                   axis.title.y = element_text(size=18, face="bold", margin=margin(t=0, r=10, b=0, l=0)),
+                   plot.title = element_text(lineheight=.8, face="bold", size=20)
+                   )
+
+  ggplot(d1, aes(x=chill_dayofyear, y=value, fill=factor(variable))) +
+  labs(x = "", y = "cumulative quantities", fill = "data type") +
+  guides(fill=guide_legend(title="")) + 
+  facet_grid(. ~ time_period ~ location, scales="fixed") +
+  # geom_line(aes(fill=factor(Timeframe), color=factor(Timeframe) )) +
+  stat_summary(geom="ribbon", alpha=0.2,
+               fun =function(z) { quantile(z,0.5) }, 
+               fun.min=function(z) { quantile(z,0)}, 
+               fun.max=function(z) { quantile(z,1) }) +
+
+  stat_summary(geom="ribbon", alpha=0.4,
+               fun=function(z) { quantile(z,0.5) }, 
+               fun.min=function(z) { quantile(z,0.1) }, 
+               fun.max=function(z) { quantile(z,0.9) }) +
+
+  stat_summary(geom="ribbon", alpha=0.8,
+               fun=function(z) { quantile(z,0.5) }, 
+               fun.min=function(z) { quantile(z,0.25) }, 
+               fun.max=function(z) { quantile(z,0.75) }) + 
+
+  stat_summary(geom="line", fun=function(z) {quantile(z,0.5)}) +
+
+  scale_color_manual(values=c("darkgreen", "orange"),
+                     breaks=c("cume_portions", "vert_Cum_dd"),
+                     labels=c("CP accum.", "heat accum."))+
+  
+  scale_fill_manual(values=c("darkgreen", "orange"),
+                    breaks=c("cume_portions", "vert_Cum_dd"),
+                    labels=c("CP accum.", "heat accum.")) +
+  
+  # scale_y_continuous(breaks = xbreaks, label = xbreaks) +
+  scale_x_continuous(breaks = newdf$day_count_since_sept, 
+                     labels = newdf$letter_day) + 
+  geom_hline(aes(yintercept = full_CP_intcpt),      size=0.2, color="darkgreen", alpha=0.3) + 
+  # geom_hline(aes(yintercept = full_CP_intcpt*0.75), size=0.2, color="darkgreen", alpha=0.3, linetype="dashed") + 
+  # geom_hline(aes(yintercept = heat_intcpt),         size=0.2, color="orange",    alpha=0.3) + 
+  the_thm + 
+  coord_cartesian(xlim = c(xmin, xmax), ylim = c(ymin, ymax)) #
+  # theme_bw() + 
+  # geom_text(data = slopes_dt,
+  #           aes(label = sprintf(slopes_dt$str_slope), 
+  #               x = rep((xmin + 25), length(slopes_dt$str_slope)),
+  #               y = rep(220,         length(slopes_dt$str_slope))),
+  #           colour = "black", fontface = "bold",
+  #           size=5, 
+  #           inherit.aes = FALSE
+  #  )
+}
+
+double_cloud_2_rows_Accum_VertDD_CP_NoSlopes_200TrySpringerSub2_YMax <- function(d1, full_CP_intcpt=73.3, 
+                                                                                 heat_intcpt=25, yMax=400){
+  #
+  # set the followings in a way that x-axis and y-axis have
+  # the same length so that the damn slopes makes sense visually
+  #
+  ymin <- 0
+  ymax <- yMax
+
+  xmin <- 1
+  xmax <- 185 # 250
+   
+  newdf <- data.table(chill_doy_map)
+  # pick every other row so that x-axis ticks are less busy
+  newdf <- newdf[c(rep(c(TRUE, FALSE), (nrow(newdf)/2))), ]
+
+  the_thm <- theme(plot.margin = unit(c(t=0 , r=0 , b=0, l=0), "cm"), 
+                   panel.grid.major = element_line(size=0.2),
+                   panel.spacing=unit(.5, "cm"),
+                   legend.text=element_text(size=18, face="bold"),
+                   legend.title = element_blank(),
+                   legend.position = "bottom",
+                   legend.margin=margin(t=-0.1, unit='cm'),
+                   strip.text = element_text(face="bold", size=16, color="black"),
+                   axis.text = element_text(size=13, color="black"), # face="bold",
+                   axis.text.x = element_text(angle = 90),
+                   axis.ticks = element_line(color = "black", size = .2),
+                   axis.title.x = element_text(size=18, face="bold", margin=margin(t=2, r=0, b=0, l=0)),
+                   axis.title.y = element_text(size=18, face="bold", margin=margin(t=0, r=10, b=0, l=0)),
+                   plot.title = element_text(lineheight=.8, face="bold", size=20)
+                   )
+
+  ggplot(d1, aes(x=chill_dayofyear, y=value, fill=factor(variable))) +
+  labs(x = "", y = "cumulative quantities", fill = "data type") +
+  guides(fill=guide_legend(title="")) + 
+  facet_grid(. ~ time_period ~ location, scales="fixed") +
+  # geom_line(aes(fill=factor(Timeframe), color=factor(Timeframe) )) +
+  stat_summary(geom="ribbon", alpha=0.2,
+               fun =function(z) { quantile(z,0.5) }, 
+               fun.min=function(z) { quantile(z,0)}, 
+               fun.max=function(z) { quantile(z,1) }) +
+
+  stat_summary(geom="ribbon", alpha=0.4,
+               fun=function(z) { quantile(z,0.5) }, 
+               fun.min=function(z) { quantile(z,0.1) }, 
+               fun.max=function(z) { quantile(z,0.9) }) +
+
+  stat_summary(geom="ribbon", alpha=0.8,
+               fun=function(z) { quantile(z,0.5) }, 
+               fun.min=function(z) { quantile(z,0.25) }, 
+               fun.max=function(z) { quantile(z,0.75) }) + 
+
+  stat_summary(geom="line", fun=function(z) {quantile(z,0.5)}) +
+
+  scale_color_manual(values=c("darkgreen", "orange"),
+                     breaks=c("cume_portions", "vert_Cum_dd"),
+                     labels=c("CP accum.", "heat accum."))+
+  
+  scale_fill_manual(values=c("darkgreen", "orange"),
+                    breaks=c("cume_portions", "vert_Cum_dd"),
+                    labels=c("CP accum.", "heat accum.")) +
+  
+  # scale_y_continuous(breaks = xbreaks, label = xbreaks) +
+  scale_x_continuous(breaks = newdf$day_count_since_sept, 
+                     labels = newdf$letter_day) + 
+  # geom_hline(aes(yintercept = full_CP_intcpt), size=0.2, color="darkgreen", alpha=0.3) + 
+  # geom_hline(aes(yintercept = full_CP_intcpt*0.75), size=0.2, color="darkgreen", alpha=0.3, linetype="dashed") + 
+  # geom_hline(aes(yintercept = heat_intcpt),         size=0.2, color="orange",    alpha=0.3) + 
+  the_thm + 
+  coord_cartesian(xlim = c(xmin, xmax), ylim = c(ymin, ymax)) #
+  # theme_bw() + 
+  # geom_text(data = slopes_dt,
+  #           aes(label = sprintf(slopes_dt$str_slope), 
+  #               x = rep((xmin + 25), length(slopes_dt$str_slope)),
+  #               y = rep(220,         length(slopes_dt$str_slope))),
+  #           colour = "black", fontface = "bold",
+  #           size=5, 
+  #           inherit.aes = FALSE
+  #  )
+}
+
 double_cloud_2_rows_Accum_VertDD_CP_NoSlopes_200TrySpringerSub2 <- function(d1, full_CP_intcpt=73.3, heat_intcpt=25){
   
   #
