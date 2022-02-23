@@ -172,7 +172,6 @@ def SG_clean_SOS_orchardinPlot_VerticalLine(raw_dt, SG_dt, idx, ax, onset_cut=0.
     # ax.xaxis.set_major_locator(plt.MaxNLocator(18))
     # ax.right_ax.grid(False)
     # ax.grid(b=None)
-    
     ax.legend(loc="upper left");
 
 

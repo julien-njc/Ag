@@ -297,9 +297,9 @@ for ID in IDs:
     #     label.set(rotation=90, horizontalalignment='right')
 
     # ax1.xaxis.set_major_formatter(
-    #     mdates.ConciseDateFormatter(ax1.xaxis.get_major_locator()))
+    # mdates.ConciseDateFormatter(ax1.xaxis.get_major_locator()))
     ax2.xaxis.set_major_formatter(ConciseDateFormatter(ax2.xaxis.get_major_locator()))
-        # matplotlib.dates.ConciseDateFormatter(ax2.xaxis.get_major_locator()))
+    # matplotlib.dates.ConciseDateFormatter(ax2.xaxis.get_major_locator()))
 
     plot_path = SOS_plot_dir + "/exactEval6000_vertLine/" + plant + "/"
     os.makedirs(plot_path, exist_ok=True)

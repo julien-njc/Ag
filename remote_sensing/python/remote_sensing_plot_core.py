@@ -16,8 +16,13 @@ from patsy import cr
 from pprint import pprint
 import matplotlib.pyplot as plt
 import seaborn as sb
-
+from pandas.plotting import register_matplotlib_converters
+from matplotlib.dates import ConciseDateFormatter
+import matplotlib.dates as mdates
 import os, os.path
+
+from datetime import datetime
+register_matplotlib_converters()
 
 import sys
 # search path for modules
@@ -30,6 +35,223 @@ import remote_sensing_core as rc
 #####                   Function definitions
 #####
 ################################################################
+def panel_SOS_Sentinel4Landsat(twoYears_raw, twoYears_regular, idx, SG_params, 
+                               SFYr, ax, onset_cut=0.5, offset_cut=0.5):
+
+    """  Feb 2022. Sentinel Vs Landsat
+    This is clean version of SG_1yr_panels_clean_sciPy_My_Peaks_SOS_fineGranularity(.)
+    HERE, I have removed the minimums and maximums from the plot along with the "processed" data points
+    that plotted some data till before SG smoothing. 
+    I will use this to plot Sentinel and landsat side by side.
+
+
+    The function SG_1yr_panels_clean_sciPy_My_Peaks_SOS_fineGranularity(.) itself
+    has the following comment in it:
+    This function has additional part to plot SOS and EOS.
+    and it is updated version of the function savitzky_1yr_panels_clean_sciPy_and_My_PeakFinder(.)
+    """
+    ## crr_fld = dataAB.copy() #***
+    crr_fld_twoYrs_regular = twoYears_regular.copy() #***
+    print ("RS core - line 50, ", crr_fld_twoYrs_regular.shape)
+    print ("RS core - line 51, ", crr_fld_twoYrs_regular.columns)
+    print ("RS core - line 52, ", crr_fld_twoYrs_regular.image_year.unique())
+    if (not("human_system_start_time" in list(crr_fld_twoYrs_regular.columns))):
+        crr_fld_twoYrs_regular = rc.add_human_start_time(crr_fld_twoYrs_regular)
+
+    plant = crr_fld_twoYrs_regular['CropTyp'].unique()[0]
+    #
+    # Take care of names, replace "/" and "," and " " by "_"
+    #
+    plant = plant.replace("/", "_")
+    plant = plant.replace(",", "_")
+    plant = plant.replace(" ", "_")
+    plant = plant.replace("__", "_")
+
+    county = crr_fld_twoYrs_regular['county'].unique()[0]
+    ID = crr_fld_twoYrs_regular['ID'].unique()[0]
+    data_source = crr_fld_twoYrs_regular['DataSrc'].unique()[0]
+    irrig_type = crr_fld_twoYrs_regular['Irrigtn'].unique()[0]
+    survey_date = crr_fld_twoYrs_regular['LstSrvD'].unique()[0]
+
+    ### Copy the regularized values that are processed up to SG smoothing.
+    twoYrs_regular_Yvalues = crr_fld_twoYrs_regular[idx].copy()
+    twoYrs_regular_Xvalues = crr_fld_twoYrs_regular['Date'].copy()
+
+    #############################################
+    ###
+    ###             Smoothen
+    ###
+    #############################################
+    window_len = SG_params[0]
+    poly_order = SG_params[1]
+    SG_pred_twoYears = scipy.signal.savgol_filter(twoYrs_regular_Yvalues, window_length=window_len, polyorder=poly_order)
+
+    # SG might violate the boundaries. clip them:
+    SG_pred_twoYears[SG_pred_twoYears > 1 ] = 1
+    SG_pred_twoYears[SG_pred_twoYears < -1 ] = -1
+    
+    crr_fld_twoYrs_regular[idx] = SG_pred_twoYears
+    #############################################
+    # crr_fld will be one year from now on
+    crr_fld = crr_fld_twoYrs_regular.copy()
+    print ("line 92 RS core, ", crr_fld.shape, " ", crr_fld.image_year.unique())
+    
+    print ("line 94: ",  type(crr_fld.image_year.unique()[0]))
+    print ("line 95: ", type(crr_fld.image_year.unique()[1]))
+    print ("line 96 RS core, ", SFYr, ", ", type(SFYr))
+    crr_fld = crr_fld[crr_fld.image_year == SFYr]
+    print ("line 98 RS core, ", crr_fld.image_year.unique())
+    #############################################
+    ###
+    ###             fine granularity table
+    ###
+    #############################################
+    # create the full calendar to make better estimation of SOS and EOS.
+    fine_granular_table = rc.create_calendar_table(SF_year = SFYr)
+    fine_granular_table = pd.merge(fine_granular_table, crr_fld, on=['Date', 'SF_year', 'doy'], how='left')
+    print ("line 107 RS core, ", fine_granular_table.shape)
+
+    ###### We need to fill the NAs that are created because they were not created in fine_granular_table
+    fine_granular_table["image_year"] = crr_fld["image_year"].unique()[0]
+    print ("line 109 RS core, ", fine_granular_table.shape)
+    fine_granular_table["ID"]     = crr_fld["ID"].unique()[0]
+    fine_granular_table["Acres"]  = crr_fld["Acres"].unique()[0]
+    fine_granular_table["county"] = crr_fld["county"].unique()[0]
+    fine_granular_table["CropTyp"] = crr_fld["CropTyp"].unique()[0]
+    fine_granular_table["DataSrc"] = crr_fld["DataSrc"].unique()[0]
+    fine_granular_table["Irrigtn"] = crr_fld["Irrigtn"].unique()[0]
+    fine_granular_table["LstSrvD"] = crr_fld["LstSrvD"].unique()[0]
+
+    # fine_granular_table["CropGrp"] = crr_fld["CropGrp"].unique()[0] # commented out on Feb 2022
+    # fine_granular_table["ExctAcr"] = crr_fld["ExctAcr"].unique()[0] # commented out on Feb 2022
+    # fine_granular_table["IntlSrD"] = crr_fld["IntlSrD"].unique()[0] # commented out on Feb 2022
+    # fine_granular_table["Notes"]   = crr_fld["Notes"].unique()[0]   # commented out on Feb 2022
+    # fine_granular_table["RtCrpTy"] = crr_fld["RtCrpTy"].unique()[0] # commented out on Feb 2022
+    # fine_granular_table["Shap_Ar"] = crr_fld["Shap_Ar"].unique()[0] # commented out on Feb 2022
+    # fine_granular_table["Shp_Lng"] = crr_fld["Shp_Lng"].unique()[0] # commented out on Feb 2022
+    # fine_granular_table["TRS"] = crr_fld["TRS"].unique()[0] # commented out on Feb 2022
+
+    fine_granular_table = rc.add_human_start_time_by_YearDoY(fine_granular_table)
+
+    # replace NAs with -1.5. Because, that is what the function fill_theGap_linearLine()
+    # uses as indicator for missing values
+    fine_granular_table.fillna(value={idx:-1.5}, inplace=True)
+    
+    fine_granular_table = rc.fill_theGap_linearLine(regular_TS = fine_granular_table, 
+                                                    V_idx=idx, 
+                                                    SF_year=SFYr)
+    
+    # update SG_pred so that we do not have to update too many other stuff.
+    SG_pred = fine_granular_table[idx].values.copy()
+    crr_fld = fine_granular_table
+    y = fine_granular_table[idx].copy()
+    #############################################
+    ###
+    ###   Form a data table of X and Y values
+    ###
+    #############################################
+
+    if len(fine_granular_table['image_year'].unique()) == 2:
+        X = rc.extract_XValues_of_2Yrs_TS(fine_granular_table, SF_yr = SFYr)
+    elif len(fine_granular_table['image_year'].unique()) == 1:
+        X = fine_granular_table['doy']
+
+    d = {'DoY': X, 'Date': pd.to_datetime(fine_granular_table.human_system_start_time.values).values}
+    date_df = pd.DataFrame(data=d)
+
+    #############################################
+    ###
+    ###      Form a dictionary for plotting
+    ###
+    #############################################
+
+    keyy = "SG: [" + str(window_len) + ", " + str(poly_order) + "]"
+    plotting_dic = { keyy : [SG_pred]}
+
+    #############################################
+    ###
+    ###             plot
+    ###
+    #############################################
+    plot_title = county + ", " + plant + " (" + ID + ", " + data_source + ", " + irrig_type + ", " + survey_date +")" 
+    ax.set_ylim([-0.3, 1.15])
+    
+    # plot regularized version of two years
+    # ax.scatter(twoYrs_regular_Xvalues.values, twoYrs_regular_Yvalues, 
+    #            label="2YRs process. data", s=7, c='#E4D00A'); # commented out on Feb 2022
+
+    # plot SG smoothed version of two years
+    ax.plot(crr_fld_twoYrs_regular['Date'].values, crr_fld_twoYrs_regular[idx], label= keyy, c='k');
+    ax.scatter(date_df.Date.values, y.values, label="1-Day Time Series", s=7, c='b');
+
+    ###
+    ###   plot SOS and EOS
+    ###
+    # Update the EVI/NDVI values to the smoothed version.
+    crr_fld [idx] = SG_pred
+    crr_fld = rc.addToDF_SOS_EOS_White(pd_TS=crr_fld, VegIdx=idx, 
+                                       onset_thresh=onset_cut, 
+                                       offset_thresh=offset_cut)
+
+    ##
+    ##  Kill bad detected seasons 
+    ##
+    crr_fld = rc.Null_SOS_EOS_by_DoYDiff(pd_TS = crr_fld, min_season_length=40)
+
+    #
+    #  Start of the season
+    #
+    # SOS = crr_fld[crr_fld['SOS'] != 0]
+    # ax.scatter(SOS['Date'], SOS['SOS'], marker='+', s=155, c='g')
+
+    # annotate SOS
+    # for ii in np.arange(0, len(SOS)):
+    #     style = dict(size=10, color='g', rotation='vertical')
+    #     ax.text(x = SOS.iloc[ii]['Date'].date(), 
+    #             y = -0.7, 
+    #             s = 'DoY=' + str(SOS.iloc[ii]['doy']), 
+    #             **style)
+    #
+    #  End of the season
+    #
+    # EOS = crr_fld[crr_fld['EOS'] != 0]
+    # ax.scatter(EOS['Date'], EOS['EOS'], marker='+', s=155, c='r')
+
+    # annotate EOS
+    # for ii in np.arange(0, len(EOS)):
+    #     style = dict(size=10, color='r', rotation='vertical')
+    #     ax.text(x = EOS.iloc[ii]['Date'].date(), 
+    #             y = -0.7, 
+    #             s = 'DoY=' + str(EOS.iloc[ii]['doy']), 
+    #             **style)
+
+    # Plot ratios:
+    # ax.plot(crr_fld['Date'], crr_fld['EVI_ratio'], c='gray', label="EVI Ratio")
+
+    # ax.axhline(0 , color = 'r', linewidth=.5)
+    # ax.axhline(1 , color = 'r', linewidth=.5)
+    # ax.axhline(-1, color = 'r', linewidth=.5)
+
+    # plot raw data of two years
+    ax.scatter(twoYears_raw['Date'].values, twoYears_raw[idx], label="raw", s=7, c='dodgerblue');
+
+    ax.set_title(plot_title);
+    ax.set(ylabel=idx)
+    ax.legend(loc="upper left");
+
+    ax.xaxis.set_major_formatter(ConciseDateFormatter(ax.xaxis.get_major_locator()))
+    # ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m'))
+
+    # locator = mdates.AutoDateLocator(minticks=36, maxticks=36)
+    # formatter = mdates.ConciseDateFormatter(locator)
+    # ax.xaxis.set_major_locator(locator)
+    # ax.xaxis.set_major_formatter(formatter)
+    
+    # ax.xaxis.set_major_locator(mdates.MonthLocator(interval=1))
+    # ax.xaxis.set_major_formatter(mdates.DateFormatter('%b'))
+
+    ax.xaxis.set_major_formatter(ConciseDateFormatter(ax.xaxis.set_major_locator(mdates.MonthLocator(interval=1))))
+
 
 def plot_for_landsat_proposal(twoYears_EVI8Day, SFYr, ax, onset_cut=0.3, offset_cut=0.3):
     """
@@ -197,7 +419,7 @@ def plot_for_landsat_proposal(twoYears_EVI8Day, SFYr, ax, onset_cut=0.3, offset_
 
     ax.set_title(plot_title);
     ax.set(ylabel = "EVI")
-    ax.legend(loc="best");
+    ax.legend(loc="upper left");
 
 ############################################################################################
 
