@@ -74,8 +74,8 @@ the_thm <- theme(plot.margin = unit(c(t=.2, r=.2, b=.2, l=0.2), "cm"),
                  strip.text.x = element_text(size=axlabelSize, face="bold"),
                  strip.text.y = element_text(size=axlabelSize, face="bold"),
                  axis.ticks = element_line(size=.1, color="black"),
-                 axis.title.x = element_text(size = axlabelSize, face="bold", margin = margin(t=10, r=0, b=0, l=0)),
-                 axis.title.y = element_text(size = axlabelSize, face="bold", margin = margin(t=0, r=10, b=0, l=0)),
+                 axis.title.x = element_text(size=axlabelSize, face="bold", margin = margin(t=10, r=0, b=0, l=0)),
+                 axis.title.y = element_text(size=axlabelSize, face="bold", margin = margin(t=0, r=10, b=0, l=0)),
                  axis.text.x = element_text(size = tickSize, face="plain", color="black", angle=30, hjust = 1),
                  axis.text.y = element_text(size = tickSize, face="plain", color="black")
                 )

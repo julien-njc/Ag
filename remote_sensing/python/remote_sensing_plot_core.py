@@ -52,9 +52,9 @@ def panel_SOS_Sentinel4Landsat(twoYears_raw, twoYears_regular, idx, SG_params,
     """
     ## crr_fld = dataAB.copy() #***
     crr_fld_twoYrs_regular = twoYears_regular.copy() #***
-    print ("RS core - line 50, ", crr_fld_twoYrs_regular.shape)
-    print ("RS core - line 51, ", crr_fld_twoYrs_regular.columns)
-    print ("RS core - line 52, ", crr_fld_twoYrs_regular.image_year.unique())
+    # print ("RS core - line 50, ", crr_fld_twoYrs_regular.shape)
+    # print ("RS core - line 51, ", crr_fld_twoYrs_regular.columns)
+    # print ("RS core - line 52, ", crr_fld_twoYrs_regular.image_year.unique())
     if (not("human_system_start_time" in list(crr_fld_twoYrs_regular.columns))):
         crr_fld_twoYrs_regular = rc.add_human_start_time(crr_fld_twoYrs_regular)
 
@@ -94,13 +94,13 @@ def panel_SOS_Sentinel4Landsat(twoYears_raw, twoYears_regular, idx, SG_params,
     #############################################
     # crr_fld will be one year from now on
     crr_fld = crr_fld_twoYrs_regular.copy()
-    print ("line 92 RS core, ", crr_fld.shape, " ", crr_fld.image_year.unique())
+    # print ("line 92 RS core, ", crr_fld.shape, " ", crr_fld.image_year.unique())
     
-    print ("line 94: ",  type(crr_fld.image_year.unique()[0]))
-    print ("line 95: ", type(crr_fld.image_year.unique()[1]))
-    print ("line 96 RS core, ", SFYr, ", ", type(SFYr))
+    # print ("line 94: ",  type(crr_fld.image_year.unique()[0]))
+    # print ("line 95: ", type(crr_fld.image_year.unique()[1]))
+    # print ("line 96 RS core, ", SFYr, ", ", type(SFYr))
     crr_fld = crr_fld[crr_fld.image_year == SFYr]
-    print ("line 98 RS core, ", crr_fld.image_year.unique())
+    # print ("line 98 RS core, ", crr_fld.image_year.unique())
     #############################################
     ###
     ###             fine granularity table
@@ -109,11 +109,11 @@ def panel_SOS_Sentinel4Landsat(twoYears_raw, twoYears_regular, idx, SG_params,
     # create the full calendar to make better estimation of SOS and EOS.
     fine_granular_table = rc.create_calendar_table(SF_year = SFYr)
     fine_granular_table = pd.merge(fine_granular_table, crr_fld, on=['Date', 'SF_year', 'doy'], how='left')
-    print ("line 107 RS core, ", fine_granular_table.shape)
+    # print ("line 107 RS core, ", fine_granular_table.shape)
 
     ###### We need to fill the NAs that are created because they were not created in fine_granular_table
     fine_granular_table["image_year"] = crr_fld["image_year"].unique()[0]
-    print ("line 109 RS core, ", fine_granular_table.shape)
+    # print ("line 109 RS core, ", fine_granular_table.shape)
     fine_granular_table["ID"]     = crr_fld["ID"].unique()[0]
     fine_granular_table["Acres"]  = crr_fld["Acres"].unique()[0]
     fine_granular_table["county"] = crr_fld["county"].unique()[0]

@@ -96,7 +96,7 @@ facet_accum_CP_TS_Cloud_SpringerSub2 <- function(d1, colname="sum_A1", due="Apr.
   xbreaks <- xbreaks[seq(1, length(xbreaks), 15)]
 
   ggplot(d1, aes(x=year, y=get(colname), fill=fil)) +
-  labs(x = "chill year", y = "accumulated chill portions") + #, fill = "Climate Group"
+  labs(x = "year", y = "accumulated chill portions") + #, fill = "Climate Group"
   # guides(fill=guide_legend(title="Time period")) + 
   facet_grid( . ~ emission ~  city) +
   stat_summary(geom="ribbon", fun=function(z) { quantile(z,0.5) }, 
@@ -120,9 +120,9 @@ facet_accum_CP_TS_Cloud_SpringerSub2 <- function(d1, colname="sum_A1", due="Apr.
         panel.grid.minor = element_line(size=0.1),
         axis.text.x = element_text(size = 10, color="black"),
         axis.text.y = element_text(size = 10, color="black"),
-        axis.title.x = element_text(size = 12, face = "bold", color="black", 
+        axis.title.x = element_text(size = 15, face = "bold", color="black", 
         margin = margin(t=8, r=0, b=0, l=0)),
-        axis.title.y = element_text(size = 12, face = "bold", color="black",
+        axis.title.y = element_text(size = 15, face = "bold", color="black",
                                           margin = margin(t=0, r=8, b=0, l=0)),
         strip.text = element_text(size=14, face = "bold"),
         legend.margin=margin(t=.1, r=0, b=0, l=0, unit='cm'),
@@ -147,19 +147,19 @@ sum_A1_plot <- facet_accum_CP_TS_Cloud_SpringerSub2(d1=summary_comp,
 
 
 write_dir <- "/Users/hn/Documents/00_GitHub/ag_papers/chill_paper/02_Springer_2/figure_201_ModHist/"
+write_dir <- "/Users/hn/Documents/00_GitHub/ag_papers/chill_paper/03_Springer_3/"
 if (dir.exists(file.path(write_dir)) == F) { dir.create(path = write_dir, recursive = T)}
 
-
-ggsave(plot = sum_A1_plot, paste0("CP_accum_sept_Apr1_wModHist_", cls, ".png"),
-       dpi=400, path=write_dir,
-       height = 7, width = 11, units = "in")
 
 ggsave(plot = sum_A1_plot, paste0("CP_accum_sept_Apr1_wModHist_", cls, ".pdf"),
        dpi=400, path=write_dir,
        height = 7, width = 11, units = "in")
 
+ggsave(plot = sum_A1_plot, paste0("CP_accum_sept_Apr1_wModHist_", cls, ".png"),
+       dpi=400, path=write_dir,
+       height = 7, width = 11, units = "in")
 ####
-#### Just Futire
+#### Just Future
 ####
 summary_comp_F <- summary_comp %>% 
                   filter(time_period != "1950-2005") %>% 

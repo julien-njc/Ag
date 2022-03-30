@@ -146,7 +146,7 @@ the_thm <- theme(plot.margin = unit(c(t=.2, r=.2, b=.2, l=0.2), "cm"),
                  strip.text.y = element_text(size=axlabelSize, face="bold"),
                  axis.ticks = element_line(size=.1, color="black"),
                  axis.title.x = element_text(size = axlabelSize, face="bold", margin = margin(t=10, r=0, b=0, l=0)),
-                 axis.title.y = element_text(size = axlabelSize, face="bold", margin = margin(t=0, r=10, b=0, l=0)),
+                 axis.title.y = element_blank(), # element_text(size = axlabelSize, face="bold", margin = margin(t=0, r=10, b=0, l=0)),
                  axis.text.x = element_text(size = tickSize, face="plain", color="black", angle=90, hjust = 1),
                  axis.text.y = element_text(size = tickSize, face="plain", color="black")
                 )
@@ -154,7 +154,7 @@ the_thm <- theme(plot.margin = unit(c(t=.2, r=.2, b=.2, l=0.2), "cm"),
 color_ord <- c("black", "dodgerblue", "olivedrab4", "tomato1")
 color_ord <- c("grey47" , "dodgerblue", "olivedrab4", "red") #
 
-plot_path <- "/Users/hn/Documents/00_GitHub/ag_papers/chill_paper/02_Springer_2/figure_201_ModHist/"
+plot_path <- "/Users/hn/Documents/00_GitHub/ag_papers/chill_paper/03_Springer_3/"
 
 if (dir.exists(plot_path) == F) {
   dir.create(path = plot_path, recursive = T)
@@ -170,7 +170,7 @@ data_melt$emission <- factor(data_melt$emission,
 plot = ggplot(data_melt, aes(y=variable, x=value), fill=factor(time_period)) + 
        geom_path(aes(colour = factor(time_period))) + 
        facet_grid(~ emission ~ city, scales = "free") + 
-       labs(y = "accumulated chill portions", x = "day of year", fill = "Climate Group") +
+       labs(x = "accumulated chill portions", y = "day of year", fill = "Climate Group") +
        scale_color_manual(labels = time_periods, values = color_ord) + 
        scale_x_continuous(breaks = DoY_map$day_count_since_sept, labels= DoY_map$letter_day) + 
        scale_y_continuous(limits = c(20, 75), breaks = seq(20, 80, by = 10)) +
@@ -182,7 +182,7 @@ plot
 plot = ggplot(data_melt, aes(x=variable, y=value), fill=factor(time_period)) + 
        geom_path(aes(colour = factor(time_period))) + 
        facet_grid(~ emission ~ city, scales = "free") + 
-       labs(y = "accumulated chill portions", x = "day of year", fill = "Climate Group") +
+       labs(x = "accumulated chill portions", y = "day of year", fill = "Climate Group") +
        scale_color_manual(labels = time_periods, values = color_ord) + 
        scale_y_continuous(breaks = DoY_map$day_count_since_sept, labels= DoY_map$letter_day) + 
        scale_x_continuous(limits = c(x_start, 75), breaks = seq(x_start, 80, by = 10)) +
@@ -194,13 +194,13 @@ plot
 qual = 400
 output_name = paste0("median_DoY_thresh_start_", x_start, ".pdf")
 ggsave(filename=output_name, plot=plot, device="pdf", 
-     path=plot_path, 
-     width=12, height=7, unit="in", dpi=qual)
+       path=plot_path, 
+       width=12, height=7, unit="in", dpi=qual)
 
 output_name = paste0("median_DoY_thresh_start_", x_start, ".png")
 ggsave(filename=output_name, plot=plot, device="png", 
-     path=plot_path, 
-     width=12, height=7, unit="in", dpi=qual)
+       path=plot_path, 
+       width=12, height=7, unit="in", dpi=qual)
 
 
 

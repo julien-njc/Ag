@@ -1011,6 +1011,8 @@ diff_CP_map_one_emission <- function(data, color_col) {
                                  breaks = c(-200, -75, -40, -25, 0, 25, 40, 75, 200))
 }
 
+
+
 diff_CP_map <- function(data, color_col) {
   states <- map_data("state")
   states_cluster <- subset(states, region %in% c("oregon", "washington", "idaho"))

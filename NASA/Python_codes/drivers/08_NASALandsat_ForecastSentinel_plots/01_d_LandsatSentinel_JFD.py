@@ -57,7 +57,7 @@ import remote_sensing_plot_core as rcp
 county = sys.argv[1]
 NDVI_ratio_cut = 0.3
 print (county)
-print ("line 60")
+
 ####################################################################################
 ###
 ###                   Aeolus Directories
@@ -98,7 +98,7 @@ elif county == "Walla2015":
     raw_names = ["L7_T1C2L2_Scaled_Walla2015_2014-01-01_2016-12-31.csv",
                  "L8_T1C2L2_Scaled_Walla2015_2014-01-01_2016-12-31.csv"]
 
-print ("line 101")
+# print ("line 101")
 SF_data_name = county + ".csv"
 
 SG_df_NDVI = pd.read_csv(NASA_data_dir + "SG_" + county + "_NDVI_JFD.csv")
@@ -164,7 +164,7 @@ NASA_raw_df_NDVI = NASA_raw_df_NDVI[NASA_raw_df_NDVI["NDVI"].notna()]
 
 NASA_raw_df_EVI = nc.add_human_start_time_by_system_start_time(NASA_raw_df_EVI)
 NASA_raw_df_NDVI= nc.add_human_start_time_by_system_start_time(NASA_raw_df_NDVI)
-print ("line 167")
+# print ("line 167")
 ########################################
 
 SG_df_NDVI = nc.initial_clean(df = SG_df_NDVI, column_to_be_cleaned = "NDVI")
@@ -181,7 +181,7 @@ print ("_____________________________________")
 print('len(IDs) is {}!'.format(len(IDs)))
 print ("_____________________________________")
 
-print ("line 184")
+# print ("line 184")
 given_year = int(county[-4:])
 # min_year = pd.to_datetime(datetime.datetime(given_year-1, 1, 1))
 # max_year = pd.to_datetime(datetime.datetime(given_year+1, 12, 31))
@@ -195,7 +195,7 @@ SG_df_NDVI = SG_df_NDVI[SG_df_NDVI.human_system_start_time <= max_year]
 SG_df_EVI = SG_df_EVI[SG_df_EVI.human_system_start_time >= min_year]
 SG_df_EVI = SG_df_EVI[SG_df_EVI.human_system_start_time <= max_year]
 
-print ("line 198")
+# print ("line 198")
 ######################################################################
 ######################################################################
 ######################################################################
@@ -218,7 +218,7 @@ else:
 
 regular_data_dir = "/data/hydro/users/Hossein/remote_sensing/03_Regularized_TS/70_cloud/2Yrs/noJump_Regularized/"
 sentinel_raw_dir = "/data/hydro/users/Hossein/remote_sensing/02_Eastern_WA_EE_TS/2Years/70_cloud/"
-print ("line 221")
+# print ("line 221")
 
 if county == "AdamBenton2016":
     f_names = ["01_Regular_filledGap_Adams_SF_2016_EVI.csv",
@@ -226,8 +226,8 @@ if county == "AdamBenton2016":
 
     a_sentinel_df = pd.read_csv(regular_data_dir + f_names[0], low_memory=False)
     a_sentinel_df_2 = pd.read_csv(regular_data_dir + f_names[1], low_memory=False)
-    print ("line 229: ", a_sentinel_df.shape)
-    print ("line 230: ", a_sentinel_df_2.shape)
+    # print ("line 229: ", a_sentinel_df.shape)
+    # print ("line 230: ", a_sentinel_df_2.shape)
     a_sentinel_df = pd.concat([a_sentinel_df, a_sentinel_df_2])
 
 elif county == "FranklinYakima2018":
@@ -245,14 +245,14 @@ elif county == "Walla2015":
     f_names = ["01_Regular_filledGap_Walla_Walla_SF_2015_EVI.csv"]
     a_sentinel_df = pd.read_csv(regular_data_dir + f_names[0], low_memory=False)
 
-print ("line 246")
+# print ("line 246")
 SF_year = int(county[-4:])
 raw_f_name = "Eastern_WA_" + str(SF_year) + "_70cloud_selectors.csv"
 sentinel_raw_df = pd.read_csv(sentinel_raw_dir + raw_f_name, low_memory=False)
-print ("line 252: ", sentinel_raw_df.shape)
-print ("line 253: ", sentinel_raw_df.county.unique())
+# print ("line 252: ", sentinel_raw_df.shape)
+# print ("line 253: ", sentinel_raw_df.county.unique())
 
-print ("line 255")
+# print ("line 255")
 if 'Date' in a_sentinel_df.columns:
     if type(a_sentinel_df.Date.iloc[0]) == str:
         a_sentinel_df['Date'] = pd.to_datetime(a_sentinel_df.Date.values).values
@@ -261,7 +261,7 @@ if 'Date' in a_sentinel_df.columns:
 a_sentinel_df['SF_year'] = SF_year
 a_sentinel_df = rc.initial_clean(df=a_sentinel_df, column_to_be_cleaned=indeks)
 sentinel_raw_df = rc.initial_clean(df=sentinel_raw_df, column_to_be_cleaned=indeks)
-print ("line 264")
+# print ("line 264")
 if not("human_system_start_time" in sentinel_raw_df.columns):
     sentinel_raw_df = rc.add_human_start_time_by_YearDoY(sentinel_raw_df)
 
@@ -271,7 +271,7 @@ if 'Date' in sentinel_raw_df.columns:
 else: 
     sentinel_raw_df['Date'] = pd.to_datetime(sentinel_raw_df.human_system_start_time.values).values
 
-print ("line 274")
+# print ("line 274")
 an_EE_TS = a_sentinel_df.copy()
 del(a_sentinel_df)
 
@@ -311,20 +311,20 @@ for ID in IDs:
     ##
     ##   Sentinel Part of the loop
     ##
-    print ("line 314")
+    # print ("line 314")
     curr_field_two_years = an_EE_TS[an_EE_TS['ID'] == ID].copy()
     sentinel_curr_raw_EVI = sentinel_raw_df[sentinel_raw_df['ID'] == ID].copy()
-    print ("line 317: " , curr_field_two_years.shape)
-    print ("line 318: " , sentinel_curr_raw_EVI.shape)
+    # print ("line 317: " , curr_field_two_years.shape)
+    # print ("line 318: " , sentinel_curr_raw_EVI.shape)
     curr_field_two_years.sort_values(by=['image_year', 'doy'], inplace=True)
     sentinel_curr_raw_EVI.sort_values(by=['image_year', 'doy'], inplace=True)
-    print ("line 321")
-    print ("line 322", curr_field_two_years.columns)
-    print ("line 323", sentinel_curr_raw_EVI.columns)
-    print ("line 324", list(curr_field_two_years.image_year.unique())[0])
-    print ("line 325", list(sentinel_curr_raw_EVI.image_year.unique())[0])
-    print ("line 326", curr_field_two_years.shape)
-    print ("line 327", sentinel_curr_raw_EVI.shape)
+    # print ("line 321")
+    # print ("line 322", curr_field_two_years.columns)
+    # print ("line 323", sentinel_curr_raw_EVI.columns)
+    # print ("line 324", list(curr_field_two_years.image_year.unique())[0])
+    # print ("line 325", list(sentinel_curr_raw_EVI.image_year.unique())[0])
+    # print ("line 326", curr_field_two_years.shape)
+    # print ("line 327", sentinel_curr_raw_EVI.shape)
     ################################################################
     
     fig, axs = plt.subplots(3, 1, figsize=(18, 9.5),
@@ -342,7 +342,7 @@ for ID in IDs:
                                                 ax=ax1,
                                                 onset_cut=NDVI_ratio_cut, 
                                                 offset_cut=NDVI_ratio_cut);
-    print ("line 343")
+    # print ("line 343")
     # Plot EVIs
     ncp.SG_clean_SOS_orchardinPlot_VerticalLine(raw_dt=curr_raw_EVI,
                                                 SG_dt=curr_SG_EVI,
@@ -357,14 +357,14 @@ for ID in IDs:
     ax2.axvspan(datetime(given_year-1, 1, 1), datetime(given_year, 1, 1), facecolor='.01', alpha=0.3)
 
     # Plot Sentinel EVI. That is just what we have right now. (Feb. 22, 2022)
-    print ("line 360")
+    # print ("line 360")
     rcp.panel_SOS_Sentinel4Landsat(twoYears_raw = sentinel_curr_raw_EVI,
                                    twoYears_regular = curr_field_two_years,
                                    idx = indeks, SG_params=[7, 3],
                                    SFYr = SF_year, ax=ax3,
                                    onset_cut = NDVI_ratio_cut, 
                                    offset_cut = NDVI_ratio_cut);
-    print ("line 367")
+    # print ("line 367")
 
 
     start = str(given_year) + '-01-01'

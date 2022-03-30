@@ -12,6 +12,7 @@ data_dir <- paste0("/Users/hn/Documents/01_research_data/",
                    "remote_sensing/01_NDVI_TS/70_Cloud/00_Eastern_WA_withYear/", 
                    "2Years/06_list_of_2cropped_IDs_4_website/")
 
+
 SF_dir <- paste0("/Users/hn/Documents/01_research_data/remote_sensing/", 
                  "00_shapeFiles/0002_final_shapeFiles/000_Eastern_WA/")
 
@@ -29,6 +30,18 @@ for (SF_year in SF_years){
   curr_shapefile <- readOGR(paste0(SF_dir, "Eastern_", SF_year, "/", "Eastern_", SF_year, ".shp"),
                             layer = paste0("Eastern_", SF_year), 
                             GDAL1_integer64_policy = TRUE)
+
+  # if (SF_year=="2015"){
+  #   curr_shapefile <- curr_shapefile[curr_shapefile@data$county %in% c("Walla Walla"), ]
+
+  #   }else if (SF_year=="2016"){
+  #     curr_shapefile <- curr_shapefile[curr_shapefile@data$county %in% c("Adams", "Benton"), ]
+
+  #   } else if  (SF_year=="2017"){
+  #     curr_shapefile <- curr_shapefile[curr_shapefile@data$county %in% c("Grant"), ]
+  #     }else if (SF_year=="2018"){
+  #       curr_shapefile <- curr_shapefile[curr_shapefile@data$county %in% c("Franklin", "Yakima"), ]
+  # }
 
   for (NASS_out in NASS_out_options){
     for (last_survey_date in last_survey_date_options){
@@ -60,11 +73,11 @@ for (SF_year in SF_years){
 
           filtered_SF <- curr_shapefile[curr_shapefile@data$ID %in% curr_data$ID, ]
 
-          write_dir <- "/Users/hn/Documents/01_research_data/remote_sensing/00_shapeFiles/03_2cropped_shapeFiles_website/"
+          write_dir <- "/Users/hn/Documents/01_research_data/doubleShapeFiles_KLM_Supriya/Sentinel_Algorithm_output/"
           if (dir.exists(file.path(write_dir)) == F){dir.create(path=file.path(write_dir), recursive=T)}
 
           output_name <- paste(name_part_2, name_part_3, name_part_4, 
-                               name_part_5, name_part_6, name_part_7, 
+                               name_part_5, name_part_6, # name_part_7, 
                                sep = "_")
 
           writeOGR(obj = filtered_SF, 

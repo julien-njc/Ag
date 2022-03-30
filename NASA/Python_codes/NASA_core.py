@@ -27,8 +27,6 @@ import sys
 ###
 
 ###########################################################
-
-
 def filter_out_NASS(dt_df):
     dt_cf_NASS = dt_df.copy()
     dt_cf_NASS['DataSrc'] = dt_cf_NASS['DataSrc'].astype(str)
@@ -118,9 +116,6 @@ def Null_SOS_EOS_by_DoYDiff(pd_TS, min_season_length=40):
                                                     2 EOS and only 1 SOS, or,
     it is possible that number of SOSs and number of EOSs are identical,
     but the plot starts with EOS and ends with SOS.
-
-    It is also possible that first EOS is ealier than first SOS.
-
     """
     #
     # Check if first EOS is less than first SOS
@@ -805,5 +800,14 @@ def add_human_start_time_by_system_start_time(HDF):
 
     if type(HDF["human_system_start_time"]==str):
         HDF['human_system_start_time'] = pd.to_datetime(HDF['human_system_start_time'])
+    
+    """
+    Lets do this to go back to the original number:
+    I added this when I was working on Colab on March 30, 2022.
+    Keep an eye on it and see if we have ever used "system_start_time"
+    again. If we do, how we use it; i.e. do we need to get rid of the 
+    following line or not.
+    """
+    HDF.system_start_time = HDF.system_start_time * 1000
     return(HDF)
 
