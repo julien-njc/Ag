@@ -85,8 +85,7 @@ for(file in dir_con){
  
   # 3c. Get hourly interpolation
   # generate hourly data
-  met_hourly <- stack_hourly_temps(weather = met_data,
-                                   latitude = lat)
+  met_hourly <- stack_hourly_temps(weather = met_data, latitude = lat)
   rm(met_data)
   # save only the necessary list item
   met_hourly <- met_hourly[[1]]

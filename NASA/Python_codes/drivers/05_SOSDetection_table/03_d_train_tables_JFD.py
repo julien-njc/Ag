@@ -375,9 +375,7 @@ for a_poly in polygon_list:
                 # re-order columns of fine_granular_table so they match!!!
                 curr_field_yr["season_count"] = 1
                 curr_field_yr = curr_field_yr[all_poly_and_SEOS.columns]
-
                 aaa = curr_field_yr.iloc[0].values.reshape(1, len(curr_field_yr.iloc[0]))
-                
                 all_poly_and_SEOS.iloc[pointer_SEOS_tab:(pointer_SEOS_tab+1)] = aaa
                 pointer_SEOS_tab += 1
         else: 
