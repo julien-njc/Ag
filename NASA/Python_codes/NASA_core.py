@@ -27,6 +27,24 @@ import sys
 ###
 
 ###########################################################
+def create_calendar_table(SF_year):
+    start = str(SF_year) + "-01-01"
+    end = str(SF_year) + "-12-31"
+    
+    df = pd.DataFrame({"human_system_start_time": pd.date_range(start, end)})
+    
+    # add day of year
+    df["doy"] = 1 + np.arange(len(df))
+    
+    # df['Weekday'] = df['Date'].dt.day_name()
+
+    # Drop the last element if the year is leap-year.
+    # we want the data to have equal size
+    if len(df)==366:
+        df.drop(index=365, axis=0, inplace=True)
+    return df
+
+
 def filter_out_NASS(dt_df):
     dt_cf_NASS = dt_df.copy()
     dt_cf_NASS['DataSrc'] = dt_cf_NASS['DataSrc'].astype(str)

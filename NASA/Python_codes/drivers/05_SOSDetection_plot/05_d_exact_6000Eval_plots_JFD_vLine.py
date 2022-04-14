@@ -228,11 +228,11 @@ for ID in IDs:
 
     # Plot NDVIs
     ncp.SG_clean_SOS_orchardinPlot_VerticalLine(raw_dt = curr_raw_NDVI,
-                                            SG_dt = curr_SG_NDVI,
-                                            idx = "NDVI",
-                                            ax = ax1,
-                                            onset_cut = 0.3, 
-                                            offset_cut = 0.3);
+                                            SG_dt=curr_SG_NDVI,
+                                            idx="NDVI",
+                                            ax=ax1,
+                                            onset_cut=0.3, 
+                                            offset_cut=0.3);
 
     # Plot EVIs
     ncp.SG_clean_SOS_orchardinPlot_VerticalLine(raw_dt = curr_raw_EVI,
