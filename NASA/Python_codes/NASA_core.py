@@ -27,6 +27,111 @@ import sys
 ###
 
 ###########################################################
+
+def regularize_a_field_annual_basis(a_df, V_idks="NDVI", interval_size=10, start_year=2008, end_year=2021):
+    """
+      This is a modification of regularize_a_field() function.
+      The update is that this function is "less flexible"!!!
+      Here we will have intervals go from Jan 1-Jan 10, and so on.
+      In other words, the time origin is Jan 1. 
+      
+      In the regularize_a_field() function the origin of time
+      was the first data point! So, we ended up having 36 data for
+      some years and 37 for some other when we were looking at 3 years of data!
+      The root cause was that ML was not part of the plan.... same old, same old!
+    """
+    """Returns a dataframe where data points are interval_size-day apart.
+       This function regularizes the data between the minimum and maximum dates
+       present in the data. 
+
+    Arguments
+    ---------
+    a_df : dataframe 
+           of a given field for only one satellite
+
+    Returns
+    -------
+    regularized_df : dataframe
+    """
+    if not("human_system_start_time" in a_df.columns):
+        a_df = add_human_start_time_by_system_start_time(a_df)
+
+    a_df['human_system_start_time'] = pd.to_datetime(a_df['human_system_start_time'])
+    a_df.sort_values(by='human_system_start_time', inplace=True)
+    a_df.reset_index(drop=True, inplace=True)
+        
+
+    assert (len(a_df.ID.unique()) == 1)
+    # assert (len(a_df.dataset.unique()) == 1)
+    #
+    # see how many days there are between the first and last image
+    #
+    a_df_coverage_days = (max(a_df.human_system_start_time) - min(a_df.human_system_start_time)).days
+    assert (a_df_coverage_days >= interval_size)
+
+    # see how many data points we need.
+    all_years = sorted(a_df.human_system_start_time.dt.year.unique())
+    no_steps_per_year = 365//interval_size
+    no_steps = len(all_years) * no_steps_per_year
+
+    """
+       I am reducing the flexibility of the code we had before!
+       I want to make it that all fields have the same exact dates
+       for their time steps. Jan. 1, Jan 10, ...
+    """
+    regular_time_stamps = []
+    for a_year in all_years:
+        regular_time_stamps = regular_time_stamps + list(pd.date_range(pd.Timestamp(str(a_year) + "-01-01"), 
+                                                                       pd.Timestamp(str(a_year) + "-12-25"), 
+                                                                       freq=str(interval_size)+'D'))
+
+    # initialize output dataframe
+    if "dataset" in a_df.columns:
+        regular_cols = ['ID', 'dataset', 'human_system_start_time', V_idks]
+    else:
+        regular_cols = ['ID', 'human_system_start_time', V_idks]
+
+    regular_df = pd.DataFrame(data = None, 
+                              index = np.arange(no_steps), 
+                              columns = regular_cols)
+
+    regular_df['ID'] = a_df.ID.unique()[0]
+    if "dataset" in a_df.columns:
+        regular_df['dataset'] = a_df.dataset.unique()[0]
+
+    if len(regular_time_stamps) == no_steps+1:
+        regular_df.human_system_start_time = regular_time_stamps[:-1]
+    elif len(regular_time_stamps) == no_steps:
+        regular_df.human_system_start_time = regular_time_stamps
+    else:
+        raise ValueError(f"There is a mismatch between no. days needed and '{interval_size}-day' interval array!")
+
+
+    # Pick the maximum of every interval_size-days
+    for start_date in regular_df.human_system_start_time:
+        """
+          The following will crate an array (of length 2)
+          it goes from a day to 10 days later; end points of the interval_size-day interval.
+
+                # Here we add 1 day to the right end point (end_date)
+          because the way pandas/python slices the dataframe; 
+          does not include the last row of sub-dataframe
+        """
+        dateRange = pd.date_range(start_date, 
+                                  start_date + pd.Timedelta(days=interval_size-1), 
+                                  freq = str(1)+'D')
+        assert (len(dateRange) == interval_size)
+
+        curr_time_window = a_df[a_df.human_system_start_time.isin(dateRange)]
+        if len(curr_time_window)==0:
+            regular_df.loc[regular_df.human_system_start_time == start_date, V_idks] = -1.5
+        else:
+            regular_df.loc[regular_df.human_system_start_time == start_date, V_idks] = max(curr_time_window[V_idks])
+    ##### end the damn for-loop
+    regular_df.reset_index(drop=True, inplace=True)
+    return (regular_df)
+
+
 def create_calendar_table(SF_year):
     start = str(SF_year) + "-01-01"
     end = str(SF_year) + "-12-31"
