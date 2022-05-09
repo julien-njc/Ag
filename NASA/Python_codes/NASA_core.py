@@ -794,7 +794,6 @@ def regularize_a_field(a_df, V_idks="NDVI", interval_size=10, start_year=2008, e
     if "dataset" in a_df.columns:
         regular_df['dataset'] = a_df.dataset.unique()[0]
 
-
     # the following is an array of time stamps where each entry is the beginning
     # of the interval_size-day period
     regular_time_stamps = pd.date_range(min(a_df.human_system_start_time), 

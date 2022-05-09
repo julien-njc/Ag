@@ -76,21 +76,21 @@ if county == "Monterey2014":
     f_names = ["L7_T1C2L2_Scaled_Monterey2014_2013-01-01_2016-01-01.csv",
                "L8_T1C2L2_Scaled_Monterey2014_2013-01-01_2016-01-01.csv"]
 
+elif county == "Walla2015":
+    f_names = ["L7_T1C2L2_Scaled_Walla2015_2014-01-01_2016-12-31.csv",
+               "L8_T1C2L2_Scaled_Walla2015_2014-01-01_2016-12-31.csv"]
+
 elif county == "AdamBenton2016":
     f_names = ["L7_T1C2L2_Scaled_AdamBenton2016_2015-01-01_2017-10-14.csv",
                "L8_T1C2L2_Scaled_AdamBenton2016_2015-01-01_2017-10-14.csv"]
-
-elif county == "FranklinYakima2018":
-    f_names = ["L7_T1C2L2_Scaled_FranklinYakima2018_2017-01-01_2019-10-14.csv",
-               "L8_T1C2L2_Scaled_FranklinYakima2018_2017-01-01_2019-10-14.csv"]
 
 elif county == "Grant2017":
     f_names = ["L7_T1C2L2_Scaled_Grant2017_2016-01-01_2018-10-14.csv",
                "L8_T1C2L2_Scaled_Grant2017_2016-01-01_2018-10-14.csv"]
 
-elif county == "Walla2015":
-    f_names = ["L7_T1C2L2_Scaled_Walla2015_2014-01-01_2016-12-31.csv",
-               "L8_T1C2L2_Scaled_Walla2015_2014-01-01_2016-12-31.csv"]
+elif county == "FranklinYakima2018":
+    f_names = ["L7_T1C2L2_Scaled_FranklinYakima2018_2017-01-01_2019-10-14.csv",
+               "L8_T1C2L2_Scaled_FranklinYakima2018_2017-01-01_2019-10-14.csv"]
 
 L7 = pd.read_csv(data_dir + f_names[0])
 L8 = pd.read_csv(data_dir + f_names[1])
