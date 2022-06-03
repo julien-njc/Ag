@@ -4,7 +4,7 @@
 # Configure PBS options
 # ----------------------------------------------------------------
 ## Define a job name
-#PBS -N outer_indeks_reg_county_moreBands
+#PBS -N mergeWides_moreBands
 
 ## Define compute options
 #PBS -l nodes=1:ppn=1
@@ -16,8 +16,8 @@
 ## Define path for output & error logs
 #PBS -k o
 
-#PBS -e /home/hnoorazar/NASA/03_regularize_fillGap/error/outer_indeks_county_moreBands_e
-#PBS -o /home/hnoorazar/NASA/03_regularize_fillGap/error/outer_indeks_county_moreBands_o
+#PBS -e /home/hnoorazar/NASA/03_01_widen_MoreBands/error/mergeWides_moreBands_e
+#PBS -o /home/hnoorazar/NASA/03_01_widen_MoreBands/error/mergeWides_moreBands_o
 
 ## Define path for reporting
 ##PBS -M h.noorazar@yahoo.com
@@ -30,7 +30,7 @@ module purge
 module load gcc/7.3.0
 module load python/3.7.1/gcc/7.3.0
 
-cd /home/hnoorazar/NASA/03_regularize_fillGap
+cd /home/hnoorazar/NASA/03_01_widen_MoreBands
    
 
 # ----------------------------------------------------------------
@@ -53,7 +53,7 @@ echo "--------- continue on ---------"
 # Run python code for matrix
 # ----------------------------------------------------------------
 
-python3 ./04_merge_regularize_train_moreBands.py indeks county
+python3 ./03_01_merge_train_moreBands_Wide.py
 
 
 

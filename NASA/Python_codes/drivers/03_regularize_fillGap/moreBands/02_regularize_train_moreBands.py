@@ -108,7 +108,7 @@ elif county == "Grant2017":
 
 elif county == "FranklinYakima2018":
     f_names = ["L7_T1C2L2_Scaled_FranklinYakima2018_2018-01-01_2019-01-01.csv",
-               "L8_T1C2L2_Scaled_FranklinYakima2018_2019-01-01_2019-01-01.csv"]
+               "L8_T1C2L2_Scaled_FranklinYakima2018_2018-01-01_2019-01-01.csv"]
 
 out_name = output_dir + "regular_" + county + "_" + indeks + "_moreBands_train_set.csv"
 
