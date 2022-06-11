@@ -703,6 +703,37 @@ More on masking clouds of Sentinel-2 and shadows
 are provided \href{https://developers.google.com/earth-engine/tutorials/community/sentinel-2-s2cloudless}{here} by GEE developers~\cite{CloudandShadowSentinel}.
 
 
+Another way of masking cloud used in
+~\cite{rs11070820}:
+
+\begin{tcolorbox}
+  \begin{algorithm}[H]
+  \label{alg:FilterCloudyPixelsLandsat78TOA}
+   \caption{Filter Cloudy Pixels for Landsat-7 and 8 \emph{TOA};
+   LANDSAT/LC08/C01/T1\_TOA and\\
+   LANDSAT/LE07/C01/T1\_TOA.}
+\SetAlgoLined
+% \KwResult{Faster convergence}
+
+1. \textbf{function} 
+\code{cloudMask(image)} \{
+
+\vspace{.1in}
+\hspace{.2in} 2. 
+\textbf{var} \code{cloudscore =} ee.Algorithms.Landsat\\\hspace{1.6in} \func{.simpleCloudScore}(image).\\ 
+\hspace{1.6in}  \func{.select}(`cloud')\;
+
+\vspace{.1in}
+
+\hspace{.2in} 3.
+\small{\textbf{return} \code{image}.\func{updateMask}(cloudscore.\func{lt}(50));}
+  
+\hspace{.01in} 10. \}
+\end{algorithm}
+\end{tcolorbox}
+
+
+
 %%%%%%%----------------------------------------
 %%%%%%%
 %%%%%%%     Timelines
@@ -954,6 +985,9 @@ at~\cite{MiniTutorialOnGitHub}.
 There is also a shapefile on Google drive~\cite{ShapeFileOnDrive} that is used
 in some of these codes.
 
+\subsection{Code Example}
+Merging data on GEE; see appendix of the paper\\
+~\href{https://www.mdpi.com/2072-4292/11/7/820/htm}{https://www.mdpi.com/2072-4292/11/7/820/htm}
 
 \section{Beyond GEE}
 I like to advice once you are done with GEE,
