@@ -662,3 +662,21 @@ def plot_oneColumn(raw_dt, ax, idx="NDVI", _label = "raw", _color="red"):
     ax.set_ylim(raw_dt[idx].min()-0.05, 1)
 
 
+
+def plot_oneColumn_CropTitle(raw_dt, ax, idx="NDVI", _label = "raw", _color="red"):
+
+    ax.plot(raw_dt['human_system_start_time'], raw_dt[idx], '-', 
+            label=_label, linewidth=3.5, color=_color, alpha=0.8)
+
+    titlee = " ".join(raw_dt.CropTyp.unique()[0].split(", ")[::-1])
+    ax.set_title(titlee)
+    ax.set_ylabel(idx) # , labelpad=20); # fontsize = label_FontSize,
+    ax.tick_params(axis='y', which='major') #, labelsize = tick_FontSize)
+    ax.tick_params(axis='x', which='major') #, labelsize = tick_FontSize) # 
+    ax.legend(loc="upper right");
+    # ax.xaxis.set_major_locator(mdates.YearLocator(1))
+    ax.set_ylim(-0.1, 1.1)
+
+
+
+
