@@ -663,9 +663,10 @@ def plot_oneColumn(raw_dt, ax, idx="NDVI", _label = "raw", _color="red"):
 
 
 
-def plot_oneColumn_CropTitle(raw_dt, ax, idx="NDVI", _label = "raw", _color="red"):
 
-    ax.plot(raw_dt['human_system_start_time'], raw_dt[idx], '-', 
+def plot_oneColumn_CropTitle(raw_dt, ax, idx="NDVI", _label = "raw", _color="red", lineStyle="-"):
+
+    ax.plot(raw_dt['human_system_start_time'], raw_dt[idx], linestyle=lineStyle, 
             label=_label, linewidth=3.5, color=_color, alpha=0.8)
 
     titlee = " ".join(raw_dt.CropTyp.unique()[0].split(", ")[::-1])
@@ -676,7 +677,5 @@ def plot_oneColumn_CropTitle(raw_dt, ax, idx="NDVI", _label = "raw", _color="red
     ax.legend(loc="upper right");
     # ax.xaxis.set_major_locator(mdates.YearLocator(1))
     ax.set_ylim(-0.1, 1.1)
-
-
 
 
