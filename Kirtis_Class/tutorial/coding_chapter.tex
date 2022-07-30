@@ -78,7 +78,7 @@ includes all the plotting functions; \code{kirtis\_class\_core.py},
 \code{kirtis\_class\_plot\_core.py}.
 Say these two modules are saved in 
 the following directory:
-\code{/Users/myName/Documents/project1/}.
+\code{/Users/Documents/project1/}.
 Then we can import these modules into our driver
 and use them like so:
 
@@ -92,10 +92,33 @@ and use them like so:
 2. \codeGreen{import} \code{kirtis\_class\_core} \codeGreen{as} \code{kcc} \;
 3. \codeGreen{import} \code{kirtis\_class\_plot\_core} \codeGreen{as} \code{kcpc} \;
 4.Use a function from \code{kirtis\_class\_core.py} like \\
-\code{diversified\_portfolio = kcc.diversify(x, y, z)}
+\code{diversified\_portfolio = kcc.\codeCyan{diversify}(\codeGoldenrod{x}, \codeGoldenrod{y}, \codeGoldenrod{z})}
 \end{algorithm}
 \end{tcolorbox}
-A simple code demonstrating this is on GitHub that you can look at.
+A simple code demonstrating this is on GitHub that you can look at;
+\href{https://github.com/HNoorazar/Ag/tree/master/Kirtis\_Class/Python}{github.com/HNoorazar/Ag/tree/master/Kirtis\_Class/Python}.\\
+
+In a similar way you can import your R modules into the drivers.
+Say your R module with all the functions in it is called \code{R\_engine\_core.R}
+located in \code{/Users/Documents/project1/}.
+You can import it like so in your driver:
+
+\begin{tcolorbox}
+  \begin{algorithm}[H]
+  \label{alg:importRCode}
+   \caption{Import Your R Modules.}
+\SetAlgoLined
+1. \code{source\_path =} \codeGreen{"Users/Documents/project1/R\_engine\_core.R"} \;
+2. \code{source(source\_path)} \;
+3.Use a function from \code{R\_engine\_core.R} like you use any function of R: \\
+\code{diversified\_portfolio = \codeCyan{diversify}(\codeGoldenrod{x}, \codeGoldenrod{y}, \codeGoldenrod{z})}
+\end{algorithm}
+\end{tcolorbox}
+
+
+
+
+
 
 
 
