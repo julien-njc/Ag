@@ -1,95 +1,5 @@
-\documentclass{article}
-\usepackage[utf8]{inputenc}
-\usepackage[osf,sc]{mathpazo}
-\usepackage[scaled=0.90]{helvet}
-\usepackage[table,dvipsnames]{xcolor}
-
-\usepackage{enumitem,mathtools}
-% \usepackage[ruled,vlined]{algorithm2e}
-\usepackage[ruled,vlined,resetcount]{algorithm2e}
-
-% \SetAlFnt{\small}
-\usepackage{algorithmic}
-
-\usepackage{float}
-\usepackage{soul}
-\usepackage{subcaption}
-
-\usepackage{graphicx}
-\usepackage{lineno}
-\usepackage{url}
-% \def\UrlBreaks{\do\/\do-}
-
-% \usepackage{breakurl}
-\usepackage[breaklinks]{hyperref}
-
-\usepackage{tcolorbox}
-\usepackage{array}
-\usepackage{tabularx}
-
-\hypersetup{
-    colorlinks=true,
-    linkcolor=cyan, % color1 : will be black
-    filecolor=red,
-    urlcolor=ForestGreen,
-    citecolor=red,
-    bookmarksopen=false,
-    pdftitle={Title},
-    pdfauthor={Author},
-}
-
-\usepackage[capitalise]{cleveref}
-
-
-\definecolor{darkpastelpurple}{rgb}{0.59, 0.44, 0.84}
-\def\code#1{\textbf{\texttt{#1}}}
-\def\codeRed#1{{\color{Maroon}{\textbf{\texttt{#1}}}}}
-\def\codeCyan#1{{\color{cyan}{\textbf{\texttt{#1}}}}}
-\def\vari#1{{\color{Cerulean}{\textbf{\texttt{#1}}}}}
-\def\func#1{{\color{Purple}{\textbf{\texttt{#1}}}}}
-\newenvironment{coded}{\color{blue}\code}
-
-\definecolor{Gray}{gray}{0.95}
-\colorlet{shadecolor}{gray!40}
-\definecolor{LightCyan}{rgb}{0.88, 1, 1}
-%\definecolor{LightCyan}{rgb}{0.92, 0.98, 0.98}
-\definecolor{brickred}{rgb}{0.8, 0.25, 0.33}
-\definecolor{mgreen}{rgb}{0.2, 0.8, 1}
-\definecolor{bleudefrance}{rgb}{0.19, 0.55, 0.91}
-\definecolor{aliceblue}{rgb}{0.94, 0.97, 1.0}
-\definecolor{azureWeb}{rgb}{0.94, 1.0, 1.0}
-\definecolor{beaublue}{rgb}{0.74, 0.83, 0.9}
-\definecolor{gainsboro}{rgb}{0.86, 0.86, 0.86}
-\definecolor{linen}{rgb}{0.98, 0.94, 0.9}
-\definecolor{oldlace}{rgb}{0.99, 0.96, 0.9}
-\definecolor{magnolia}{rgb}{0.97, 0.96, 1.0}
-\definecolor{moccasin}{rgb}{0.98, 0.92, 0.84}
-\definecolor{navajowhite}{rgb}{1.0, 0.87, 0.68}
-\definecolor{palecornflowerblue}{rgb}{0.67, 0.8, 0.94}
-
-
-\usepackage{enumitem}
-\setlist[description]{%
-  topsep=10pt,   % space before start / after end of list
-% itemsep=5pt,   % space between items
-%   font={\bfseries\sffamily}, % set the label font
-%  font={\bfseries\sffamily\color{red}}, % if colour is needed
-font={\color{red}},
-}
-
-\newcommand{\EVI}{E\!V\!I}
-\newcommand{\NDVI}{N\!D\!V\!I}
-\newcommand{\NIR}{N\!I\!R}
-
-\title{Google Earth Engine}
-\author{Hossein Noorazar}
-\date{\today}
-
-\begin{document}
-\maketitle
-\tableofcontents
-
-\clearpage
+\chapter{Google Earth Engine}
+\label{chap:Google Earth Engine}
 
 \section{Preface}
 Google Earth Engine sucks! 
@@ -98,13 +8,12 @@ we have a simple example to show GEE is very specific.
 Accessing to elements/entries of its object is not
 intuitive. Figuring out every single step is a 
 challenge.
-\begin{figure}[H]
+\begin{figure}
   \centering
   \includegraphics[width=1\textwidth]{figures/GEE_Sucks}
   \caption{GEE sucks.}
   \label{fig:GEESucks}
 \end{figure}
-
 \noindent Here is the code used for generation of Fig.~\ref{fig:GEESucks}.
 \begin{tcolorbox}
 %  \textbf{Algorithm for gradient descent with momentum is given below}
@@ -173,8 +82,6 @@ this particular case for the following reasons:
 %%%%%%%
 %%%%%%%  Landsat Products and Differences
 %%%%%%%
-\section{Landsat Products and Differences}
-
 There are different products\footnote{start here to collect some information. some of the products are deprecated and superseded and Google does not show them easily: \href{https://developers.google.com/earth-engine/datasets/catalog/landsat}{here}} that fall under 
 different labels; tier 1 vs tier 2, collection 1 vs collection 2, level 1 and level 2.
 Some of these have the same description on 
@@ -191,14 +98,11 @@ It seems Collection-2 Level-2 Tier-1 should be the best, but
 in our plots it was not different from T1\_SR (\cref{fig:C2L2Performance}). 
 Also keep in mind \hl{Collection-2 Level-2 bands must be scaled.}
 
-\begin{figure}[H]
-  \includegraphics[width=1\textwidth]{figures/00_merged_Landsats_Smoothed_and_raw}
-\caption{In this plot the data points from Landsat-5, -7, and -8 (Tier 1, Surface Reflectance, from GEE collection LANDSAT/LE07/C01/T1\_SR) are
-merged together to form one vector. The same is done to Landsat-5 and -7 Collection-2 Level-2 (from GEE collection LANDSAT/LE07/C02/T1\_L2).}
-We can see they all are performing well.
+\begin{figure}[htb]
+ \includegraphics[width=1\textwidth]{figures/00_merged_Landsats_Smoothed_and_raw}
+\caption{In this plot the data points from Landsat-5, -7, and -8 (Tier 1, Surface Reflectance, from GEE collection LANDSAT/LE07/C01/T1\_SR) are merged together to form one vector. The same is done to Landsat-5 and -7 Collection-2 Level-2 (from GEE collection LANDSAT/LE07/C02/T1\_L2). We can see they all are performing well.} 
 \label{fig:C2L2Performance}
 \end{figure}
-
 
 Moreover, GEE~\cite{Landsat7T1SRBandWidths}
 says ``This dataset is the atmospherically corrected surface
@@ -210,9 +114,9 @@ This dataset has been superseded by LANDSAT/LC08/C02/T1\_L2.''
 Collection-1 has only Level-1 data, however, Collection-2 has 
 level-1 as well as Level-2.
 
-
 \begin{description}
-\item [Collection 1] Landsat Collection 1 was established in 2016 to improve archive management.
+\item [Collection 1] Landsat Collection 1 was 
+established in 2016 to improve archive management.
 \href{https://www.usgs.gov/core-science-systems/nli/landsat/landsat-collection-1?qt-science_support_page_related_con=1#qt-science_support_page_related_con}{Learn more about Collection 1 from the USGS.}
 
 Landsat Collection 1 consists of Level-1 data products 
@@ -221,21 +125,18 @@ Infrared Sensor (TIRS), Landsat 7 Enhanced Thematic Mapper
 Plus (ETM+), Landsat 4-5 Thematic Mapper (TM)*, and Landsat 1-5 
 Multispectral Scanner (MSS) instruments.
 \textbf{Collection 1 Tiers:}
-\begin{description}
-\item [Tier 1]
-``Landsat scenes with the highest available data quality are placed into 
-Tier 1 and are considered suitable for time-series analysis.''~\cite{C1Describe}
-
-\item [Tier 2] ``Landsat scenes not meeting Tier 1 criteria during processing
- are assigned to Tier 2. Tier 2 scenes adhere to the same radiometric 
- standard as Tier 1 scenes, but do not meet the Tier 1 geometry 
- specification due to less accurate orbital information 
- (specific to older Landsat sensors), significant cloud cover, 
- insufficient ground control, or other factors.''~\cite{C1Describe}
-\end{description}
-
-
-
+    \begin{description}
+    \item [Tier 1]
+    ``Landsat scenes with the highest available data quality are placed into 
+    Tier 1 and are considered suitable for time-series analysis.''~\cite{C1Describe}
+    
+    \item [Tier 2] ``Landsat scenes not meeting Tier 1 criteria during processing
+     are assigned to Tier 2. Tier 2 scenes adhere to the same radiometric 
+     standard as Tier 1 scenes, but do not meet the Tier 1 geometry 
+     specification due to less accurate orbital information 
+     (specific to older Landsat sensors), significant cloud cover, 
+     insufficient ground control, or other factors.''~\cite{C1Describe}
+    \end{description}
 \item [Collection 2] 
 Landsat Collection 2 marks the second major reprocessing effort on 
 the Landsat archive by the USGS that results in several data product 
@@ -351,7 +252,6 @@ to be copied into \vari{feature\_a}.
 I guess if that argument is dropped, then
 all \vari{properties} will be copied.
 
-
 %%%%%%%----------------------------------------
 %%%%%%%
 %%%%%%% Find Centroid of Polygons
@@ -413,25 +313,14 @@ that area (or parts of it, depending on how large the area is)
 would not belong to the polygon 
 (See Fig.~\ref{fig:badBuffer}; it is not a doughnut, 
 but it delivers the message!)
-\begin{figure}[!h]
-  \centering
-  \begin{subfigure}[b]{0.4\textwidth}
-    % \centering
-    \includegraphics[width=1.1\textwidth]{figures/badCentroid}
-    \caption{Bad Centroid}
-    \label{fig:badCentroid}
-  \end{subfigure}
-  \qquad 
-  \begin{subfigure}[b]{.4\textwidth}
-    % \centering
-    \includegraphics[width=1.06\textwidth]{figures/badBuffer}
-    \caption{Bad Buffer}
-    \label{fig:badBuffer}
-  \end{subfigure}
-\caption{Centroids and buffers around the centroids of 
-         polygons in a shapefile.}
-\label{fig:badPolygon}
+\begin{figure}
+\subfloat[][Bad Centroid]{\includegraphics[width=0.5\textwidth]{figures/badCentroid}\label{fig:badCentroid}} \qquad
+\subfloat[][Bad Buffer]{\includegraphics[width=0.5\textwidth]{figures/badBuffer}\label{fig:badBuffer}}
+\caption[][11\baselineskip]{Centroids and buffers around the centroids of 
+         polygons in a shapefile.
+\label{fig:badPolygon}}
 \end{figure}
+
 By adding one line (line 5.5 in Alg.~\ref{alg:FindCentroidsBuffers}) 
 to the function \func{getCentroid(.)}
 we can get a buffer (a rectangular or a circle area) around
@@ -514,7 +403,6 @@ are covered by cloud up t0 70\%.
 This is a pre-filtering step. Later, 
 we can toss out the cloudy 
 \emph{pixels} from every single image.
-
 \begin{tcolorbox}
   \begin{algorithm}[H]
   \label{alg:FilterCloudyPixelsSentinel}
@@ -595,7 +483,7 @@ cloud information are different
 between Sentinel and
 Landsat or even among different Landsats.\\
 
-Landsat-8 \emph{Surface Reflectance} cloud mask~\cite{Landsat8CloudMask}:
+Landsat-8 \emph{Surface Reflectance} cloud mask\cite{Landsat8CloudMask}:
 \begin{tcolorbox}
   \begin{algorithm}[H]
   \label{alg:FilterCloudyPixelsLandsat8}
@@ -644,9 +532,9 @@ shadow and cloud,
 \end{algorithm}
 \end{tcolorbox}
 
+
 \noindent \textbf{{\color{red}{Note:}}} This is
 written for Landsat-8 (Surface Reflectance Tier 1 and 2).\\
-
 
 The code for masking the cloudy pixels in Landsat-4, 5, and 7 
 \emph{Surface Reflectance} is given by~\cite{Landsat457CloudMask}
@@ -733,7 +621,6 @@ Another way of masking cloud used in
 \end{tcolorbox}
 
 
-
 %%%%%%%----------------------------------------
 %%%%%%%
 %%%%%%%     Timelines
@@ -745,7 +632,7 @@ shows the timeline of Landsat
 satellites~\cite{LandsatTimelinesWiki}
 and~\cref{tab:ElevationTable} shows the
 exact dates.
-\begin{figure}[H]
+\begin{figure}[htb]
   \includegraphics[width=1\textwidth]{figures/landsatTimeline1}
 \caption{Landsat Timeline.}
 \label{fig:landsatTimeline}
@@ -779,7 +666,6 @@ Landsat 9 & 16 September 2021 (planned) & - \\ \hline
 %%%%%%%
 \section{Band Names and Indices}
 \label{sec:Band_Names_and_Indices}
-
 Band names are different in each instrument
 (see~\cref{tab:BandNameTable}).
 Hence the indices must be defined differently
@@ -791,7 +677,7 @@ The bandwidths are very similar. If their
 minimal differences makes any difference I am not aware of it and do not care. 
 Go nuts if you wish; figure out why, what, how.
 Bandwidths of Sentinel-2 is found on Wikipedia~\cite{SentinelBandwidths}
-and Bandwidths of Landsats can be found on GEE pages (e.g.~\cite{Landsat7T1SRBandWidths}).
+and Bandwidths of Landsats can be found on GEE pages (e.g.~\citep{Landsat7T1SRBandWidths}).
 
 \begin{table}[]
 \centering
@@ -854,9 +740,6 @@ Landsat-5 C2 L2 & SR\_B4: 0.77 -- 0.90 $\mu m$ & SR\_B3: 0.63 -- 0.69 $\mu m$ & 
 \end{table}
 
 
-
-
-
 \begin{gather}
 \label{eq:EVILandsat8}
 \begin{aligned}
@@ -870,10 +753,10 @@ Landsat-5 C2 L2 & SR\_B4: 0.77 -- 0.90 $\mu m$ & SR\_B3: 0.63 -- 0.69 $\mu m$ & 
 \noindent where $NIR$ is near infrared, $R$ is Red,
 $B$ is blue, 
 $\text{EVI}_8$ is the Enhanced Vegetation Index (EVI) 
-in Landsat-8~\cite{Landsat8EVI}, 
+in Landsat-8~\citep{Landsat8EVI}, 
 and $\text{EVI}_S$
 is the EVI in Sentinel; The NIR band in
-Landsat-8 is $B5$~\cite{L8BandNames}
+Landsat-8 is $B5$~\citep{L8BandNames}
 and for Sentinel is $B8$.
 
 ``EVI is similar to Normalized Difference 
@@ -889,11 +772,11 @@ the blue band ($B$).  These enhancements allow
 for index calculation as a ratio between 
 the $R$ and $NIR$ values, while reducing the 
 background noise, atmospheric noise, and 
-saturation in most cases''~\cite{Landsat8EVI}.
+saturation in most cases''~\citep{Landsat8EVI}.
 
 Below are the NDVIs for 
-Landsat-4 to Landsat-7~\cite{Landsat4NDVI},
-Landsat-8~\cite{Landsat4NDVI}, and Sentinel:
+Landsat-4 to Landsat-7~\citep{Landsat4NDVI},
+Landsat-8~\citep{Landsat4NDVI}, and Sentinel:
 \begin{gather}
 \label{eq:NDVILandsat8}
 \begin{aligned}
@@ -905,7 +788,7 @@ Landsat-8~\cite{Landsat4NDVI}, and Sentinel:
 \end{gather}
 
 Landsat-7 has 8-day NDVI composite already provided 
-by GEE~\cite{Landsat7NDVIComposite}. This product
+by GEE~\citep{Landsat7NDVIComposite}. This product
 is based on TOA data which is not perfect! However,
 it seems running some smoothing methods on it can
 make it useful.
@@ -956,7 +839,8 @@ it turns all into white (lower left). But the image exported via for-loop
 can be seen with naked eye (top right). The strange event is that the 
 batch-downloaded image, can be seen if it is opened via Python or 
 GIS (lower right image)!
-\begin{figure}[H]
+
+\begin{figure}[htb]
   \centering
   \includegraphics[width=.9\textwidth]{figures/strangeBatch}
   \caption{Strange Behavior of Batch-Download.}
@@ -968,45 +852,46 @@ Secondly, any time a data is exported on GEE interface, you need
 to click on the \textbf{Run} button on \textbf{Task} tab. Perhaps Python
 can be used to avoid this problem, as well as server-side/client-side
 problem altogether.
-
 \end{description}
-
 
 \section{Full Code Examples; Landsat and Sentinel}
 
-Here are two examples, one for Landsat-8~\cite{FullCodeLandsat8} 
-and one for Sentinel-2~\cite{FullCodeSentinel}.
+Here are two examples, one for Landsat-8~\citep{FullCodeLandsat8} 
+and one for Sentinel-2~\citep{FullCodeSentinel}.
 They are both on the GEE Mini Tutorial repo on 
-Google Earth Engine~\cite{GEEMiniTutorialRepoonEE}. 
+Google Earth Engine~\citep{GEEMiniTutorialRepoonEE}. 
 I have had problems with sharing repo in the past.
 If that does not work, you can copy the codes
 from the GitHub repo where this PDF is located
-at~\cite{MiniTutorialOnGitHub}.
-There is also a shapefile on Google drive~\cite{ShapeFileOnDrive} that is used
+at~\citep{MiniTutorialOnGitHub}.
+There is also a shapefile on Google drive~\citep{ShapeFileOnDrive} that is used
 in some of these codes.
 
 \subsection{Code Example}
 Merging data on GEE; see appendix of the paper\\
 ~\href{https://www.mdpi.com/2072-4292/11/7/820/htm}{https://www.mdpi.com/2072-4292/11/7/820/htm}
 
+\section{Remarks}
+
+\begin{description}
+\item [Filter Clouds and Scale.]
+Please look at the way clouds and shadows are
+filtered and proper bands are scaled with not hard-coding
+on the GEE page\cite{MaskCloudShadowScaleprepSrL8}
+in the function \func{prepSrL8(.)}.
+
+\item [Merge on GEE] You can merge
+two image collections (e.g. image collections from Landsat 7 and 8)
+on GEE like so \\
+\code{var merge\_IC = ee.ImageCollection(col\_1.}\func{merge}\code{(col\_2))};
+
+\end{description}
+
 \section{Beyond GEE}
 I like to advice once you are done with GEE,
 read your CSV files (Python/R/etc.) and round the 
 digits to 2 (or 3?) decimal places
 if you will. That reduces the file sizes.
-Of course this metters when you are working
+Of course this matters when you are working
 with substantial number of fields.
 
-%%%%%%%----------------------------------------
-%%%%%%%
-%%%%%%% references
-%%%%%%%
-
-\bibliographystyle{unsrt}
-\bibliography{GEE_References.bib}
-
-%%%%%%%----------------------------------------
-%%%%%%%
-%%%%%%%       The End
-%%%%%%%
-\end{document}

@@ -10,7 +10,7 @@ do
     do
       for county in Asotin Benton Douglas Ferry Franklin Garfield Grant Klickitat Spokane Whitman Yakima
       do
-        cp template.sh ./qsubs/q_$outer.sh
+        cp template.sh                       ./qsubs/q_$outer.sh
         sed -i s/outer/"$outer"/g            ./qsubs/q_$outer.sh
         sed -i s/cloud_type/"$cloud_type"/g  ./qsubs/q_$outer.sh
         sed -i s/indeks/"$indeks"/g          ./qsubs/q_$outer.sh

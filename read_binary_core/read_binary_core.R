@@ -50,7 +50,7 @@ read_binary_addmdy_8var <- function(filename, ymd){
   Nrecords <- nrow(ymd)
   ind <- seq(1, Nrecords * Nofvariables, Nofvariables)
   fileCon  <-  file(filename, "rb")
-  temp <- readBin(fileCon, integer(), size = 2, n = Nrecords * Nofvariables,
+  temp <- readBin(fileCon, integer(), size=2, n=Nrecords*Nofvariables,
                   endian = "little")
   dataM <- matrix(0, Nrecords, 8)
   dataM[1:Nrecords, 1] <- temp[ind] / 40.00         # precip data
