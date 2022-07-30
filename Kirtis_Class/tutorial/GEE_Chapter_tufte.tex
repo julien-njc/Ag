@@ -104,7 +104,7 @@ Also keep in mind \hl{Collection-2 Level-2 bands must be scaled.}
 \label{fig:C2L2Performance}
 \end{figure}
 
-Moreover, GEE~\cite{Landsat7T1SRBandWidths}
+Moreover, GEE~\citep{Landsat7T1SRBandWidths}
 says ``This dataset is the atmospherically corrected surface
 reflectance from the Landsat 7 ETM+ sensor.'' about ``USGS Landsat 7 
 Surface Reflectance Tier 1''  (LANDSAT/LE07/C01/T1\_SR). 
@@ -128,14 +128,14 @@ Multispectral Scanner (MSS) instruments.
     \begin{description}
     \item [Tier 1]
     ``Landsat scenes with the highest available data quality are placed into 
-    Tier 1 and are considered suitable for time-series analysis.''~\cite{C1Describe}
+    Tier 1 and are considered suitable for time-series analysis.''~\citep{C1Describe}
     
     \item [Tier 2] ``Landsat scenes not meeting Tier 1 criteria during processing
      are assigned to Tier 2. Tier 2 scenes adhere to the same radiometric 
      standard as Tier 1 scenes, but do not meet the Tier 1 geometry 
      specification due to less accurate orbital information 
      (specific to older Landsat sensors), significant cloud cover, 
-     insufficient ground control, or other factors.''~\cite{C1Describe}
+     insufficient ground control, or other factors.''~\citep{C1Describe}
     \end{description}
 \item [Collection 2] 
 Landsat Collection 2 marks the second major reprocessing effort on 
@@ -144,19 +144,20 @@ improvements that harness recent advancements in data processing,
 algorithm development, and data access and distribution capabilities. 
 \href{https://www.usgs.gov/core-science-systems/nli/landsat/landsat-collection-2?qt-science_support_page_related_con=1#}{Learn more about Collection 2 from the USGS.}
 
-Collection-2 Level-1 has different processings for different satellites~\cite{C2L1Describe}.
+Collection-2 Level-1 has different processings for different satellites~\citep{C2L1Describe}.
 It seems Collection-2 level-1 is TOA and Collection-2 level-2 is Surface Reflectance. 
 ``Collection-2 Level-2 science products are generated from Collection 2 Level-1 
 inputs that meet the <76 degrees Solar Zenith Angle constraint and include the 
-required auxiliary data inputs to generate a scientifically viable product.''~\cite{C2L2Describe}.
+required auxiliary data inputs to generate a scientifically viable 
+product.''~\citep{C2L2Describe}.
 ``\textbf{Surface reflectance} (unitless) 
 measures the fraction of incoming solar radiation that is 
 reflected from the Earth's surface to the Landsat sensor. 
 The LEDAPS and LaSRC surface reflectance algorithms 
 correct for the temporally, spatially and spectrally varying scattering 
 and absorbing effects of atmospheric gases, aerosols, and water vapor, 
-which is necessary to reliably characterize the Earth’s land surface.''~\cite{C2L2Describe}.
-For the enhancement details please see~\cite{C2L2Describe}.
+which is necessary to reliably characterize the Earth’s land surface.''~\citep{C2L2Describe}.
+For the enhancement details please see~\citep{C2L2Describe}.
 \end{description}
 
 
@@ -483,7 +484,7 @@ cloud information are different
 between Sentinel and
 Landsat or even among different Landsats.\\
 
-Landsat-8 \emph{Surface Reflectance} cloud mask\cite{Landsat8CloudMask}:
+Landsat-8 \emph{Surface Reflectance} cloud mask~\citep{Landsat8CloudMask}:
 \begin{tcolorbox}
   \begin{algorithm}[H]
   \label{alg:FilterCloudyPixelsLandsat8}
@@ -537,7 +538,7 @@ shadow and cloud,
 written for Landsat-8 (Surface Reflectance Tier 1 and 2).\\
 
 The code for masking the cloudy pixels in Landsat-4, 5, and 7 
-\emph{Surface Reflectance} is given by~\cite{Landsat457CloudMask}
+\emph{Surface Reflectance} is given by~\citep{Landsat457CloudMask}
 that is given below by Alg.~\ref{alg:FilterCloudyPixelsLandsat457}:
 \begin{tcolorbox}
   \begin{algorithm}[H]
@@ -586,13 +587,12 @@ that is given below by Alg.~\ref{alg:FilterCloudyPixelsLandsat457}:
 
 I have copied the cloud masking functions
 from GEE development/data-product pages into a script that can be found 
-\href{https://code.earthengine.google.com/?scriptPath=users\%2Fhnoorazar\%2FGEE_Mini_Tutorial\%3ACloudMaskings}{here}~\cite{CloudandMaskingFunctionsonMyGEE}.
+\href{https://code.earthengine.google.com/?scriptPath=users\%2Fhnoorazar\%2FGEE_Mini_Tutorial\%3ACloudMaskings}{here}~\citep{CloudandMaskingFunctionsonMyGEE}.
 More on masking clouds of Sentinel-2 and shadows
-are provided \href{https://developers.google.com/earth-engine/tutorials/community/sentinel-2-s2cloudless}{here} by GEE developers~\cite{CloudandShadowSentinel}.
+are provided \href{https://developers.google.com/earth-engine/tutorials/community/sentinel-2-s2cloudless}{here}~\citep{CloudandShadowSentinel} by GEE developers.
 
 
-Another way of masking cloud used in
-~\cite{rs11070820}:
+Another way of masking cloud used in~\citep{rs11070820}:
 
 \begin{tcolorbox}
   \begin{algorithm}[H]
@@ -629,7 +629,7 @@ Another way of masking cloud used in
 \label{sec:Timelines}
 Figure~\ref{fig:landsatTimeline}
 shows the timeline of Landsat
-satellites~\cite{LandsatTimelinesWiki}
+satellites~\citep{LandsatTimelinesWiki}
 and~\cref{tab:ElevationTable} shows the
 exact dates.
 \begin{figure}[htb]
