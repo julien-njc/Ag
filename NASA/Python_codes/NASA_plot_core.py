@@ -9,7 +9,6 @@ import numpy as np
 import datetime
 from datetime import date, timedelta
 sys.path.append('/Users/hn/Documents/00_GitHub/Ag/NASA/Python_codes/')
-sys.path.append('/home/hnoorazar/NASA/')
 import NASA_core as nc
 
 
