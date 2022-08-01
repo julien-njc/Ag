@@ -45,7 +45,7 @@ We see that not only the variable name is meaningful but also
 it is implying the type of the variable. It is an array. It is not a list.
 It is not a panda dataframe. 
 
-\item [Variables with Default values] come last.
+\item [Variables with Default Values] come last.
 
 \item [Function's Description] Include the functions' descriptions
 the first thing in the function. The first line (text) can describe what the function does. 
@@ -66,8 +66,8 @@ simple stuff. If you do not make comments and need to use
 the code after a month you may have hard time remembering.
 \end{description}
 The example above is on \href{https://github.com/HNoorazar/Ag/blob/master/Kirtis\_Class/Python/Kirtis\_Class\_core.py}{GitHub} for you to review.
-The convention used for documentation is the same as 
-that of numpy~\citep{numpyStyle}.
+The convention for documentation used in this example is the same as 
+that of NumPy~\citep{numpyStyle}.
 
 Once you write your functions in a central module
 you can import them into your driver modules and use
@@ -93,7 +93,7 @@ and use them like so:
 1. \code{sys.path.append(}'\codeRed{/Users/Documents/project1/}'\code{)}\;
 2. \codeGreen{import} \code{kirtis\_class\_core} \codeGreen{as} \code{kcc} \;
 3. \codeGreen{import} \code{kirtis\_class\_plot\_core} \codeGreen{as} \code{kcpc} \;
-4.Use the function \codeCyan{diversify} from \code{kirtis\_class\_core.py} like \\
+4. Use the function \codeCyan{diversify} from \code{kirtis\_class\_core.py} like \\
 \code{diversified\_portfolio = kcc.\codeCyan{diversify}(\codeGoldenrod{x}, \codeGoldenrod{y}, \codeGoldenrod{z})}
 \end{algorithm}
 \end{tcolorbox}
@@ -101,7 +101,7 @@ A simple code demonstrating this is on GitHub that you can look at;
 \href{https://github.com/HNoorazar/Ag/tree/master/Kirtis\_Class/Python}{github.com/HNoorazar/Ag/tree/master/Kirtis\_Class/Python}.\\
 
 In a similar way you can import your R modules into the drivers.
-Say your R module with all the functions in it is called \code{R\_engine\_core.R}
+Say your R module with all the functions in it is called \code{kirtis\_class\_core.R}
 located in \code{/Users/Documents/project1/}.
 You can import it like so in your driver:
 
@@ -110,9 +110,9 @@ You can import it like so in your driver:
   \label{alg:importRCode}
    \caption{Import Your R Modules.}
 \SetAlgoLined
-1. \code{source\_path =} \codeGreen{"Users/Documents/project1/R\_engine\_core.R"} \;
+1. \code{source\_path =} \codeGreen{"Users/Documents/project1/kirtis\_class\_core.R"} \;
 2. \code{source(source\_path)} \;
-3.Use the function \codeCyan{diversify} from \code{R\_engine\_core.R} like you use any function of R: \\
+3. Use the function \codeCyan{diversify} from \code{R\_engine\_core.R} like you use any function of R: \\
 \code{diversified\_portfolio = \codeCyan{diversify}(\codeGoldenrod{x}, \codeGoldenrod{y}, \codeGoldenrod{z})}
 \end{algorithm}
 \end{tcolorbox}
