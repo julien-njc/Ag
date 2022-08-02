@@ -1102,7 +1102,7 @@ diapause_abs_rel <- function(data,
     #    the data directly. The drivers also should be updated.
     #
     #    The reason is that for sensitivity stuff I already combined all emissions
-    #    and scale_shifts. So, I wanted to use one file for all of them. Fuck codling moth!
+    #    and scale_shifts. So, I wanted to use one file for all of them.
     #
     # file_name = paste0(input_dir, file_name)
     # data <- data.table(readRDS(file_name))

@@ -16,7 +16,6 @@ options(digits=9)
 
 compute_GDD <- function(data_dir, file_name, observed_or_future, lower_cut=10, upper_cut=30){
 
-
     if (observed_or_future=="observed"){
         no_vars_=8
       } else if (observed_or_future=="future"){

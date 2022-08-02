@@ -1557,9 +1557,9 @@ generate_scale_sens_table <- function(master_path, shifts){
     DT_2080_warm = data.table(shift = shifts)
     
     DT_historical_cold = data.table(shift = shifts)
-    DT_2040_cold = data.table(shift = shifts)
-    DT_2060_cold = data.table(shift = shifts)
-    DT_2080_cold = data.table(shift = shifts)
+    DT_2040_cold = data.table(shift=shifts)
+    DT_2060_cold = data.table(shift=shifts)
+    DT_2080_cold = data.table(shift=shifts)
     
     for (dead_line in dead_lines){
       for (stag in stages){
