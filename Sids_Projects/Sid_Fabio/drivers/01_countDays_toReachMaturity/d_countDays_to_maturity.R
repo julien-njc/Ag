@@ -113,7 +113,6 @@ for(fileName in local_files){
                       data.table()
 
     days_to_maturity_tb$no_of_extreme_heat[days_to_maturity_tb$location==fileName & days_to_maturity_tb$year==a_year] = dim(extreme_heat_tb)[1]
-    
 
   }  
 }

@@ -130,7 +130,7 @@ prepareData_CMPOP <- function(filename, input_folder,
   # metdata <- readbinarydata_addmdy(input_file, Nrecords, Nofvariables, ymd, ind)
 
   # from read_binanry_core.R
-  metdata <- read_binary_addmdy(filename=input_file, ymd = A_ymd, no_vars = NoVariables) 
+  metdata <- read_binary_addmdy(filename=input_file, ymd=A_ymd, no_vars=NoVariables) 
   metdata <- data.table(metdata)
 
   
