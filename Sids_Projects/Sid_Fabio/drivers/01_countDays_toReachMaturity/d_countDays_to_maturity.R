@@ -13,9 +13,9 @@ options(digits=9)
 ######################################################################
 
 args = commandArgs(trailingOnly=TRUE)
-veg_type = args[1]
-model_type = args[2]
-start_doy = args[3]
+veg_type = args[1] # carrot, tomato, spinach, strawberry
+model_type = args[2] # observed or name of future models; e.g. BNU-XYZ
+start_doy = strtoi(args[3]) # 1, 15, 30, 45, ...
 
 ######################################################################
 # Define main output path
@@ -41,7 +41,7 @@ veg_params=veg_params[veg_params$veg==veg_type, ]
 start_time <- Sys.time()
 
 
-dir_base <- "/data/hydro/users/Hossein/Sids_Projects/SidFabio/00_cum_GDD/"
+dir_base <- "/data/hydro/users/Hossein/Sids_Projects/SidFabio/00_cumGDD/"
 data_dir <- paste0(dir_base, veg_type, "/", model_type, "/")
 
 col_names <- c("location", "year", "days_to_maturity", 
@@ -74,14 +74,14 @@ for(fileName in local_files){
 
   # data_tb[, cum_GDD:=NULL] # cum_GDD is useless. I need to do this on yearly basis.
 
-  for (a_year in sort(unique(days_to_maturity$year))){
+  for (a_year in sort(unique(days_to_maturity_tb$year))){
     curr_row_num <- data_tb[data_tb$year==a_year & data_tb$doy==start_doy, ]$row_num
     curr_data <- data_tb[data_tb$row_num>=curr_row_num, ]
     curr_data <- data.table(curr_data)
     curr_data$cum_GDD <- 0
     curr_data[, cum_GDD := cumsum(daily_GDD)] # , by=list(year)
 
-    day_of_maturity=curr_data[curr_data$cum_GDD >= veg_params$maturity_gdd]
+    day_of_maturity=curr_data[curr_data$cum_GDD >= veg_params[veg_params$veg==veg_type]$maturity_gdd]
     dayCount = day_of_maturity$row_num[1]-curr_data$row_num[1]
 
     # Record days_to_maturity
@@ -99,7 +99,7 @@ for(fileName in local_files){
                     filter(tmax<=veg_params$optimum_hi) %>%
                     data.table()
 
-    days_to_maturity_tb$no_days_in_opt_interval[days_to_maturity_tb$location==fileName & days_to_maturity_tb$year==a_year] = dim(start_to_maturity_tb)[1]
+    days_to_maturity_tb$no_days_in_opt_interval[days_to_maturity_tb$location==fileName & days_to_maturity_tb$year==a_year] = dim(optimum_table)[1]
 
     extreme_cold_tb = start_to_maturity_tb %>%
                       filter(tmin<=veg_params$cold_stress) %>%
@@ -117,13 +117,13 @@ for(fileName in local_files){
   }  
 }
 
-current_out = paste0(out_dir_base, "/days_to_maturity/", veg_type, "/") # "_", model_type, 
+current_out = paste0(out_dir_base, "/01_days2maturity_EE/", veg_type, "/") # "_", model_type, 
 if (dir.exists(current_out) == F) {
     dir.create(path = current_out, recursive = T)
 }
 
-write.csv(days_to_maturity, 
-          file = paste0(current_out, model_type, "_days_to_maturity.csv"), 
+write.csv(days_to_maturity_tb, 
+          file = paste0(current_out, model_type, "_start_DoY_", start_doy, "_days2maturity_EE.csv"), 
           row.names=FALSE)
 
 
