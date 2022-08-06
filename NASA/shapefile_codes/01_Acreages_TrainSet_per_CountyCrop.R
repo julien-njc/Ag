@@ -105,8 +105,8 @@ walla_Acr$year = walla_yr
 # damn monteray
 
 Mont <- readOGR("/Users/hn/Documents/01_research_data/NASA/shapefiles/Monterey/2014_Crop_Monterey_CDL.shp",
-                       layer = "2014_Crop_Monterey_CDL", 
-                       GDAL1_integer64_policy = TRUE)
+                 layer = "2014_Crop_Monterey_CDL", 
+                 GDAL1_integer64_policy = TRUE)
 
 Mont <- Mont@data
 # Mont <- Mont %>% filter(County == "Monterey") %>% data.table()

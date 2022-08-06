@@ -37,7 +37,7 @@ plot_No_generations <- function(input_dir, file_name,
   df <- (df %>% group_by(CountyGroup, ClimateGroup))
   medians <- (df %>% summarise(med = median(!!sym(var))))
   rm(df)
-  y_lab = paste0("No. of generations")
+  y_lab = paste0("number of generations")
 
   box_plot = ggplot(data = data, aes(x = ClimateGroup, y = !!sym(var), fill = ClimateGroup)) + 
              geom_boxplot(outlier.size=-.15, lwd=0.25, notch=F, width=box_width) +
@@ -105,7 +105,7 @@ plot_No_generations_annotation <- function(input_dir, file_name,
   df <- (df %>% group_by(CountyGroup, ClimateGroup))
   medians <- (df %>% summarise(med = median(!!sym(var))))
   rm(df)
-  y_lab = paste0("No. of generations")
+  y_lab = paste0("number of generations")
   the_theme<-theme(plot.margin = margin(t=.5, r=0.5, b=0, l=0.1, unit = 'cm'),
                    panel.grid.major = element_line(size = 0.1),
                    panel.grid.minor = element_blank(),
@@ -144,8 +144,8 @@ plot_No_generations_annotation <- function(input_dir, file_name,
   return(box_plot)
 }
 ########################################################################################
-input_dir = "/Users/hn/Desktop/Desktop/Kirti/check_point/my_aeolus_2015/all_local/"
-plot_path = "/Users/hn/Desktop/Desktop/Kirti/check_point/my_aeolus_2015/all_local/"
+input_dir = "/Users/hn/Documents/01_research_data/codling_moth/overlaping//"
+plot_path = "/Users/hn/Documents/01_research_data/codling_moth/overlaping//"
 setwd(input_dir)
 
 color_ord <- c("grey47", "dodgerblue", "olivedrab4", "red")
@@ -158,7 +158,7 @@ file_pref = "generations_"
 file_mid = "_combined_CMPOP_"
 file_end = ".rds"
 
-quality = 700
+quality = 500
 plot_with = 6.5
 plot_height = 2.5
 
@@ -208,9 +208,13 @@ A_ann <- annotate_figure(larva_ann,
                          top = text_grob(plot_title, color = "black", face = "bold", size = 15)
                          # fig.lab = plot_title, fig.lab.size = 35, fig.lab.face = "bold", fig.lab.pos = c("top.left")
                          )
-plot_dpi <- 300
+plot_dpi <- 400
 ggsave("larva_gen_aug.png", A, path="./", width=10, height=4, unit="in", dpi=quality)
 ggsave("larva_gen_aug_ann.png", A_ann, path="./", width=10, height=4, unit="in", dpi=quality)
+
+ggsave("larva_gen_aug.pdf", A, path="./", width=10, height=4, unit="in", dpi=quality)
+ggsave("larva_gen_aug_ann.pdf", A_ann, path="./", width=10, height=4, unit="in", dpi=quality)
+
 
 
 adult <- ggpubr::ggarrange(plotlist = list(Adult_Aug_rcp45, Adult_Aug_rcp85),
@@ -236,9 +240,11 @@ A_ann <- annotate_figure(adult_ann,
                          top = text_grob(plot_title, color = "black", face = "bold", size = 15)
                          # fig.lab = plot_title, fig.lab.size = 35, fig.lab.face = "bold", fig.lab.pos = c("top.left")
                          )
-plot_dpi <- 300
+plot_dpi <- 400
 ggsave("adult_gen_aug.png", A, path="./", width=10, height=4, unit="in", dpi=quality)
 ggsave("adult_gen_aug_ann.png", A_ann, path="./", width=10, height=4, unit="in", dpi=quality)
 
+ggsave("adult_gen_aug.pdf", A, path="./", width=10, height=4, unit="in", dpi=quality)
+ggsave("adult_gen_aug_ann.pdf", A_ann, path="./", width=10, height=4, unit="in", dpi=quality)
 
 
