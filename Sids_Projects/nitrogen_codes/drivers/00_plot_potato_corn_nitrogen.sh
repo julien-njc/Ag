@@ -9,8 +9,8 @@
 ## Define compute options
 #PBS -l nodes=1:ppn=10
 #PBS -l mem=5gb
-#PBS -l walltime=99:00:00
-#PBS -q hydro
+#PBS -l walltime=06:00:00
+##PBS -q hydro
 
 ## Define path for output & error logs
 #PBS -k o

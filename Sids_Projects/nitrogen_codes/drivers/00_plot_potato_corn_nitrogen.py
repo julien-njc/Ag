@@ -71,26 +71,41 @@ corn = potatpCornRed[potatpCornRed.CropTyp.isin(['Corn, Field', 'Corn, Sweet', '
 potato.reset_index(drop=True, inplace=True)
 corn.reset_index(drop=True, inplace=True)
 
-corn["chl"] =corn["CIRed"]* 6.68
-potato.loc[:, 'chl'] = potato.loc[:, 'CIRed']*0.8013
+#
+# Canopy Chl
+#
+corn["chl"]=corn["CIRed"]* 6.68
+corn["chl"]=corn["chl"]-0.67
 
-corn["chl"] =corn["chl"]-0.67
-potato.loc[:, 'chl'] = potato.loc[:, 'chl']-0.4704
+potato.loc[:, 'chl']=potato.loc[:, 'CIRed'] * 0.8013
+potato.loc[:, 'chl']=potato.loc[:, 'chl'] - 0.4704
 
-corn_potato = pd.concat([corn, potato])
+corn_potato=pd.concat([potato, corn])
 corn_potato.reset_index(drop=True, inplace=True)
 
+#
+# Nitorgen
+#
 corn_potato["nit"] = corn_potato["chl"]*4.73+0.27
 
 
 corn_potato = nc.add_human_start_time_by_system_start_time(corn_potato)
 
+###### Round the damn numbers
+corn_potato=corn_potato.round(1)
+
+
 potato_nit_min=corn_potato[corn_potato.CropTyp.isin(["Potato Seed", "Potato"])].nit.min()
 potato_nit_max=corn_potato[corn_potato.CropTyp.isin(["Potato Seed", "Potato"])].nit.max()
 
-corn_nit_min=corn_potato[~corn_potato.CropTyp.isin(["Potato Seed", "Potato"])].nit.min()
-corn_nit_max=corn_potato[~corn_potato.CropTyp.isin(["Potato Seed", "Potato"])].nit.max()
+corn_F_min=corn_potato[corn_potato.CropTyp=="Corn, Field"].nit.min()
+corn_F_max=corn_potato[corn_potato.CropTyp=="Corn, Field"].nit.max()
 
+corn_Sweet_min=corn_potato[corn_potato.CropTyp=="Corn, Sweet"].nit.min()
+corn_Sweet_max=corn_potato[corn_potato.CropTyp=="Corn, Sweet"].nit.max()
+
+corn_Seed_min=corn_potato[corn_potato.CropTyp=="Corn Seed"].nit.min()
+corn_Seed_max=corn_potato[corn_potato.CropTyp=="Corn Seed"].nit.max()
 
 
 size = 20
@@ -118,8 +133,8 @@ plt.rcParams['ytick.labelleft'] = True
 plt.rcParams.update(params)
 
 def plot_oneColumn_CropTitle_scatter(raw_dt, ax, titlee, idx="NDVI", 
-                                     _label = "raw", _color="red"
-                                     , y_min=-1, y_max=1):
+                                     _label = "raw", _color="red",
+                                     y_min=-1, y_max=1):
 
     ax.plot(raw_dt['human_system_start_time'], raw_dt[idx], c=_color, linewidth=2,
                 label=_label);
@@ -148,13 +163,29 @@ for _id in IDs:
                             # sharex=True, sharey=True,
                            gridspec_kw={'hspace': 0.35, 'wspace': .05});
     axs.grid(True);
+    
+    if curr.CropTyp.unique()[0]=="Corn, Field":
+        curr_min=corn_F_min
+        curr_max=corn_F_max
+    elif curr.CropTyp.unique()[0]=="Corn, Sweet":
+        curr_min=corn_Sweet_min
+        curr_max=corn_Sweet_max
+    elif curr.CropTyp.unique()[0]=="Corn Seed":
+        curr_min=corn_Seed_min
+        curr_max=corn_Seed_max
+    else:
+        curr_min=potato_nit_min
+        curr_max=potato_nit_max
+
     plot_oneColumn_CropTitle_scatter(raw_dt = curr, ax=axs, idx=indeks, titlee=titlee,
                                      _label = "Canopy N",
                                      _color="dodgerblue", 
-                                     y_min=corn_nit_min, y_max=corn_nit_max)
+                                     y_min=curr_min, y_max=curr_max)
 
     # save flat
-    sub_dir = "_".join(curr_meta.CropTyp.unique()[0].split(", ")[::-1])
+    sub_dir = "".join("_".join(curr_meta.CropTyp.unique()[0].split(" ")).split(","))
+    # "_".join("_".join(curr_meta.CropTyp.unique()[0].split(", ")[::-1]).split(" ")[::-1])
+    # "_".join(curr_meta.CropTyp.unique()[0].split(", ")[::-1])
     plot_path = plot_dir + "/cornPotatopPlots/" + sub_dir + "/"
     os.makedirs(plot_path, exist_ok=True)
     fig_name = plot_path + curr_meta.county.unique()[0] + "_" + _id +'.png'
@@ -168,3 +199,5 @@ print ("done")
 
 end_time = time.time()
 print ("it took {:.0f} minutes to run this code.".format((end_time - start_time)/60))
+
+
