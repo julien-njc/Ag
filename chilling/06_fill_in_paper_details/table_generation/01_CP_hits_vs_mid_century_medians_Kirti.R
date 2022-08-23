@@ -51,7 +51,9 @@ sept_summary_comp_summary <- within(sept_summary_comp_summary, remove("lat"))
 write.csv(sept_summary_comp_summary, 
           file = paste0("/Users/hn/Documents/00_GitHub/", 
                         "Ag_papers/Chill_Paper/tables/", 
-                        "CP_medians.csv"))
+                        "CP_medians.csv"),
+          row.names=FALSE)
+
 
 
 sept_summary_comp_no_model_hist <- within(sept_summary_comp_summary, remove("historical_1950-2005"))
