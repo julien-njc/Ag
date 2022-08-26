@@ -1,5 +1,5 @@
 #!/bin/bash
-cd /home/hnoorazar/sid/sidFabio/01_countDays_toReachMaturity
+cd /home/hnoorazar/Sid/sidFabio/01_countDays_toReachMaturity
 
 outer=1
 for veg_type in tomato

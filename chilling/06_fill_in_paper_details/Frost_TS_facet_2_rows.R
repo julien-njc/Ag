@@ -104,7 +104,7 @@ for (em in emissions){
   source(source_2)
   frost_plt <- cloudy_frost_2_rows(d1 = curr_frost, 
                                    colname = "chill_dayofyear", 
-                                   fil = "first frost")
+                                   fil="first frost")
 
   ggsave(plot = frost_plt,
          filename = paste0("first_frost_", gsub(" ", "", gsub("\\.", "", em)), ".png"), 

@@ -1,18 +1,10 @@
-
 .libPaths("/data/hydro/R_libs35")
 .libPaths()
 
-
-
 source_path="/Users/hn/Documents/00_GitHub/Ag/read_binary_core/read_binary_core.R"
-data_dir="/Users/hn/Documents/01_research_data/Sid/SidFabio/binary/VIC_Binary_CONUS_to_2016/"
 source_path = "/home/hnoorazar/reading_binary/read_binary_core.R"
 source(source_path)
-
-
 options(digits=9)
-options(digits=9)
-
 
 detect_county_byLatLong <- function(latLong_datatable){
     counties <- map('county', fill=TRUE, col="transparent", plot=FALSE)
@@ -86,6 +78,9 @@ compute_GDD_nonLinear <- function(data_dir, file_name, observed_or_future,
     # Drop extra columns
     met_data[, c("TAvg_Minus_lower_cut", "numerator_p1", "numerator_p2", "numerator"):=NULL]
 
+    # add day of year
+    met_data$doy = 1
+    met_data[, doy := cumsum(doy), by=list(year)]
     return (met_data)
 }
 

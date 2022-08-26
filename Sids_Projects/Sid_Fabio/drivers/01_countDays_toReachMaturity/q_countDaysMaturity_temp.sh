@@ -16,8 +16,8 @@
 ## Define path for output & error logs
 #PBS -k o
   ##PBS -j oe
-#PBS -e /home/hnoorazar/sid/sidFabio/01_countDays_toReachMaturity/error/mature_EE_outer_E
-#PBS -o /home/hnoorazar/sid/sidFabio/01_countDays_toReachMaturity/error/mature_EE_outer_O
+#PBS -e /home/hnoorazar/Sid/sidFabio/01_countDays_toReachMaturity/error/mature_EE_outer_E
+#PBS -o /home/hnoorazar/Sid/sidFabio/01_countDays_toReachMaturity/error/mature_EE_outer_O
 
 ## Define path for reporting
 #PBS -m abe
@@ -42,7 +42,7 @@ module load gcc/7.3.0
 module load r/3.5.1/gcc/7.3.0
 module load r/3.5.1
 
-Rscript --vanilla /home/hnoorazar/sid/sidFabio/01_countDays_toReachMaturity/d_countDays_to_maturity.R veg_type model_type start_doy
+Rscript --vanilla /home/hnoorazar/Sid/sidFabio/01_countDays_toReachMaturity/d_countDays_to_maturity.R veg_type model_type start_doy
 
 echo
 echo "----- DONE -----"

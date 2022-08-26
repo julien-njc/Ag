@@ -1,5 +1,5 @@
 #!/bin/bash
-cd /home/hnoorazar/sid/sidFabio/00_cumGDD_separateLocationsModels
+cd /home/hnoorazar/Sid/sidFabio/00_cumGDD_separateLocationsModels
 
 outer=1
 for veg_type in tomato

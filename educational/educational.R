@@ -652,13 +652,8 @@ start_ID = ID[seq(1, length(ID), 14)]
 
 Above works also on data tables.
 
-
-
 # initiate data table of given size:
 data <- setNames(data.table(matrix(nrow = 0, ncol = 3)), c("va", "vb", "vc"))
-
-
-
 
 
 #######################################################################

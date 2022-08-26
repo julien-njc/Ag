@@ -1,7 +1,9 @@
 .libPaths("/data/hydro/R_libs35")
 .libPaths()
 library(data.table)
-source_path = "/home/hnoorazar/sid/sidFabio/SidFabio_core.R"
+
+
+source_path = "/home/hnoorazar/Sid/sidFabio/SidFabio_core.R"
 source(source_path)
 options(digit=9)
 options(digits=9)
@@ -74,7 +76,7 @@ for(file in local_files){
               data.table()
 
 
-  current_out = paste0(out_dir, "/00_cumGDD_nonLinear/", veg_type, "/", model_type, "_", param_type, "/")
+  current_out = paste0(out_dir, "/00_cumGDD_nonLinear/", veg_type, "/", gsub("-", "", model_type), "_", param_type, "/")
   if (dir.exists(current_out) == F) {
       dir.create(path = current_out, recursive = T)
     }

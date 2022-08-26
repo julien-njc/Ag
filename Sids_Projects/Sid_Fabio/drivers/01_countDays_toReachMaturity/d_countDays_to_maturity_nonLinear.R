@@ -1,7 +1,7 @@
 .libPaths("/data/hydro/R_libs35")
 .libPaths()
 library(data.table)
-source_path = "/home/hnoorazar/sid/sidFabio/SidFabio_core.R"
+source_path = "/home/hnoorazar/Sid/sidFabio/SidFabio_core.R"
 source(source_path)
 options(digit=9)
 options(digits=9)
@@ -36,14 +36,19 @@ local_files <- as.vector(local_files$V1)
 veg_params <- data.table(read.csv(paste0(param_dir, "veg_params.csv"),  as.is=T))
 veg_params=veg_params[veg_params$veg==veg_type, ]
 
+print ("line 39")
+print (head(veg_params, 2))
+
+print ("______________")
+print ("Line 43")
+print (paste0("veg_type: ", veg_type, " model_type: ", model_type, ", start_doy :", start_doy))
+
 
 # 3. Process the data -----------------------------------------------------
 # Time the processing of this batch of files
 start_time <- Sys.time()
 
-
-
-data_dir <- paste0(dir_base, veg_type, "/", model_type, "_", param_type, "/")
+data_dir <- paste0(dir_base, veg_type, "/", gsub("-", "", model_type), "_", param_type, "/")
 
 col_names <- c("location", "year", "days_to_maturity", 
                "no_days_in_opt_interval", "no_of_extreme_cold", "no_of_extreme_heat")
@@ -64,11 +69,17 @@ if (model_type=="observed"){
 #             USE.NAMES=FALSE)
 # lat = x[2, ]
 # long = x[3, ]
+print ("line 75")
+print (local_files)
 
 for(fileName in local_files){
   # The following function will look into the right directory when 
   data_tb <- data.table(read.csv(paste0(data_dir, fileName, ".csv")))
   data_tb$row_num <- seq.int(nrow(data_tb))
+
+  # add day of year
+   data_tb$doy = 1
+   data_tb[, doy := cumsum(doy), by=list(year)]
 
   # data_tb <- data_tb %>%
   #         select(-c(precip, windspeed, SPH, SRAD, Rmax, Rmin))
@@ -95,9 +106,14 @@ for(fileName in local_files){
                            filter(row_num<=day_of_maturity$row_num[1]) %>%
                            data.table()
     
+    # optimum_table = start_to_maturity_tb %>%
+    #                 filter(tmin>=veg_params$optimum_low) %>%
+    #                 filter(tmax<=veg_params$optimum_hi) %>%
+    #                 data.table()
+
     optimum_table = start_to_maturity_tb %>%
-                    filter(tmin>=veg_params$optimum_low) %>%
-                    filter(tmax<=veg_params$optimum_hi) %>%
+                    filter(Tavg>=veg_params$optimum_low) %>%
+                    filter(Tavg<=veg_params$optimum_hi) %>%
                     data.table()
 
     days_to_maturity_tb$no_days_in_opt_interval[days_to_maturity_tb$location==fileName & days_to_maturity_tb$year==a_year] = dim(optimum_table)[1]
@@ -124,7 +140,7 @@ if (dir.exists(current_out) == F) {
 }
 
 write.csv(days_to_maturity_tb, 
-          file = paste0(current_out, model_type, "_start_DoY_", start_doy, "_days2maturity_EE.csv"), 
+          file = paste0(current_out, gsub("-", "", model_type), "_start_DoY_", start_doy, "_days2maturity_EE.csv"), 
           row.names=FALSE)
 
 

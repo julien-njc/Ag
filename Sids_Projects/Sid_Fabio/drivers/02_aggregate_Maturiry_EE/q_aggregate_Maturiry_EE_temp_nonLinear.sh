@@ -5,7 +5,7 @@
 #PBS -V
 
 ## Define a job name
-#PBS -N outer_nonLinear_cumGDD_modelName
+#PBS -N outer_veg_type_param_type_agg
 
 ## Define compute options
 #PBS -l nodes=1:ppn=1
@@ -16,8 +16,8 @@
 ## Define path for output & error logs
 #PBS -k o
   ##PBS -j oe
-#PBS -e /home/hnoorazar/Sid/sidFabio/00_cumGDD_separateLocationsModels/error/nonLinear_cumGDD_outer_E
-#PBS -o /home/hnoorazar/Sid/sidFabio/00_cumGDD_separateLocationsModels/error/nonLinear_cumGDD_outer_O
+#PBS -e /home/hnoorazar/Sid/sidFabio/02_aggregate_Maturiry_EE/error/veg_type_param_type_outer_e
+#PBS -o /home/hnoorazar/Sid/sidFabio/02_aggregate_Maturiry_EE/error/veg_type_param_type_outer_o
 
 ## Define path for reporting
 #PBS -m abe
@@ -42,7 +42,7 @@ module load gcc/7.3.0
 module load r/3.5.1/gcc/7.3.0
 module load r/3.5.1
 
-Rscript --vanilla /home/hnoorazar/Sid/sidFabio/00_cumGDD_separateLocationsModels/d_cumGDD_nonLinear.R veg_type modelName param_type
+Rscript --vanilla /home/hnoorazar/Sid/sidFabio/02_aggregate_Maturiry_EE/d_aggregate_Maturiry_EE_nonLinear.R veg_type param_type ##model_type start_doy
 
 echo
 echo "----- DONE -----"
