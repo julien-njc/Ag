@@ -16,8 +16,8 @@
 ## Define path for output & error logs
 #PBS -k o
   ##PBS -j oe
-#PBS -e /home/hnoorazar/Sid/sidFabio/00_cumGDD_separateLocationsModels/error/nonLinear_cumGDD_outer_E
-#PBS -o /home/hnoorazar/Sid/sidFabio/00_cumGDD_separateLocationsModels/error/nonLinear_cumGDD_outer_O
+#PBS -e /home/hnoorazar/Sid/sidFabio/00_cumGDD_separateLocationsModels/error/nonLinear_cumGDD_outer_e
+#PBS -o /home/hnoorazar/Sid/sidFabio/00_cumGDD_separateLocationsModels/error/nonLinear_cumGDD_outer_o
 
 ## Define path for reporting
 #PBS -m abe

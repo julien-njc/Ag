@@ -55,11 +55,12 @@ for(file in local_files){
                                  file_name=file, 
                                  observed_or_future=model_type, 
                                  lower_cut=veg_params$lower_cut, 
-                                 upper_cut=veg_params$upper_cut)
+                                 upper_cut=veg_params$upper_cut, 
+                                 maturity_cumGDD=veg_params$maturity_gdd)
 
   # 3b. Clean it up
   met_data <- met_data %>%
-              select(-c(precip, windspeed, SPH, Rmax, Rmin)) %>%
+              select(-c(precip, windspeed, SPH, SRAD, Rmax, Rmin)) %>%
               data.table()
 
 

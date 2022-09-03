@@ -1,8 +1,9 @@
-.libPaths("/data/hydro/R_libs35")
-.libPaths()
+# .libPaths("/data/hydro/R_libs35")
+# .libPaths()
 
-source_path="/Users/hn/Documents/00_GitHub/Ag/read_binary_core/read_binary_core.R"
-source_path = "/home/hnoorazar/reading_binary/read_binary_core.R"
+source_path = "/home/h.noorazar/Sid/sidFabio/read_binary_core.R" # Kamiak
+
+
 source(source_path)
 options(digits=9)
 
@@ -89,22 +90,30 @@ compute_GDD_nonLinear <- function(data_dir, file_name, observed_or_future,
 
 
 
-compute_GDD_linear <- function(data_dir, file_name, observed_or_future, lower_cut=10, upper_cut=30){
-    if (observed_or_future=="observed"){
-        no_vars_=8
-        met_data <- read_binary(file_path=paste0(data_dir, file_name), 
-                                hist=TRUE, 
-                                no_vars=no_vars_)
+compute_GDD_linear <- function(data_dir, file_name, data_type_, lower_cut=10, upper_cut=30){
+    #
+    #  on fucking Kamiak everything has 8 variales
+    #
+    # future data are all over the place. West are in Adams directory
+    # non-west are elsewhere. Fuck this shit. Hence this if-else statement.
+    # right this second (Sept. 2022 we are doing observed and future (i.e. no modeled historical))
 
-      } else {
-        no_vars_=4
+    no_vars_=8
+    
+    if (data_type_=="observed"){
         met_data <- read_binary(file_path=paste0(data_dir, file_name), 
-                                hist=FALSE, 
+                                data_type=data_type_, 
+                                no_vars=no_vars_)
+      } else{
+        # future data are all over the place. West are in Adams directory
+        # non-west are elsewhere. Fuck this shit. Hence this if-else statement.
+        # right this second (Sept. 2022 we are doing observed and future (i.e. no modeled historical))
+        met_data <- read_binary(file_path=paste0(file_name), 
+                                data_type=data_type_, 
                                 no_vars=no_vars_)
     }
-    
     # we do not need 1979.
-    if (observed_or_future=="observed"){
+    if (data_type_=="observed"){
       met_data <- met_data[met_data$year>=1980]
     }
 

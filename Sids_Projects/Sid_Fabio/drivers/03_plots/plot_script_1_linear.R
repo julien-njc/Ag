@@ -23,7 +23,7 @@ options(digits=9)
 ########
 
 veg_type = "tomato"  # "tomato" at this point, later: "carrot", "spinach", "strawberry", "tomato"
-param_type = "fabio" # "fabio" or "claudio"
+# param_type = "fabio" # "fabio" or "claudio"
 
 ################################
 ########
@@ -31,10 +31,10 @@ param_type = "fabio" # "fabio" or "claudio"
 ########
 
 data_dir_base = "/Users/hn/Documents/01_research_data/Sid/SidFabio/"
-data_dir = paste0(data_dir_base, "/02_aggregate_Maturiry_EE_nonLinear/", veg_type, "_", param_type, "/")
+data_dir = paste0(data_dir_base, "/02_aggregate_Maturiry_EE_linear/", veg_type, "/")
 
 
-out_dir = paste0(data_dir_base, "03_plots/", veg_type, "_", param_type, "/")
+out_dir = paste0(data_dir_base, "03_plots/", veg_type, "/")
 if (dir.exists(out_dir) == F) {
     dir.create(path = out_dir, recursive = T)
 }
@@ -100,7 +100,7 @@ within_TP_median_of_annual_means_within_CRD$startDoY <- factor(within_TP_median_
 
 
 mean_days_to_maturity_plot<- annual_TS(d1=annual_means_within_CRD, colname="mean_days_to_maturity", fil="maturity age")
-fName = paste("mean_days_to_maturity", veg_type, param_type, sep = "_")
+fName = paste("mean_days_to_maturity", veg_type, sep = "_")
 
 # ggsave(plot = mean_days_to_maturity_plot,
 #        filename = paste0(fName, ".png"), 
@@ -126,7 +126,7 @@ for (a_crd in chosen_CRD_alph){
  mean_days_to_maturity_plot<- annual_TS(d1=annual_means_within_CRD_subset, 
                                         colname="mean_days_to_maturity", fil="maturity age")
  
- fName = paste("mean_days_to_maturity", veg_type, param_type, a_crd, sep = "_")
+ fName = paste("mean_days_to_maturity", veg_type, a_crd, sep = "_")
 
  subset_out_dir = paste0(out_dir, "mean_days_to_maturity_separate_CRD/")
   if (dir.exists(subset_out_dir) == F) {
@@ -150,7 +150,7 @@ for (a_start_DOY in start_DOY){
   mean_days_to_maturity_plot<- annual_TS(d1=annual_means_within_CRD_subset, 
                                          colname="mean_days_to_maturity", fil="maturity age")
  
-  fName = paste("mean_days_to_maturity", veg_type, param_type, a_start_DOY, sep = "_")
+  fName = paste("mean_days_to_maturity", veg_type, a_start_DOY, sep = "_")
 
   subset_out_dir = paste0(out_dir, "mean_days_to_maturity_separate_start_DoY/")
    if (dir.exists(subset_out_dir) == F) {
@@ -158,7 +158,7 @@ for (a_start_DOY in start_DOY){
     }
   ggsave(plot = mean_days_to_maturity_plot,
          filename = paste0(fName, ".png"), 
-         width=20, height=7.5, units = "in", 
+         width=20, height=7.5, units = "in",
          dpi=200, device = "png",
          path=subset_out_dir,
          limitsize = FALSE)
@@ -173,12 +173,12 @@ box_annual_means_within_CRD=box_annual_startDoY_x(dt=annual_means_within_CRD,
                                                   colname="mean_days_to_maturity", 
                                                   time_period="observed")
 
-param_type="fabio"
-out_dir = paste0(data_dir_base, "03_plots/", veg_type, "_", param_type, "/")
+# param_type="fabio"
+out_dir = paste0(data_dir_base, "03_plots/", veg_type, "/")
 if (dir.exists(out_dir) == F) {
     dir.create(path = out_dir, recursive = T)
 }
-fName = paste("box_mean_days_to_maturity", veg_type, param_type, sep = "_")
+fName = paste("box_mean_days_to_maturity", veg_type, sep = "_")
 ggsave(plot = box_annual_means_within_CRD,
        filename = paste0(fName, ".png"), 
        width=17, height=4, units = "in", 

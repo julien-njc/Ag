@@ -16,8 +16,8 @@
 ## Define path for output & error logs
 #PBS -k o
   ##PBS -j oe
-#PBS -e /home/hnoorazar/Sid/sidFabio/00_cumGDD_separateLocationsModels/error/cumGDD_outer_E
-#PBS -o /home/hnoorazar/Sid/sidFabio/00_cumGDD_separateLocationsModels/error/cumGDD_outer_O
+#PBS -e /home/hnoorazar/Sid/sidFabio/00_cumGDD_separateLocationsModels/error/exactFuture_cumGDD_outer_e
+#PBS -o /home/hnoorazar/Sid/sidFabio/00_cumGDD_separateLocationsModels/error/exactFuture_cumGDD_outer_o
 
 ## Define path for reporting
 #PBS -m abe
@@ -42,7 +42,7 @@ module load gcc/7.3.0
 module load r/3.5.1/gcc/7.3.0
 module load r/3.5.1
 
-Rscript --vanilla /home/hnoorazar/Sid/sidFabio/00_cumGDD_separateLocationsModels/d_cumGDD_linear.R veg_type modelName
+Rscript --vanilla /home/hnoorazar/Sid/sidFabio/00_cumGDD_separateLocationsModels/d_cumGDD.R veg_type modelName
 
 echo
 echo "----- DONE -----"

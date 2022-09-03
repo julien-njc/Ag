@@ -57,6 +57,7 @@ if (param_type=="fabio"){
   LC=veg_params$Claudio_lower_cut
   UC=veg_params$Claudio_upper_cut
   Topt=veg_params$Claudio_ToptNonLinear
+  print (paste("line 60", LC, UC, Topt, sep=", "))
 }
 
 for(file in local_files){
@@ -72,7 +73,7 @@ for(file in local_files){
 
   # 3b. Clean it up
   met_data <- met_data %>%
-              select(-c(precip, windspeed, SPH, SRAD, Rmax, Rmin)) %>%
+              select(-c(precip, windspeed, SPH, Rmax, Rmin)) %>%
               data.table()
 
 
