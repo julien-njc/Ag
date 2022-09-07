@@ -13,8 +13,8 @@
 
 
 ###SBATCH -k o
-#SBATCH --output=/home/h.noorazar/Sid/sidFabio/01_countDays_toReachMaturity/error/matureEE_outer.o
-#SBATCH --error=/home/h.noorazar/Sid/sidFabio/01_countDays_toReachMaturity/error/matureEE_outer.e
+#SBATCH --output=/home/h.noorazar/Sid/sidFabio/02_aggregate_Maturiry_EE/error/matureEE_outer.o
+#SBATCH --error=/home/h.noorazar/Sid/sidFabio/02_aggregate_Maturiry_EE/error/matureEE_outer.e
 echo
 echo "--- We are now in $PWD, running an R script ..."
 echo
@@ -35,7 +35,7 @@ module load r/4.1.0
 ## cd /data/project/agaid/AnalogData_Sid/Creating_Variables_old/
 ### Rscript --vanilla ./sid_script_west_model_pr_ch.R ${SLURM_ARRAY_TASK_ID}
 
-Rscript --vanilla /home/h.noorazar/Sid/sidFabio/01_countDays_toReachMaturity/d_countDays_to_maturity.R veg_type model_type start_doy 
+Rscript --vanilla /home/h.noorazar/Sid/sidFabio/02_aggregate_Maturiry_EE/d_aggregate_Maturiry_EE_Linear.R veg_type
 
 
 echo
@@ -43,3 +43,4 @@ echo "----- DONE -----"
 echo
 
 exit 0
+

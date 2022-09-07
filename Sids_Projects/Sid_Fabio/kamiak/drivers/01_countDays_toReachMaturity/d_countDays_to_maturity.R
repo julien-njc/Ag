@@ -19,9 +19,12 @@ start_doy = args[3]
 
 ######################################################################
 # Define main output path
+dir_base <- "/home/h.noorazar/Sid/sidFabio/00_cumGDD_separateLocationsModels/"
+data_dir <- paste0(dir_base, veg_type, "/", gsub("-", "", model_type), "/")
+
+
 out_dir_base = "/home/h.noorazar/Sid/sidFabio/" # kamiak
 param_dir = file.path("/home/h.noorazar/Sid/sidFabio/000_parameters/") # Kamiak
-
 
 VIC_grids = data.table(read.csv(paste0(param_dir, "tomato_crd_trial.csv")))
 VIC_grids = VIC_grids[VIC_grids$CRD %in% c("CA40", "CA50", "CA51", "FL50", "MI80")]
@@ -37,8 +40,7 @@ fabio_future_close_startDoY <- data.table(read.csv(paste0(param_dir, "fabio_futu
 # Time the processing of this batch of files
 start_time <- Sys.time()
 
-dir_base <- "/home/h.noorazar/Sid/sidFabio/00_cumGDD_separateLocationsModels/"
-data_dir <- paste0(dir_base, veg_type, "/", gsub("-", "", model_type), "/")
+
 
 col_names <- c("location", "year", "days_to_maturity", 
                "no_days_in_opt_interval", "no_of_extreme_cold", "no_of_extreme_heat",
@@ -86,6 +88,9 @@ for(fileName in VIC_grids$file_name){
     # The following function will look into the right directory when 
     data_tb <- data.table(read.csv(paste0(data_dir, fileName, ".csv")))
     data_tb$row_num <- seq.int(nrow(data_tb))
+    #
+    # Here is where we have filtered 2041 to 2070: unique(days_to_maturity_tb$year)
+    #
     for (a_year in sort(unique(days_to_maturity_tb$year))){
       curr_row_num <- data_tb[data_tb$year==a_year & data_tb$doy==start_doy, ]$row_num
       curr_data <- data_tb[data_tb$row_num>=curr_row_num, ]
@@ -107,16 +112,16 @@ for(fileName in VIC_grids$file_name){
                              filter(row_num>=curr_data$row_num[1]) %>%
                              filter(row_num<=day_of_maturity$row_num[1]) %>%
                              data.table()
-      print ("107")
-      print (fileName)
-      print (a_year)
-      print (tail(start_to_maturity_tb, 1)$cum_SRAD)
+      # print ("107")
+      # print (fileName)
+      # print (a_year)
+      # print (tail(start_to_maturity_tb, 1)$cum_SRAD)
       # print (days_to_maturity_tb)
       # days_to_maturity_tb$cum_solar<-tail(start_to_maturity_tb, 1)$cum_SRAD
       days_to_maturity_tb$cum_solar[days_to_maturity_tb$location==fileName & days_to_maturity_tb$year==a_year]=tail(start_to_maturity_tb, 1)$cum_SRAD
-      print (start_to_maturity_tb)
-      print (days_to_maturity_tb[days_to_maturity_tb$location==fileName & days_to_maturity_tb$year==a_year])
-      print ("_113_____________________________________")
+      # print (start_to_maturity_tb)
+      # print (days_to_maturity_tb[days_to_maturity_tb$location==fileName & days_to_maturity_tb$year==a_year])
+      # print ("_113_____________________________________")
 
 
       optimum_table = start_to_maturity_tb %>%
@@ -143,7 +148,7 @@ for(fileName in VIC_grids$file_name){
   }
 }
 
-current_out = paste0(out_dir_base, "/01_days2maturity_EE_linear/", veg_type, "/") # "_", model_type, 
+current_out = paste0(out_dir_base, "/01_countDays_toReachMaturity/", veg_type, "/start_doy_", start_doy, "/") # "_", model_type, 
 if (dir.exists(current_out) == F) {
     dir.create(path = current_out, recursive = T)
 }

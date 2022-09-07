@@ -11,7 +11,7 @@ box_annual_startDoY_x <- function(dt, colname="mean_days_to_maturity", time_peri
       title_ <- paste0("average number of days to maturity: ", 
                         unique(dt$veg), ", ", 
                         time_period, ", ",
-                        str_to_title(unique(dt$param_type)))
+                        stringr::str_to_title(unique(dt$param_type)))
      } else{
       title_ <- paste0("Title?")
   }
@@ -68,12 +68,11 @@ box_annual_startDoY_x <- function(dt, colname="mean_days_to_maturity", time_peri
   return (safe_b)
 }
 
-
 annual_TS <- function(d1, colname="mean_days_to_maturity", fil="maturity age"){
   if (colname=="mean_days_to_maturity"){
-     cls <- "deepskyblue" # bloom color
+     cls<-"deepskyblue" # bloom color
       } else { # colname == "thresh_DoY")
-        cls <- "darkgreen" # threshold color
+        cls<-"darkgreen" # threshold color
   }
   # d1$chill_season <- gsub("chill_", "", d1$chill_season)
   # d1$chill_season <- substr(d1$chill_season, 1, 4)
@@ -91,8 +90,8 @@ annual_TS <- function(d1, colname="mean_days_to_maturity", fil="maturity age"){
   # scale_x_continuous(breaks=seq(1970, 2100, 10)) +
   # scale_x_continuous(breaks = xbreaks) +
   # scale_y_continuous(breaks = chill_doy_map$day_count_since_sept, labels = chill_doy_map$letter_day) +
-  scale_color_manual(values = cls) +
-  scale_fill_manual(values = cls) +
+  scale_color_manual(values=cls) +
+  scale_fill_manual(values=cls) +
   theme(panel.grid.major = element_line(size=0.2),
         panel.spacing=unit(.5, "cm"),
         legend.text=element_text(size=18, face="bold"),
