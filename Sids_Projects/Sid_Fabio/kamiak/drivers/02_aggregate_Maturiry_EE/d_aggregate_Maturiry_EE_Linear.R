@@ -83,15 +83,17 @@ for (a_folder in folders_){
 
   given_DoY_annual_means_within_CRD = all_data[, .(mean_days_to_maturity = mean(days_to_maturity), 
                                                    mean_no_days_in_opt_interval = mean(no_days_in_opt_interval), 
-                                                   mean_no_of_extreme_cold = mean(no_of_extreme_cold), 
-                                                   mean_no_of_extreme_heat = mean(no_of_extreme_heat)),
+                                                   mean_no_of_extreme_cold = mean(no_of_extreme_cold),
+                                                   mean_no_of_extreme_heat = mean(no_of_extreme_heat),
+                                                   mean_of_cum_solar = mean(cum_solar)),
                                                    by = c("STASD_N", "year", "startDoY", "time_period")]
 
-  given_DoY_median_of_annual_means_within_CRD_within_TP = given_DoY_annual_means_within_CRD[, .(median_of_mean_days_to_maturity = median(mean_days_to_maturity), 
-                                                                                                median_of_mean_no_days_in_opt_interval = median(mean_no_days_in_opt_interval), 
-                                                                                                median_of_mean_no_of_extreme_cold = median(mean_no_of_extreme_cold), 
-                                                                                                median_of_mean_no_of_extreme_heat = median(mean_no_of_extreme_heat)),
-                                                                                                by = c("STASD_N", "startDoY", "time_period")]
+  given_DoY_median_of_annual_means_within_CRD_within_TP=given_DoY_annual_means_within_CRD[,.(median_of_mean_days_to_maturity=median(mean_days_to_maturity), 
+                                                                                             median_of_mean_no_days_in_opt_interval=median(mean_no_days_in_opt_interval), 
+                                                                                             median_of_mean_no_of_extreme_cold=median(mean_no_of_extreme_cold), 
+                                                                                             median_of_mean_no_of_extreme_heat=median(mean_no_of_extreme_heat),
+                                                                                             median_of_mean_of_cum_solar=median(mean_of_cum_solar)),
+                                                                                             by = c("STASD_N", "startDoY", "time_period")]
 
   annual_means_within_CRD = rbind(annual_means_within_CRD, given_DoY_annual_means_within_CRD)
   median_of_annual_means_within_CRD_within_TP = rbind(median_of_annual_means_within_CRD_within_TP, 

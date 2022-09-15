@@ -53,7 +53,6 @@ file_names = c("annual_means_within_CRD_properSpecialDoY.csv", "within_TP_median
 annual_means_within_CRD = data.table(read.csv(paste0(data_dir, file_names[1])))
 within_TP_median_of_annual_means_within_CRD = data.table(read.csv(paste0(data_dir, file_names[2])))
 
-
 ################################
 ########
 ########    Subset
@@ -64,6 +63,7 @@ unique(annual_means_within_CRD$STASD_N)
 # 12 is Florida and 26 is Michigan.
 chosen_CRD <- c(640, 650, 651, 1250, 2680)
 chosen_CRD_alph <- c("CA40", "CA50", "CA51", "FL50", "MI80")
+
 annual_means_within_CRD <- annual_means_within_CRD %>%
                            filter(STASD_N %in% chosen_CRD) %>%
                            data.table()
@@ -94,8 +94,6 @@ annual_means_within_CRD$startDoY <- factor(annual_means_within_CRD$startDoY,
                                            levels = start_DOY, order=TRUE)
 within_TP_median_of_annual_means_within_CRD$startDoY <- factor(within_TP_median_of_annual_means_within_CRD$startDoY, 
                                                                levels=start_DOY, order=TRUE)
-
-
 
 median_of_means_3col <- within_TP_median_of_annual_means_within_CRD[, c("CRD", "median_of_mean_days_to_maturity", "startDoY")]
 
@@ -138,6 +136,37 @@ table_to_export = table_to_export[, c(1, 4, 5, 3, 2, 6)]
 
 write.csv(table_to_export, 
           file = paste0(out_dir, "median_of_means_of_days_to_maturity_wide_specialOrder_Aug30Email.csv"), 
+          row.names=FALSE)
+
+
+######### SR 
+
+
+median_of_means_3col <- within_TP_median_of_annual_means_within_CRD[, c("CRD", "median_of_mean_of_cum_solar", "startDoY")]
+
+table_to_export = reshape(median_of_means_3col, idvar="startDoY", timevar="CRD", direction="wide")
+table_to_export <- table_to_export[order(startDoY, ),]
+cols_to_round <- names(table_to_export)[2:length(names(table_to_export))]
+
+# round the numbers
+table_to_export[,(cols_to_round) := round(.SD,0), .SDcols=cols_to_round]
+
+# change the damn column names. They are long, but descriptive:
+x <- sapply(colnames(table_to_export)[2: length(colnames(table_to_export))], 
+            function(x) strsplit(x, "\\.")[[1]], 
+            USE.NAMES=FALSE)
+new_colNames = x[2, ]
+
+setnames(table_to_export, 
+         old=colnames(table_to_export)[2: length(colnames(table_to_export))], 
+         new=new_colNames)
+
+
+# change the order of columns
+table_to_export = table_to_export[, c(1, 4, 5, 3, 2, 6)]
+
+write.csv(table_to_export, 
+          file = paste0(out_dir, "median_of_means_of_cumSR_wide_specialOrder_Aug30Email.csv"), 
           row.names=FALSE)
 
 

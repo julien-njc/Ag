@@ -2,19 +2,9 @@
 options(digits=9)
 
 
-
-box_annual_startDoY_x <- function(dt, colname="mean_days_to_maturity", time_period="observed"){
+box_annual_startDoY_x <- function(dt, colname, title_, yLab){
   color_ord = c("grey40", "dodgerblue", "olivedrab4", "red", "orange")
   categ_lab = sort(unique(dt$startDoY))
-
-  if (colname == "mean_days_to_maturity"){
-      title_ <- paste0("average number of days to maturity: ", 
-                        unique(dt$veg), ", ", 
-                        time_period, ", ",
-                        str_to_title(unique(dt$param_type)))
-     } else{
-      title_ <- paste0("Title?")
-  }
 
   x_axis_labels<- sort(as.numeric(array(unique(dt$startDoY))))
   x_axis_labels<- x_axis_labels[seq(1,length(x_axis_labels),2)]
@@ -57,7 +47,7 @@ box_annual_startDoY_x <- function(dt, colname="mean_days_to_maturity", time_peri
             # scale_color_manual(values = color_ord, labels = categ_lab,
             #                    name = "Time\nPeriod", limits = color_ord) +
             ggtitle(lab=title_) + 
-            labs(x="accumulation start (DoY)", y = "average number of days to reach maturity") 
+            labs(x="accumulation start (DoY)", y=yLab) 
             # geom_text(data = medians, 
             #           aes(label=sprintf("%1.0f", medians$med), 
             #               y=medians$med), 
